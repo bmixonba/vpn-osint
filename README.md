@@ -19,7 +19,12 @@ $ python3 -m venv src/.env
 1. Run the server:
 ```bash
 $ cd  src
-$ ./setup_dev_server.sh
+(.env) $ ./setup_dev_server.sh 
+ * Serving Flask app 'frontend'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
 ```
 2. Browse to the server front end in your web browser:
 
