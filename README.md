@@ -4,4 +4,15 @@ The VPN OSINT project is focused on bringing transparency to the VPN provider sp
 they allow to see their network traffic.
 
 
+# Methodology
+
+## App List Creation
+
+1. 
+
+## App Selection
+### 
+
+## Evaluation Metric 
+### 
 
