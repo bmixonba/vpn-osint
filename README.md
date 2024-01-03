@@ -23,7 +23,7 @@ $ ./setup_dev_server.sh
 ```
 2. Browse to the server front end in your web browser:
 
-[imgs/vpnosintWebServerHome.png]
+![Development Server Homepage](imgs/vpnosintWebServerHome.png)
 
 # Methodology
 
