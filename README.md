@@ -34,6 +34,14 @@ Press CTRL+C to quit
 
 ## App List Creation
 
+The first step is building a list of VPN apps on which to focus. The obvious approach is to look
+through repositories of apps, such as that provided by sensortower, manually going through the
+VPN apps, and selecting a subset to focus analysis. While I will use this approach later, another
+approach that should be considered is finding VPNs organically. For this, the first step is finding 
+social media accounts, such as on telegram, youtube, twitter, etc., and finding references to VPNs
+that way. Once one or more accounts have been identified, we can mark them and then explore their 
+following, verified followers, and followers lists, profile hyper links, and text. 
+
 1. 
 
 ## App Selection
