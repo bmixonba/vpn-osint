@@ -1,7 +1,9 @@
 # Motivation
 
 `RQ1: Is owner, operator, developer transparency is important?`
+
 `RQ2: Why owner, operator, developer transparency is important?`
+
 `RQ3: How can lack of ood trans negatively impact users?`
 
 Transparency is an important factor when people consider which VPNs they use. Typically transparency 
