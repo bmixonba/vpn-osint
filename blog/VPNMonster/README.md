@@ -1,4 +1,4 @@
-# Reverse Engineering VPN Monster: Part #N
+# Reverse Engineering VPN Monster - Basic Dynamic Analysis: Part #1
 
 Author: Ben Mixon-Baca
 
@@ -30,4 +30,11 @@ are actually routed through the tunnel. It appears they are. The image below dem
 that was successful:
 
 ![Ping test](./imgs/VPNMonster_ping_test_2024_5_3_png)
+
+## Files
+
+The app stores a lot of data using the MMKV library from Tencent to keep cached information synchronized. An example is provided in the screen capture and the raw data for one of the files, `mmkv_vpn` is available at, `data/files/mmkv`
+
+![mmkv_example](./imgs/VPNMonster.mmkv.blog1.png)
+
 
