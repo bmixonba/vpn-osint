@@ -29,7 +29,7 @@ I sent pings to a server I control just to see if the traffic, at least for ICMP
 are actually routed through the tunnel. It appears they are. The image below demonstrates
 that was successful:
 
-![Ping test](./imgs/VPNMonster_ping_test_2024_5_3_png)
+![Ping test](./imgs/VPNMonster_ping_test_2024_5_3.png)
 
 ## Files
 
