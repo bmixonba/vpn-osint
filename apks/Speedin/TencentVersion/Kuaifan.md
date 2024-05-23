@@ -32,4 +32,18 @@ frida-trace -U -f $APK --decorate -I "libjiagu_64.so" -I "*jiagu*"  -j "cc.oasis
 ![frida1](./imgs/speedin.runfridaondevice.1.png)
 
 ![frida2](./imgs/speedin.runfrida.2.png)
+
+There is a reference to a hidden directory with the same name in the Frida output. The fact that the directory is hidden and the `.so` files are in a hidden directory is only making it more concerning that this is a naughty file, but let's not jump to conclusions. After all, there are plenty of legitimate reasons why a developer/company would pack their APK, particularly if their IP (intellecutal property) is in the app, so we press on.
+
 ![frida3](./imgs/speedin.runfrida.3.png)
+
+After pulling the .so file from the phone (using `adb pull` of course :}), we load it into Ghidra.
+
+We see immediately based on the entropy measures that this `so` file is odd. Unfortuntaely, it is become clear that
+this program is likely just the unpacker for the actual app, so we dig around the APK more.
+
+# More Obfuscated Files
+
+Next, we find yet more weirdness. After digging into the `assets` directory, we see the file A
+
+![ghidra1](./imgs/speedin.compressed.weirdfill.png)
