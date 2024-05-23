@@ -52,7 +52,10 @@ We make a copy of this hidden zip, move it to a different location, and unzip it
 
 ![hiddenzip](./imgs/speedin.hiddenzip.1.png)
 
+![hiddenzip2](./imgs/speedin.hiddensharedobjects.png)
+
 And now we have found yet MORE shared objects...
+
 
 ![hiddenzip2](./imgs/Speedin.SuperTroopers1.png)
 
