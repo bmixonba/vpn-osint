@@ -47,3 +47,12 @@ this program is likely just the unpacker for the actual app, so we dig around th
 Next, we find yet more weirdness. After digging into the `assets` directory, we see the file A
 
 ![ghidra1](./imgs/speedin.compressed.weirdfill.png)
+
+We make a copy of this hidden zip, move it to a different location, and unzip it.
+
+![hiddenzip](./imgs/speedin.hiddenzip.1.png)
+
+And now we have found yet MORE shared objects...
+
+![hiddenzip2](./imgs/Speedin.SuperTroopers1.png)
+
