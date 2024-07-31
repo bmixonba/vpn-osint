@@ -111,6 +111,7 @@ I had to manually search for very detailed info about DoNot malware, for example
 
 ## Project Dependency Diagram
 
+```bash
           v-open and crowd sourced 
           v-network<-cryptosluice/inductive
 discovery<-phishing/typosquatting<-What we are doing
@@ -143,3 +144,4 @@ data proc<-dynamic<-Network<-signals from VPNS <- VPN-alyzer <- Diwen and/or Ree
 analysis <- Apple some ML to answer some meaningful research question?
 
 synthesis<-
+```
