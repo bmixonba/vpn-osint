@@ -102,6 +102,23 @@ social media analysis for forecasting civil war
 - VPNalyzer
 - Proxy identification - Diwen and Roya, Jerry, Methods using techniques documented by the GFW authors, CryptoSluice
 
+
+# Case-study
+
+## Inductive
+ 
+Four variations of the KuaiFan Accerator VPN discovered based on CryptoSluice results.
+
+## Deductive
+
+Ten VPNs from Autumn Breeze, Lemon Clove, and Innovative Connecting
+
+## Typo-Squatting Enumeration
+
+Ten LetsVPN to investigate by using dnstwist to identifying typo-squatted domains of `letsvpn.com`. This was inspired by 
+a [recent report](https://cyble.com/blog/new-malware-campaign-targets-letsvpn-users/) that LetsVPN was being impersonated
+by attackers.
+
 # Misc. Notes
 
 - Mobile Surveillance Monitor
