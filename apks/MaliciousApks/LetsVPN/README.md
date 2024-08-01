@@ -127,3 +127,4 @@ VirusTotal had 24 of 73 sensors return positive results.
 
 ### Candidate9
 
+The following candidate yields another ZIP file containing a Microsoft MSI file, `KuaiVpn-n.msi`.
