@@ -9,39 +9,79 @@
 * One is for the legitimate App, X use obfuscation (shared/imported libraries still contain social network of Code)
 
 
-## Motivation & Background
+## Motivation 
 
 LetsVPN is an app focused primarily on Chinese users. [Crybl](https://cyble.com/blog/new-malware-campaign-targets-letsvpn-users/) 
-documented attackers targeting LetsVpn to install malware on the user's device. The legit LetsVPN App is developed by LetsGo Networks and
-is geared towards Chinese users. This makes it an appealing backdoor target. I identified 7 imposters by manually enumerating different
-random, one character transformations of the domain name "letsgovpn" letsgovpn.com. and modifying the extension 
+documented attacks targeting LetsVPN to install malware on the user's device. The legitimate LetsVPN App is developed by LetsGo Networks 
+and is focused on Chinese users. According to [AppleCensorship](https://applecensorship.com/app-store-monitor/test/letsvpn) LetsVPN is
+also removed from the Chinese App store. 
 
-## Legit1
+![Apple Censorship](applecensorship-letsvpn.png)
+
+This makes it an appealing target for impersonation.
+
+
+
+## Methodology 
+
+### Domain Discovery 
+Using [dnstwist](https://github.com/elceef/dnstwist) and
+[urlcrazy](https://github.com/urbanadventurer/urlcrazy) I identified seven domain impersonating `letsvpn.com`.
+
+
+## Results
+
+### Legit1
 
 This is the legitimate version of the APK.
 
-[//]: # urls,letsvpn.world domain info, the source for LetsVPN
+#### Misc. Info
 
-## Candidate1
+urls,letsvpn.world domain info, the source for LetsVPN
+
+### Candidate1
 
 This is another legitimate version of the app. The URL redirects  to `letsvpn.world`.
-[//]: # url, letssvpn.com domain info, redirects to letsvpn.world
+#### Misc. Info
+url, letssvpn.com domain info, redirects to letsvpn.world
 
-## Candidate2
+### Candidate2
 
-[//]: # url,letsssvpn.com domain info,
+Requesting the URL `letsssvpn.com` yields the following impersonated website:
 
-## Candidate3
+![Fake Website](./Candidate2/letsssvpn.com.definitely-fake.png)
 
-## Candidate4
+This is a suspicious version of LetsVPN. The download claims to be an APK, but unzipping the files
+a Microsoft `MSI` file.
 
-## Candidate5
+#### Misc. Info
+url,letsssvpn.com domain info,
+
+### Candidate3
+
+Requesting the URL `lettsvpn.com` yields the following website:
+
+![Fake Website](./Candidate3/letesvpn.com-fake.pnlettsvpn.com.fake.png)
+
+This is another suspicious version of LetsVPN. The download claims to be an APK, but unzipping the files
+a Microsoft `MSI` file. This is a different MSI file from `Candidate2`.
+
+### Candidate4
+
+Requesting the URL `letesvpn.com` yields the following page:
+
+![Fake Website](./Candidate4/letesvpn.com-fake.png)
+
+This is another suspicious version of LetsVPN. The download claims to be an APK, but unzipping the files
+a Microsoft `MSI` file. This is a different MSI file from `Candidate2`.
+
+### Candidate5
 
 [//]: # vpn type, v2ray, password, 123456, fine location, true
 
 The following candidate is related to the [following report](https://research.checkpoint.com/2023/pandas-with-a-soul-chinese-espionage-attacks-against-southeast-asian-government-entities/)
 
-## Candidate6
+### Candidate6
 
 Searching for the URL `letsvpn.me` yields a valid website:
 
@@ -58,10 +98,10 @@ It appears to request minimal permissions, none of which seem too invasive.
 
 The code reference multiple URLs related to API calls, one `https://gitee.com/tima123/tg0`.
 
-## Candidate7
+### Candidate7
 
 
-## Candidate8
+### Candidate8
 
-## Candidate9
+### Candidate9
 
