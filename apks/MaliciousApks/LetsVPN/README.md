@@ -6,8 +6,7 @@
 
 * Two of the APKs are msi files, two are "exe" files, and the remaining are APKs files
 
-* One is for the legitimate App, X use obfuscation (shared/imported libraries still contain social network of Code)
-
+* One APK, Candidate6, uses obfuscation (shared/imported libraries still contain social network of Code)
 
 ## Motivation 
 
@@ -20,14 +19,11 @@ also removed from the Chinese App store.
 
 This makes it an appealing target for impersonation.
 
-
-
 ## Methodology 
 
 ### Domain Discovery 
 Using [dnstwist](https://github.com/elceef/dnstwist) and
 [urlcrazy](https://github.com/urbanadventurer/urlcrazy) I identified seven domain impersonating `letsvpn.com`.
-
 
 ## Results
 
