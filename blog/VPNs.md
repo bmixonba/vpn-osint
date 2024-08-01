@@ -62,15 +62,17 @@ due to the risks they present to users.
 ## Discovery 
 
 ### Deductive 
+
 Using Deductive Discovery, we identified a cluster of 10 VPNs from three VPN providers on Google Play. The providers are
 Autumn Breeze, Innovative Connecting, and Lemon Clove. A simple string search of their decompressed APK file results
-in the ten APK names present in the shared library `libopvpnutil.so`.
+in the ten APK names present in the shared library `libopvpnutil.so`. More details about these VPNs can be found [here](https://github.com/bmixonba/vpn-osint/blob/main/blog/VPNMonster/README.md)
 
 ### Inductive
 
-Using Inductive Discovery, we identified a VPN accelerator, Kuaifan, that appears to have poor transport layer security.
+Using Inductive Discovery, we identified a VPN accelerator, Kuaifan, that appears to have poor transport layer security. More details
+about the results for this app are available [here](https://github.com/bmixonba/vpn-osint/blob/main/blog/Kuaifan/Kuaifan.md).
 
 ### Adversarial
 
-Using Adversarial Discovery, we identified that LetsVPN is being targeted by both state and non-state actors for impersonation, censorship, and malware implantation.
+Using Adversarial Discovery, we identified that LetsVPN is being targeted by both state and non-state actors for impersonation, censorship, and malware implantation. More details about the specific Apps and analysis techniques is covered in the post [here](https://github.com/bmixonba/vpn-osint/blob/main/blog/LetsVPN/README.md).
 
