@@ -61,7 +61,7 @@ url,letsssvpn.com domain info,
 
 Requesting the URL `lettsvpn.com` yields the following website:
 
-![Fake Website](./Candidate3/letesvpn.com-fake.pnlettsvpn.com.fake.png)
+![Fake Website](./Candidate3/lettsvpn.com.fake.png)
 
 This is another suspicious version of LetsVPN. The download claims to be an APK, but unzipping the files
 a Microsoft `MSI` file. This is a different MSI file from `Candidate2`.
