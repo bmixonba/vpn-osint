@@ -18,18 +18,18 @@ random, one character transformations of the domain name "letsgovpn" letsgovpn.c
 
 ## Legit1
 
-urls,letsvpn.world
-domain info, the source for LetsVPN
+This is the legitimate version of the APK.
+
+[//]: # urls,letsvpn.world domain info, the source for LetsVPN
 
 ## Candidate1
 
-url, letssvpn.com
-domain info, redirects to letsvpn.world
+This is another legitimate version of the app. The URL redirects  to `letsvpn.world`.
+[//]: # url, letssvpn.com domain info, redirects to letsvpn.world
 
 ## Candidate2
 
-url,letsssvpn.com
-domain info,
+[//]: # url,letsssvpn.com domain info,
 
 ## Candidate3
 
@@ -37,13 +37,11 @@ domain info,
 
 ## Candidate5
 
-vpn type, v2ray
-password, 123456
-fine location, true
-report,https://research.checkpoint.com/2023/pandas-with-a-soul-chinese-espionage-attacks-against-southeast-asian-government-entities/
+[//]: # vpn type, v2ray, password, 123456, fine location, true
+
+The following candidate is related to the [following report](https://research.checkpoint.com/2023/pandas-with-a-soul-chinese-espionage-attacks-against-southeast-asian-government-entities/)
 
 ## Candidate6
-
 
 Searching for the URL `letsvpn.me` yields a valid website:
 
@@ -60,7 +58,10 @@ It appears to request minimal permissions, none of which seem too invasive.
 
 The code reference multiple URLs related to API calls, one `https://gitee.com/tima123/tg0`.
 
-
 ## Candidate7
 
+
 ## Candidate8
+
+## Candidate9
+
