@@ -56,6 +56,9 @@ The actual APK name is `com.li.fast`. This decompliled APK is obfuscated as seen
 
 It appears to request minimal permissions, none of which seem too invasive. 
 
+![Permissions](./Candidate6/candidate6-permissions.png)
+
+The code reference multiple URLs related to API calls, one `https://gitee.com/tima123/tg0`.
 
 
 ## Candidate7
