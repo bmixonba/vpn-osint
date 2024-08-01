@@ -123,7 +123,7 @@ The download produces the zip file, `kuaiVPN.zip`. Unzipping the file yields `ku
 the download should be for an Android APK. It has sha256 `ee5f3eca5753a7b5f8411c3495662807909618739231a0dad2be365c084ea0a9`.
 VirusTotal had 24 of 73 sensors return positive results.
 
-![Candidate7 VirusTotal](./Candidate8/candidate8-virustotal.png
+![Candidate8 VirusTotal](./Candidate8/candidate8-virustotal.png)
 
 ### Candidate9
 
