@@ -100,6 +100,18 @@ The code reference multiple URLs related to API calls, one `https://gitee.com/ti
 
 ### Candidate7
 
+Searching Baidu for LetsVPN yields the following search results:
+
+![Baidu Recommendation](./Candidate7/lettsvpn.com-baidu-recommendations.png)
+
+The file downloaded is `pg457.apk`.
+
+After decompiling the code in jadx, the real package name is `com.pangu.c96b73589`
+
+There are some interesting Permissions, such as requesting to download packages and record audio.
+
+![Candidate7 Permissions](./Candidate7/candidate7-permissions.png)
+
 
 ### Candidate8
 
