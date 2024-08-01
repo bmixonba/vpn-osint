@@ -44,7 +44,19 @@ report,https://research.checkpoint.com/2023/pandas-with-a-soul-chinese-espionage
 
 ## Candidate6
 
-obfuscated, true
+
+Searching for the URL `letsvpn.me` yields a valid website:
+
+
+![Fake Website](./Candidate6/letsvpn.me.fake.png)
+
+The actual APK name is `com.li.fast`. This decompliled APK is obfuscated as seen in the following image:
+
+![Obfuscated APK](./Candidate6/candidate6-obfuscated.png)
+
+It appears to request minimal permissions, none of which seem too invasive. 
+
+
 
 ## Candidate7
 
