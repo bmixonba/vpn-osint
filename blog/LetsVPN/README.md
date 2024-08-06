@@ -15,7 +15,7 @@ documented attacks targeting LetsVPN to install malware on the user's device. Th
 and is focused on Chinese users. According to [AppleCensorship](https://applecensorship.com/app-store-monitor/test/letsvpn) LetsVPN is
 also removed from the Chinese App store. 
 
-![Apple Censorship](applecensorship-letsvpn.png)
+![Apple Censorship](./imgs/applecensorship-letsvpn.png)
 
 This makes it an appealing target for impersonation.
 
@@ -45,7 +45,7 @@ url, letssvpn.com domain info, redirects to letsvpn.world
 
 Requesting the URL `letsssvpn.com` yields the following impersonated website:
 
-![Fake Website](./letsssvpn.com.definitely-fake.png)
+![Fake Website](./imgs/letsssvpn.com.definitely-fake.png)
 
 This is a suspicious version of LetsVPN. The download claims to be an APK, but unzipping the files
 a Microsoft `MSI` file.
@@ -57,7 +57,7 @@ url,letsssvpn.com domain info,
 
 Requesting the URL `lettsvpn.com` yields the following website:
 
-![Fake Website](./lettsvpn.com.fake.png)
+![Fake Website](./imgs/lettsvpn.com.fake.png)
 
 This is another suspicious version of LetsVPN. The download claims to be an APK, but unzipping the files
 a Microsoft `MSI` file. This is a different MSI file from `Candidate2`.
@@ -66,7 +66,7 @@ a Microsoft `MSI` file. This is a different MSI file from `Candidate2`.
 
 Requesting the URL `letesvpn.com` yields the following page:
 
-![Fake Website](./letesvpn.com-fake.png)
+![Fake Website](./imgs/letesvpn.com-fake.png)
 
 This is another suspicious version of LetsVPN. The download claims to be an APK, but unzipping the files
 a Microsoft `MSI` file. This is a different MSI file from `Candidate2`.
@@ -82,15 +82,15 @@ The following candidate is related to the [following report](https://research.ch
 Searching for the URL `letsvpn.me` yields a valid website:
 
 
-![Fake Website](./letsvpn.me.fake.png)
+![Fake Website](./imgs/letsvpn.me.fake.png)
 
 The actual APK name is `com.li.fast`. This decompliled APK is obfuscated as seen in the following image:
 
-![Obfuscated APK](./candidate6-obfuscated.png)
+![Obfuscated APK](./imgs/candidate6-obfuscated.png)
 
 It appears to request minimal permissions, none of which seem too invasive. 
 
-![Permissions](./candidate6-permissions.png)
+![Permissions](./imgs/candidate6-permissions.png)
 
 The code reference multiple URLs related to API calls, one `https://gitee.com/tima123/tg0`.
 
@@ -98,7 +98,7 @@ The code reference multiple URLs related to API calls, one `https://gitee.com/ti
 
 Searching Baidu for LetsVPN yields the following search results:
 
-![Baidu Recommendation](./lettsvpn.com-baidu-recommendations.png)
+![Baidu Recommendation](./imgs/lettsvpn.com-baidu-recommendations.png)
 
 The file downloaded is `pg457.apk`.
 
@@ -106,20 +106,20 @@ After decompiling the code in jadx, the real package name is `com.pangu.c96b7358
 
 There are some interesting Permissions, such as requesting to download packages and record audio.
 
-![Candidate7 Permissions](./candidate7-permissions.png)
+![Candidate7 Permissions](./imgs/candidate7-permissions.png)
 
 
 ### Candidate8
 
 Baidu also recommended the following site for LetsVPN, `kuailiavfpns.com`.
 
-![Kuailiavfpns](./kuailiavfpns.com.png)
+![Kuailiavfpns](./imgs/kuailiavfpns.com.png)
 
 The download produces the zip file, `kuaiVPN.zip`. Unzipping the file yields `kuaiVPN.exe`, which is suspicious because
 the download should be for an Android APK. It has sha256 `ee5f3eca5753a7b5f8411c3495662807909618739231a0dad2be365c084ea0a9`.
 VirusTotal had 24 of 73 sensors return positive results.
 
-![Candidate8 VirusTotal](./candidate8-virustotal.png)
+![Candidate8 VirusTotal](./imgs/candidate8-virustotal.png)
 
 ### Candidate9
 
