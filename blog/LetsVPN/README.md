@@ -2,7 +2,9 @@
 
 ## Key Findings
 
-* Investigated 8 LetsVPN clones
+* LetsVPN has been targeted by censored and impersonated by multiple attackers
+
+* Investigated 14 LetsVPN clones
 
 * Two of the APKs are msi files, two are "exe" files, and the remaining are APKs files
 
@@ -10,10 +12,7 @@
 
 ## Motivation 
 
-LetsVPN is an app focused primarily on Chinese users. [Crybl](https://cyble.com/blog/new-malware-campaign-targets-letsvpn-users/) 
-documented attacks targeting LetsVPN to install malware on the user's device. The legitimate LetsVPN App is developed by LetsGo Networks 
-and is focused on Chinese users. According to [AppleCensorship](https://applecensorship.com/app-store-monitor/test/letsvpn) LetsVPN is
-also removed from the Chinese App store. 
+LetsVPN is VPN a VPN app is developed by LetsGo Networks and is focused on Chinese users. According to [AppleCensorship](https://applecensorship.com/app-store-monitor/test/letsvpn) LetsVPN is also removed from the Chinese App store. Furthermore, [Crybl](https://cyble.com/blog/new-malware-campaign-targets-letsvpn-users/) documented attacks targeting LetsVPN to install malware on the user's device. While these two events are not connected per se, censorship undoubtable creates a gap in the supply chain that attacker can exploit. To better understand the modern threat of censorship on the VPN ecosystem, this post covers a case study focused on understanding the threat that imposter VPNs pose to Netizens.
 
 ![Apple Censorship](./imgs/applecensorship-letsvpn.png)
 
@@ -27,6 +26,18 @@ Using [dnstwist](https://github.com/elceef/dnstwist) and
 
 ## Results
 
+### Transparency
+
+#### Domain
+
+#### Website
+
+The website uses Matomo for url tracking. Javascript embedded within the homepage uses the
+following endpoint for user tracking and analytrics: https://web.dcobxs.com/matomo.php
+
+This page is clearly designed to impersonate letsvpn.world. The evidence for this is the color scheme,
+logos, and graphics similarity.
+
 ### Legit1
 
 This is the legitimate version of the APK.
@@ -35,9 +46,17 @@ This is the legitimate version of the APK.
 
 urls,letsvpn.world domain info, the source for LetsVPN
 
+##### Candidate 1
+
+Location, H
+
+#### 
+
+
 ### Candidate1
 
 This is another legitimate version of the app. The URL redirects  to `letsvpn.world`.
+
 #### Misc. Info
 url, letssvpn.com domain info, redirects to letsvpn.world
 
@@ -124,3 +143,10 @@ VirusTotal had 24 of 73 sensors return positive results.
 ### Candidate9
 
 The following candidate yields another ZIP file containing a Microsoft MSI file, `KuaiVpn-n.msi`.
+
+### Candidate10
+
+### Candidate11
+
+There is clearly something different about this VPN app versus the others. First, it's an MSI file, not a ZIP file. Second,
+it may be a previously unknown malware given that the hash does not show up in VirusTotal.
