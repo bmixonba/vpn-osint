@@ -21,7 +21,7 @@ def main():
         urls = [l[:-1] for l in f.readlines()]
     for url in urls:
         cert = get_cert(url)
-        with open(f"{url}.cert.txt", "w") as f:
+        with open(f"{url}.cert.pem", "w") as f:
             f.write(cert)
 
 
