@@ -23,7 +23,16 @@ def get_db_connection():
     )
     return conn
 
-# Company Profile API
+
+# Analyst view
+@app.route('/analyst')
+def analyst():
+    """ """
+    return render_template("analyst.html")
+
+
+# Aggregate View
+## Company Profile API
 
 
 # Example route to render the profile view
@@ -31,6 +40,12 @@ def get_db_connection():
 def company_profile(company_id):
     # You would query your database to fetch the specific company data here
     return render_template('company_profile.html')
+
+# Example route to render the profile view
+@app.route('/web_artifact')
+def web_artifact():
+    # You would query your database to fetch the specific company data here
+    return render_template('web_artifact.html')
 
 # API endpoint to fetch the company data
 @app.route('/api/vpn-company/<int:company_id>')

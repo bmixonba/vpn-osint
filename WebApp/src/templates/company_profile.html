@@ -131,6 +131,13 @@
     <h2>Relationship Network Graph</h2>
     <div id="network"></div>
   </div>
+
+  <!-- Relationship Network Graph View -->
+  <div class="subview">
+    <h2>Webpage View</h2>
+    <div id="webpage"></div>
+  </div>
+
 </div>
 
 <script>
@@ -209,8 +216,7 @@
         to: rel.to
       });
     });
-
-    const networkContainer = document.getElementById('network');
+	  const networkContainer = document.getElementById('network');
   }
 
   // Call the fetch function to load data dynamically
@@ -239,6 +245,13 @@
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);  // Save the selected theme
   });
+  const webpageContainer = document.getElementById('webpage').getContext('2d');
+  webpageContainer.
+	  // Add the header info to the webpage at the bottom.
+    <h1>Embedded Webpage</h1>
+    <div class="panel">
+        <iframe src="https://web.archive.org/web/20250000000000*/https://play.google.com/store/apps/details?id=free.vpn.unblock.proxy.turbovpn&hl=en_US"></iframe>
+    </div>
 </script>
 
 </body>
