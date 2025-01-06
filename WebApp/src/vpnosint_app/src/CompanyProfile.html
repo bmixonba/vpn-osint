@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPN Company Profile</title>
+
+  <!-- Leaflet for Geospatial View -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+  <!-- Chart.js for Timeline View -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- vis.js for Relationship Graph -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+
+  <style>
+    #map { height: 300px; width: 100%; }
+    #timeline { height: 300px; width: 100%; }
+    #network { height: 300px; width: 100%; }
+    .container { display: flex; flex-direction: column; gap: 20px; padding: 20px; }
+    .subview { border: 1px solid #ccc; padding: 10px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>VPN Company Profile</h1>
+
+  <!-- Geospatial View -->
+  <div class="subview">
+    <h2>Geospatial Information</h2>
+    <div id="map"></div>
+  </div>
+
+  <!-- Timeline View -->
+  <div class="subview">
+    <h2>Timeline of Events</h2>
+    <canvas id="timeline"></canvas>
+  </div>
+
+  <!-- Relationship Network Graph View -->
+  <div class="subview">
+    <h2>Relationship Network Graph</h2>
+    <div id="network"></div>
+  </div>
+</div>
+
+<script>
+  // Example data (replace this with real company data fetched from your backend)
+  const vpnCompany = {
+    name: "Example VPN",
+    locations: [
+      { lat: 40.7128, lon: -74.0060, name: "New York, USA" },
+      { lat: 51.5074, lon: -0.1278, name: "London, UK" }
+    ],
+    timelineEvents: [
+      { label: "Incorporation", date: "2022-01-01" },
+      { label: "Trademark Filing", date: "2022-06-15" },
+      { label: "Domain Registration", date: "2023-02-10" }
+    ],
+    relationships: [
+      { from: "Example VPN", to: "Registrar A" },
+      { from: "Example VPN", to: "Domain A" },
+      { from: "Registrar A", to: "Domain A" }
+    ]
+  };
+
+  // Geospatial View (Leaflet Map)
+  const map = L.map('map').setView([vpnCompany.locations[0].lat, vpnCompany.locations[0].lon], 2);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  vpnCompany.locations.forEach(location => {
+    L.marker([location.lat, location.lon]).addTo(map)
+      .bindPopup(location.name);
+  });
+
+  // Timeline View (Chart.js)
+  const timelineCtx = document.getElementById('timeline').getContext('2d');
+  const labels = vpnCompany.timelineEvents.map(event => event.date);
+  const data = vpnCompany.timelineEvents.map(event => 1); // Just using 1 for height
+
+  new Chart(timelineCtx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Company Events',
+        data: data,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        x: { title: { display: true, text: 'Event Dates' }},
+        y: { display: false }
+      }
+    }
+  });
+
+  // Relationship Network Graph (vis.js)
+  const nodes = new vis.DataSet([
+    { id: 1, label: vpnCompany.name },
+    { id: 2, label: 'Registrar A' },
+    { id: 3, label: 'Domain A' }
+  ]);
+
+  const edges = new vis.DataSet(vpnCompany.relationships.map((rel, index) => ({
+    id: index + 1, from: nodes.get({filter: n => n.label === rel.from})[0].id, to: nodes.get({filter: n => n.label === rel.to})[0].id
+  })));
+
+  const networkContainer = document.getElementById('network');
+  const networkData = { nodes: nodes, edges: edges };
+  const networkOptions = {};
+
+  new vis.Network(networkContainer, networkData, networkOptions);
+</script>
+
+</body>
+</html>
