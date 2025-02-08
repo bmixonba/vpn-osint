@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Analysis Dashboard</h1>
+<div class="dashboard-container">
+    <!-- Geospatial Information -->
+    <div class="dashboard-item" id="geospatial-view">
+        <h2>Geospatial Information</h2>
+        <div id="map" style="height: 300px;"></div>
+    </div>
+
+    <!-- Network Relationship Graph -->
+    <div class="dashboard-item" id="network-graph">
+        <h2>Network Relationship Graph</h2>
+        <div id="graph" style="height: 300px;"></div>
+    </div>
+
+    <!-- Metadata Table -->
+    <div class="dashboard-item" id="metadata-view">
+        <h2>Metadata</h2>
+        <table id="metadata-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Populated dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- URL Analysis -->
+    <div class="dashboard-item" id="url-analysis">
+        <h2>URL Analysis</h2>
+        <form id="url-form">
+            <label for="url">Enter URL:</label>
+            <input type="text" id="url" name="url" required>
+            <button type="submit">Analyze</button>
+        </form>
+        <div id="url-result"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// Geospatial Map
+const map = L.map('map').setView([0, 0], 2);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+// Fetch and display geospatial data
+fetch('/api/geospatial-data')
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(location => {
+            L.marker([location.lat, location.lon]).addTo(map)
+             .bindPopup(`<b>${location.company}</b><br>${location.address}`);
+        });
+    });
+
+// Network Graph
+const graphData = await fetch('/api/network-graph').then(res => res.json());
+const svg = d3.select('#graph').append('svg').attr('width', '100%').attr('height', '100%');
+const width = document.querySelector('#graph').clientWidth;
+const height = document.querySelector('#graph').clientHeight;
+
+// Use D3.js to draw a simple force-directed graph
+const simulation = d3.forceSimulation(graphData.nodes)
+    .force('link', d3.forceLink(graphData.links).id(d => d.id))
+    .force('charge', d3.forceManyBody())
+    .force('center', d3.forceCenter(width / 2, height / 2));
+
+// Metadata Table
+fetch('/api/vpn-metadata')
+    .then(response => response.json())
+    .then(data => {
+        const tbody = document.querySelector('#metadata-table tbody');
+        Object.entries(data).forEach(([company, details]) => {
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = company;
+            row.insertCell(1).innerText = JSON.stringify(details);
+        });
+    });
+
+// URL Analysis
+document.querySelector('#url-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const url = document.querySelector('#url').value;
+    const response = await fetch('/api/analyze-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+    });
+    const result = await response.json();
+    document.querySelector('#url-result').innerHTML = JSON.stringify(result, null, 2);
+});
+</script>
+{% endblock %}
+

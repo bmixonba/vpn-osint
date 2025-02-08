@@ -1,24 +1,17 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, send_from_directory
 app = Flask(__name__)
     
 import sys
 import json
 import psycopg2
+import os
 
-from flask import Flask, render_template, jsonify
-app = Flask(__name__)
-
-import sys
-import json
-import psycopg2
-
-app = Flask(__name__)
 # Connect to PostgreSQL
 def get_db_connection():
     conn = psycopg2.connect(
         dbname="vpnosint_db",
         user="vpnosint_user",
-        password="labtrash337",
+        password="<PASSWORD>",
         host="localhost"
     )
     return conn
@@ -30,7 +23,40 @@ def analyst():
     """ """
     return render_template("analyst.html")
 
+@app.route('/submit_business', methods=['POST'])
+def submit_business():
+    name = request.form['name']
+    email = request.form['email']
+    message = request.form['message']
 
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('INSERT INTO user_data (name, email, message) VALUES (%s, %s, %s)',
+                (name, email, message))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('analyst'))
+
+@app.route('/submit_social_media', methods=['POST'])
+def submit_social_media():
+    name = request.form['name']
+    email = request.form['email']
+    message = request.form['message']
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('INSERT INTO user_data (name, email, message) VALUES (%s, %s, %s)',
+                (name, email, message))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('analyst'))
+
+"""
+"""
 # Aggregate View
 ## Company Profile API
 
@@ -42,9 +68,21 @@ def company_profile(company_id):
     return render_template('company_profile.html')
 
 # Example route to render the profile view
-@app.route('/web_artifact')
+@app.route('/web_artifact/<int:company_id>')
 def web_artifact():
+    return render_template('web_artifact.html')
+
+# Example route to render the profile view
+@app.route('/vpn_company_webpages/<int:company_id>')
+def vpn_company_webpages():
     # You would query your database to fetch the specific company data here
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(f'SELECT * FROM vpnosint_webpage_db WHERE company_id={company_id};')
+
+    locations = cur.fetchall()
     return render_template('web_artifact.html')
 
 # API endpoint to fetch the company data
@@ -79,6 +117,23 @@ def get_company_data(company_id):
     }
     return jsonify(company_data)
 
+@app.route('/network-data', methods=['GET'])
+def network_data():
+    data = {
+        "nodes": [
+            {"data": {"id": "vpn1", "label": "Lemon Clove"}},
+            {"data": {"id": "vpn2", "label": "Autumn Breeze"}},
+            {"data": {"id": "vpn3", "label": "Innovative Connecting"}},
+            {"data": {"id": "person1", "label": "Kathleen S. Fennessy"}},
+        ],
+        "edges": [
+            {"data": {"source": "vpn1", "target": "person1", "label": "Copyright"}},
+            {"data": {"source": "vpn1", "target": "vpn3", "label": "Undisclosed Partnership"}},
+            {"data": {"source": "vpn1", "target": "vpn2", "label": "Undisclosed Partnership"}},
+        ]
+    }
+    return jsonify(data)
+
 # Location API
 @app.route('/api/locations')
 def get_locations():
@@ -90,6 +145,88 @@ def get_locations():
     conn.close()
 
     return jsonify([{'lat': loc[0], 'lng': loc[1]} for loc in locations])
+
+# APK API
+@app.route('/api/vpn_apk/int:apk_id')
+def get_vpn_apk():
+    """ """
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+
+SOURCE_CODE_PATH = "./decompiled_apk"
+
+@app.route('/source-files')
+def list_source_files():
+    """List all source code files in the decompiled APK directory."""
+    files = []
+    for root, _, filenames in os.walk(SOURCE_CODE_PATH):
+        for filename in filenames:
+            if filename.endswith('.java') or filename.endswith('.xml'):  # Include Java/XML files
+                relative_path = os.path.relpath(os.path.join(root, filename), SOURCE_CODE_PATH)
+                files.append(relative_path)
+    return jsonify(files)
+
+@app.route('/source-code/<path:filename>')
+def get_source_code(filename):
+    """Serve the content of a specific source file."""
+    return send_from_directory(SOURCE_CODE_PATH, filename)
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/example_index')
+def example_index():
+    # conn = get_db_connection()
+    # cur = conn.cursor()
+
+    # Fetch data for the Form View (e.g., list of companies)
+    # cur.execute('SELECT id, name FROM companies;')
+    companies = ["Company 1","Company 2","Company 3"] # cur.fetchall()
+
+    # Fetch data for the Analyst View (e.g., specific company details)
+    # company_id = request.args.get('company_id', default=1, type=int)  # Default to first company
+    # cur.execute('SELECT * FROM companies WHERE id = %s;', (company_id,))
+    company_details = [50,"VPN Company",80] # cur.fetchone()
+
+    # Fetch data for the Company-Specific Information View (e.g., categories of information)
+    # cur.execute('SELECT category, COUNT(*) as count FROM company_info WHERE company_id = %s GROUP BY category;', (company_id,))
+    company_categories = ["Proxy","Accelerator","VPN"] # cur.fetchall()
+
+    # Fetch data for the Global View (e.g., aggregate information about all companies)
+    # cur.execute('SELECT COUNT(*) as total_companies FROM companies;')
+    total_companies = 3 # cur.fetchone()[0]
+
+    # cur.execute('SELECT AVG(revenue) as avg_revenue FROM companies;')
+    avg_revenue = 500000000 # cur.fetchone()[0]
+
+    # cur.close()
+    # conn.close()
+
+    return render_template(
+        'example_index.html',
+        companies=companies,
+        company_details=company_details,
+        company_categories=company_categories,
+        total_companies=total_companies,
+        avg_revenue=avg_revenue
+    )
+
+@app.route('/submit_company', methods=['POST'])
+def submit_company():
+    name = request.form['name']
+    revenue = request.form['revenue']
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('INSERT INTO companies (name, revenue) VALUES (%s, %s)',
+                (name, revenue))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('index'))
+
 
 def main():
     app.run(debug=True)

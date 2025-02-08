@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyst Frontend</title>
+    <style>
+        /* Flexbox container for the forms */
+        .form-container {
+            display: flex;
+            gap: 20px; /* Space between the forms */
+        }
+
+        /* Style for each form */
+        .form-section {
+            flex: 1; /* Each form takes equal space */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .form-section h2 {
+            margin-top: 0;
+        }
+
+        .form-section label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .form-section input[type="text"],
+        .form-section input[type="email"],
+        .form-section input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .form-section input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-section input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Analyst Frontend</h1>
+
+    <!-- Container for the forms -->
+    <div class="form-container">
+        <!-- User Form -->
+        <div class="form-section">
+            <h2>User Information</h2>
+            <form action="{{ url_for('submit_user') }}" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required><br><br>
+
+                <input type="submit" value="Submit User">
+            </form>
+        </div>
+
+        <!-- Product Form -->
+        <div class="form-section">
+            <h2>Product Information</h2>
+            <form action="{{ url_for('submit_product') }}" method="post">
+                <label for="product_name">Product Name:</label>
+                <input type="text" id="product_name" name="product_name" required><br><br>
+
+                <label for="price">Price:</label>
+                <input type="number" id="price" name="price" step="0.01" required><br><br>
+
+                <input type="submit" value="Submit Product">
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+

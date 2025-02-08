@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VPN Company Profile</title>
 
+      <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+
   <!-- Leaflet for Geospatial View -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -15,9 +18,68 @@
   <!-- vis.js for Relationship Graph -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.22.0/cytoscape.min.js"></script>
+
+  <!-- Source code analysis -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
 
   <!-- Style for Dark/Light Mode -->
   <style>
+
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+	transition: background-color 0.3s, color 0.3s;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: row; /* Arrange children in a row */
+	overflow: hidden;
+
+    }
+
+    #sidebar {
+            background-color: var(--bg-color);
+	    color: var(--text-color);
+	    transition: background-color 0.3s, color 0.3s;
+	    font-family: Arial, sans-serif;
+	    width: 20%;
+            min-width: 150px; /* Minimum width for the sidebar */
+            max-width: 50%; /* Maximum width for the sidebar */
+            background-color: #f4f4f4;
+            padding: 10px;
+            overflow-y: auto;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+    }
+
+    #content {
+
+        width: 80%; /* Main content takes up the remaining width */
+        padding: 10px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    pre {
+        background: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+
+    iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+    }
     /* Define light and dark mode colors using CSS variables */
     :root {
       --bg-color: white;
@@ -31,11 +93,6 @@
       --border-color: #444;
     }
 
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: background-color 0.3s, color 0.3s;
-    }
 
     .subview {
       border: 1px solid var(--border-color);
@@ -43,16 +100,24 @@
       transition: border-color 0.3s;
     }
 
-    #map, #timeline, #network { 
+    #map, #timeline, #network, #webpage { 
       height: 300px; 
       width: 100%; 
     }
 
     .container {
-      display: flex;
+	    flex-grow: 1;
+	    overflow-y: auto; /* Enable vertical scrolling for the content area */
+	    overflow-x: hidden; /* Prevent horizontal scrolling */
+	    display: flex;
+	    flex-direction: column;
+	    padding: 10px;
+	    height: 100%; /* Ensure it fills the remaining height of the viewport */
+	    box-sizing: border-box; /* Include padding in the height calculation */
+      /* display: flex;
       flex-direction: column;
       gap: 20px;
-      padding: 20px;
+      padding: 20px;*/
     }
 
     /* Toggle switch */
@@ -101,158 +166,328 @@
     label:active:after {
       width: 28px;
     }
+    #cy {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ccc;
+    }
+
+    #controls {
+      margin-bottom: 20px;
+    }
   </style>
 </head>
+
 <body>
-
-<!-- Toggle switch for light/dark mode -->
-<div class="theme-toggle">
-  <input type="checkbox" id="theme-switch">
-  <label for="theme-switch">Toggle Theme</label>
-</div>
-
-<div class="container">
-  <h1 id="company-name">Loading Company Name...</h1>
-
-  <!-- Geospatial View -->
-  <div class="subview">
-    <h2>Geospatial Information</h2>
-    <div id="map"></div>
+	<div id="sidebar">
+		<h2>Source Files</h2>
+		<ul id="file-list"></ul>
+	</div>
+	<!-- Toggle switch for light/dark mode -->
+  <div class="theme-toggle">
+	  <input type="checkbox" id="theme-switch">
+	  <label for="theme-switch">
+		  Toggle Theme</label> </div>
+  <div id="content">
+	  <h2>Source Code Viewer</h2>
+	  <pre><code id="code-viewer" class="java">
+	  </code></pre>
   </div>
 
-  <!-- Timeline View -->
-  <div class="subview">
-    <h2>Timeline of Events</h2>
-    <canvas id="timeline"></canvas>
-  </div>
+  <div class="container">
+	  <h1 id="company-name">
+		  Loading Company Name...
+	  </h1>
+	  <!-- Geospatial View -->
+	  <div class="subview">
+		  <h2>Geospatial Information</h2>
+		  <div id="map"></div>
+	  </div>
+	  <!-- Timeline View -->
+	  <div class="subview">
+		  <h2>Timeline of Events</h2>
+		  <canvas id="timeline"></canvas>
+	  </div>
+	  <!-- Relationship Network Graph View -->
+	  <div class="subview">
+		  <h2>Relationship Network Graph</h2>
+		  <button id="filterVPNs">
+			  Show Only VPNs</button>
+		  <button id="resetFilter">
+			  Reset Filter</button>
+		  <button id="cluster">
+			  Cluster Layout</button>
+		  <div id="cy"></div>
+	  </div>
+	  <!-- Embedded Webpage View -->
+	  <div class="subview">
+		  <h2>Webpage View</h2>
+		  <div id="webpage" 
+			  class="carousel slide"
+			  data-bs-ride="carousel">
+			  <div class="carousel-inner">
+				  <div class="carousel-item active">
+					  <iframe src="https://web.archive.org/web/20180412092237/https://play.google.com/store/apps/details?id=free.vpn.unblock.proxy.turbovpn&hl=en_US" title="Page 2"></iframe>
+				  </div>
+				  <div class="carousel-item">
+					  <iframe src="https://web.archive.org/web/20250106170609/https://opencorporates.com/companies/sg/201812738K" title="Page 3"></iframe>
+				  </div>
+			  </div>
+			  <button class="carousel-control-prev" type="button" data-bs-target="#iframeCarousel" data-bs-slide="prev">
+				  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				  <span class="visually-hidden">Previous</span>
+			  </button>
+			  <button class="carousel-control-next" type="button" data-bs-target="#iframeCarousel" data-bs-slide="next">
+				  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+				  <span class="visually-hidden">Next</span>
+			  </button>
+		  </div>
+	  </div>
+	  <script>
+		  // Function to fetch data for a specific company based on its ID
+		  const companyId = window.location.pathname.split('/').pop();
+		  function fetchCompanyData() {
+			  fetch(`/api/vpn-company/${companyId}`)
+				  .then(response => response.json())
+				  .then(data => {
+					  updateProfile(data);
+				  })
+				  .catch(error => {
+					  console.error('Error fetching company data:', error);
+				  });
+		  }
+		  function updateProfile(data) {
+			  // Update the company name
+			  document.getElementById('company-name').textContent = data.name;
+			  // Populate the map
+			  const map = L.map('map').setView([data.locations[0].lat, data.locations[0].lon], 2);
+			  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				  attribution: '&copy; OpenStreetMap contributors'
+			  }).addTo(map);
+			  data.locations.forEach(location => {
+				  L.marker([location.lat, location.lon]).addTo(map).bindPopup(location.address);
+			  });
+			  // Populate the timeline
+			  const timelineCtx = document.getElementById('timeline').getContext('2d');
+			  const labels = data.timelineEvents.map(event => event.date);
+			  const timelineData = data.timelineEvents.map(() => 1);
+			  new Chart(timelineCtx, {
+				  type: 'bar',
+				  data: {
+					  labels: labels,
+					  datasets: [{
+						  label: 'Company Events',
+						  data: timelineData,
+						  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						  borderColor: 'rgba(75, 192, 192, 1)',
+						  borderWidth: 1
+					  }]
+				  },
+				  options: {
+					  scales: {
+						  x: { title: { display: true, text: 'Event Dates' }},
+						  y: { display: false }
+					  }
+				  }
+			  });
+			  // Define nodes and edges
+			  const elements = [
+				  // Nodes
+				  { data: { id: 'vpn1', label: 'VPN Provider 1' } },
+				  { data: { id: 'vpn2', label: 'VPN Provider 2' } },
+				  { data: { id: 'person1', label: 'Person A' } },
+				  { data: { id: 'place1', label: 'Place X' } },
+				  { data: { id: 'thing1', label: 'Thing Y' } },
+				  // Edges
+				  { data: { source: 'vpn1', target: 'person1', label: 'References' } },
+				  { data: { source: 'vpn1', target: 'place1', label: 'Located in' } },
+				  { data: { source: 'vpn1', target: 'thing1', label: 'Owns' } },
+				  { data: { source: 'vpn1', target: 'vpn2', label: 'Partnership' } },
+			  ];
+			  // Populate the relationship network graph
+			  // const nodes = new vis.DataSet();
+			  // const edges = new vis.DataSet();
+			  // First, add unique nodes for each relationship
+			  // const nodeLabels = new Set();  // Store unique nodes
+			  // data.relationships.forEach((rel) => {
+			  //   if (!nodeLabels.has(rel.from)) {
+			  //    nodeLabels.add(rel.from);
+			  //    nodes.add({ id: rel.from, label: rel.from });
+			  //  }
+			  // if (!nodeLabels.has(rel.to)) {
+			  //   nodeLabels.add(rel.to);
+			  //   nodes.add({ id: rel.to, label: rel.to });
+			  //   }
+			  // });
+			  // Now create edges based on the relationship between the nodes
+			  // data.relationships.forEach((rel) => {
+			  //  edges.add({
+			  //     from: rel.from,
+			  //     to: rel.to
+			  //   });
+			  //  });
+			  //   const networkContainer = document.getElementById('network');
+			  function updateWebpagePanel() {
+				  const webpageContainer = document.getElementById('webpage');
+				  webpageContainer.innerHTML = '';
+				  const iframe = document.createElement('iframe');
+				  iframe.src = "https://web.archive.org/web/20250106170609/https://opencorporates.com/companies/sg/201812738K";
+				  iframe.style.width='100%';
+				  iframe.style.height='100%';
+				  iframe.style.border='none';
+				  webpageContainer.appendChild(iframe);
+			  }
+			  // updateWebpagePanel();
+		  }
+		  // Call the fetch function to load data dynamically
+		  fetchCompanyData();
+		  // Toggle dark and light mode
+		  const themeSwitch = document.getElementById('theme-switch');
 
-  <!-- Relationship Network Graph View -->
-  <div class="subview">
-    <h2>Relationship Network Graph</h2>
-    <div id="network"></div>
-  </div>
-
-  <!-- Relationship Network Graph View -->
-  <div class="subview">
-    <h2>Webpage View</h2>
-    <div id="webpage"></div>
-  </div>
-
-</div>
-
-<script>
-  // Function to fetch data for a specific company based on its ID
-  const companyId = window.location.pathname.split('/').pop();
-
-  function fetchCompanyData() {
-    fetch(`/api/vpn-company/${companyId}`)
-      .then(response => response.json())
-      .then(data => {
-        updateProfile(data);
-      })
-      .catch(error => {
-        console.error('Error fetching company data:', error);
-      });
-  }
-
-  function updateProfile(data) {
-    // Update the company name
-    document.getElementById('company-name').textContent = data.name;
-
-    // Populate the map
-    const map = L.map('map').setView([data.locations[0].lat, data.locations[0].lon], 2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-    data.locations.forEach(location => {
-      L.marker([location.lat, location.lon]).addTo(map).bindPopup(location.address);
-    });
-
-    // Populate the timeline
-    const timelineCtx = document.getElementById('timeline').getContext('2d');
-    const labels = data.timelineEvents.map(event => event.date);
-    const timelineData = data.timelineEvents.map(() => 1);
-    new Chart(timelineCtx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Company Events',
-          data: timelineData,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          x: { title: { display: true, text: 'Event Dates' }},
-          y: { display: false }
-        }
-      }
-    });
-
-    // Populate the relationship network graph
-    const nodes = new vis.DataSet();
-    const edges = new vis.DataSet();
-
-    // First, add unique nodes for each relationship
-    const nodeLabels = new Set();  // Store unique nodes
-    data.relationships.forEach((rel) => {
-      if (!nodeLabels.has(rel.from)) {
-        nodeLabels.add(rel.from);
-        nodes.add({ id: rel.from, label: rel.from });
-      }
-      if (!nodeLabels.has(rel.to)) {
-        nodeLabels.add(rel.to);
-        nodes.add({ id: rel.to, label: rel.to });
-      }
-    });
-
-    // Now create edges based on the relationship between the nodes
-    data.relationships.forEach((rel) => {
-      edges.add({
-        from: rel.from,
-        to: rel.to
-      });
-    });
-	  const networkContainer = document.getElementById('network');
-  }
-
-  // Call the fetch function to load data dynamically
-  fetchCompanyData();
-
-  // Toggle dark and light mode
-  const themeSwitch = document.getElementById('theme-switch');
-
-  themeSwitch.addEventListener('change', function() {
-    if (this.checked) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-    }
-  });
-
-  // Save the theme preference to localStorage (optional)
-  const currentTheme = localStorage.getItem('theme');
-  if (currentTheme) {
-    document.documentElement.setAttribute('data-theme', currentTheme);
-    themeSwitch.checked = currentTheme === 'dark';
-  }
-
-  themeSwitch.addEventListener('change', function() {
-    const theme = this.checked ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);  // Save the selected theme
-  });
-  const webpageContainer = document.getElementById('webpage').getContext('2d');
-  webpageContainer.
-	  // Add the header info to the webpage at the bottom.
-    <h1>Embedded Webpage</h1>
-    <div class="panel">
-        <iframe src="https://web.archive.org/web/20250000000000*/https://play.google.com/store/apps/details?id=free.vpn.unblock.proxy.turbovpn&hl=en_US"></iframe>
-    </div>
+		  themeSwitch.addEventListener('change', function() {
+			  if (this.checked) {
+				  document.documentElement.setAttribute('data-theme', 'dark');
+			  } else {
+				  document.documentElement.setAttribute('data-theme', 'light');
+			  }
+		  });
+		  // Save the theme preference to localStorage (optional)
+		  const currentTheme = localStorage.getItem('theme');
+		  if (currentTheme) {
+			  document.documentElement.setAttribute('data-theme', currentTheme);
+			  themeSwitch.checked = currentTheme === 'dark';
+		  }
+		  themeSwitch.addEventListener('change', function() {
+			  const theme = this.checked ? 'dark' : 'light';
+			  document.documentElement.setAttribute('data-theme', theme);
+			  localStorage.setItem('theme', theme);  // Save the selected theme
+		  });
+		  //        const webpageContainer = document.getElementById('webpage');
+		  //        webpageContainer.textContent = '<h1>Embedded Webpage</h1>
+		  //        <div class="panel">
+ 	 	  //       <iframe src="https://web.archive.org/web/20250000000000*/https://play.google.com/store/apps/details?id=free.vpn.unblock.proxy.turbovpn&hl=en_US"></iframe>
+                  //  </div>'
+                  // }
+                  // updateWebpagePanel();
+                  // webpageContainer.
+                  // Add the header info to the webpage at the bottom.
+                  //  <h1>Embedded Webpage</h1>
+                  //  <div class="panel">
+                  //      <iframe src="https://web.archive.org/web/20250000000000*/https://play.google.com/store/apps/details?id=free.vpn.unblock.proxy.turbovpn&hl=en_US"></iframe>
+                  //  </div>
+                  // Initialize Cytoscape
+		  const cy = cytoscape({
+			  container: document.getElementById('cy'),
+			  elements: [],
+			  style: [
+				  {
+					  selector: 'node',
+					  style: {
+						  'background-color': '#0074D9',
+						  'label': 'data(label)',
+						  'color': '#fff',
+						  'text-halign': 'center',
+						  'text-valign': 'center',
+					  }
+				  },
+				  {
+					  selector: 'edge',
+					  style: {
+						  'width': 2,
+						  'line-color': '#FF4136',
+						  'target-arrow-color': '#FF4136',
+						  'target-arrow-shape': 'triangle',
+						  'curve-style': 'bezier',
+						  'label': 'data(label)',
+						  'text-background-color': '#fff',
+						  'text-background-opacity': 1,
+					  }
+				  },
+				  {
+					  selector: '[type="VPN"]',
+					  style: {
+						  'background-color': '#2ECC40',
+					  }
+				  },{
+					  selector: '[type="Person"]',
+					  style: {
+						  'background-color': '#FF851B',
+					  }
+				  },
+				  {
+					  selector: '[type="Place"]',
+					  style: {
+						  'background-color': '#7FDBFF',
+					  }
+				  },
+				  {
+					  selector: '[type="Thing"]',
+					  style: {
+						  'background-color': '#B10DC9',
+					  }
+				  }
+			  ],
+			  layout: {
+				  name: 'cose',
+				  animate: true,
+				  padding: 10
+			  }
+		  });
+		  // Fetch network data from the Flask server
+		  fetch('/network-data')
+			  .then(response => response.json())
+			  .then(data => {
+				  cy.add(data.nodes);
+				  cy.add(data.edges);
+				  cy.layout({ name: 'cose' }).run();
+			  });
+		  // Filter nodes by type
+		  document.getElementById('filterVPNs').addEventListener('click', () => {
+			  cy.nodes().forEach(node => {
+				  if (node.data('type') !== 'VPN') {
+					  node.style('display', 'none');
+				  }
+			  });
+		  });
+		  // Reset the filter
+		  document.getElementById('resetFilter').addEventListener('click', () => {
+			  cy.nodes().style('display', 'element');
+		  });
+		  // Apply a clustering layout
+		  document.getElementById('cluster').addEventListener('click', () => {
+			  cy.layout({ name: 'circle' }).run();
+		  });
+		  // Fetch and display the list of source files
+		  fetch('/source-files')
+			  .then(response => response.json())
+			  .then(files => {
+				  const fileList = document.getElementById('file-list');
+				  files.forEach(file => {
+					  const li = document.createElement('li');
+					  const link = document.createElement('a');
+					  link.textContent = file;
+					  link.href = "#";
+					  link.dataset.filePath = file;
+					  // Load the file content when clicked
+					  link.addEventListener('click', (e) => {
+						  e.preventDefault();
+						  loadSourceCode(e.target.dataset.filePath);
+					  });
+					  li.appendChild(link);
+					  fileList.appendChild(li);
+				  });
+			  });
+		  // Fetch and display the source code of a selected file
+		  function loadSourceCode(filePath) {
+			  fetch(`/source-code/${filePath}`)
+				  .then(response => response.text())
+				  .then(code => {
+					  const codeViewer = document.getElementById('code-viewer');
+					  codeViewer.textContent = code;
+					  hljs.highlightElement(codeViewer);  // Highlight the code
+				  });
+		  }
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

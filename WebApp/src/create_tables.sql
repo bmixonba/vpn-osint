@@ -24,3 +24,20 @@ CREATE TABLE IF NOT EXISTS vpnosint_domain_db (
         REFERENCES vpnosint_business_db (id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS vpnosint_vpn_apk_db (
+    id SERIAL PRIMARY KEY,
+    apk_name VARCHAR(255) NOT NULL,
+);
+CREATE TABLE IF NOT EXISTS vpnosint_vpn_company_to_vpn_apk_db (
+    id SERIAL PRIMARY KEY,
+    business_id INT,
+    apk_id INT,
+    CONSTRAINT fk_business
+        FOREIGN KEY (business_id)
+        REFERENCES vpnosint_business_db (id)
+        ON DELETE CASCADE
+        FOREIGN KEY (apk_id)
+        REFERENCES vpnosint_vpn_apk_db (id)
+        ON DELETE CASCADE
+);

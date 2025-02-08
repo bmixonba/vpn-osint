@@ -1,19 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analyst Frontend</title>
+    <title>VPN Transparency Report</title>
     <style>
-        /* Flexbox container for the forms */
+        /* Tab styling */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        .tab button {
+            background-color: inherit;
+            float: left;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+        }
+
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+        /* Tab content styling */
+        .tabcontent {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+
+        /* Form container styling */
         .form-container {
             display: flex;
             gap: 20px; /* Space between the forms */
             margin-bottom: 20px;
         }
 
-        /* Style for each form */
         .form-section {
             flex: 1; /* Each form takes equal space */
             padding: 20px;
@@ -26,14 +57,7 @@
             margin-top: 0;
         }
 
-        .form-section label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
         .form-section input[type="text"],
-        .form-section input[type="email"],
         .form-section input[type="number"] {
             width: 100%;
             padding: 8px;
@@ -83,10 +107,44 @@
             border-radius: 4px;
             background-color: #f1f1f1;
         }
+
+
+        /* Analysis view styling */
+        .analysis-view,
+        .company-specific-view,
+        .global-view {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .analysis-view h2,
+        .company-specific-view h2,
+        .global-view h2 {
+            margin-top: 0;
+        }
+
+        .analysis-view p,
+        .company-specific-view p,
+        .global-view p {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
-	<h1>Analyst</h1>
+    <h1>VPN Transparency Report</h1>
+
+    <!-- Tab links -->
+    <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'FormView')">Form View</button>
+        <button class="tablinks" onclick="openTab(event, 'AnalystView')">Analyst View</button>
+        <button class="tablinks" onclick="openTab(event, 'CompanySpecificView')">Company-Specific View</button>
+        <button class="tablinks" onclick="openTab(event, 'GlobalView')">Global View</button>
+    </div>
+
+    <!-- Form View -->
+    <div id="FormView" class="tabcontent">
 	<div class="form-container">
 		<!-- User Form -->
 		<div class="form-section">
@@ -155,6 +213,58 @@
 			</form>
 		</div>
 	</div>
+    </div>
 
+    <!-- Analyst View -->
+    <div id="AnalystView" class="tabcontent">
+        <div class="analysis-view">
+            <h2>Analyst View</h2>
+            <p><strong>Company Name:</strong> {{ company_details[1] }}</p>
+            <p><strong>Revenue:</strong> ${{ "%.2f"|format(company_details[2]) }}</p>
+        </div>
+    </div>
+
+    <!-- Company-Specific View -->
+    <div id="CompanySpecificView" class="tabcontent">
+        <div class="company-specific-view">
+            <h2>Company-Specific Information</h2>
+            {% for category in company_categories %}
+                <p><strong>{{ category[0] }}:</strong> {{ category[1] }} entries</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Global View -->
+    <div id="GlobalView" class="tabcontent">
+        <div class="global-view">
+            <h2>Global View</h2>
+            <p><strong>Total Companies:</strong> {{ total_companies }}</p>
+            <p><strong>Average Revenue:</strong> ${{ "%.2f"|format(avg_revenue) }}</p>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to handle tab switching
+        function openTab(evt, tabName) {
+            // Hide all tab content
+            var tabcontent = document.getElementsByClassName("tabcontent");
+            for (var i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            // Remove the "active" class from all tab buttons
+            var tablinks = document.getElementsByClassName("tablinks");
+            for (var i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            // Show the current tab and add the "active" class to the button
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // Open the default tab (Form View) on page load
+        document.getElementsByClassName("tablinks")[0].click();
+    </script>
 </body>
 </html>
