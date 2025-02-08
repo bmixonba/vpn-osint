@@ -4,35 +4,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VPN Transparency Report</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <!-- Leaflet for Geospatial View -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Chart.js for Timeline View -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- vis.js for Relationship Graph -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.22.0/cytoscape.min.js"></script>
+    <!-- Source code analysis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
     <style>
-        /* Tab styling */
-        .tab {
-            overflow: hidden;
-            border: 1px solid #ccc;
-            background-color: #f1f1f1;
-        }
+body {
+	background-color: var(--bg-color);
+        color: var(--text-color);
+	transition: background-color 0.3s, color 0.3s;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        height: 100vh;
+	overflow: hidden;
 
-        .tab button {
-            background-color: inherit;
-            float: left;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 14px 16px;
-            transition: 0.3s;
-        }
+    }
 
-        .tab button:hover {
-            background-color: #ddd;
-        }
+#content {
+	width: 80%; /* Main content takes up the remaining width */
+        padding: 10px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+pre {
+        background: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+}
 
-        .tab button.active {
-            background-color: #ccc;
-        }
 
-        /* Tab content styling */
-        .tabcontent {
-            display: none;
+iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+}
+/* Define light and dark mode colors using CSS variables */
+:root {
+	--bg-color: white;
+	--text-color: black;
+	--border-color: #ccc;
+}
+
+[data-theme="dark"] {
+	--bg-color: #121212;
+	--text-color: #f5f5f5;
+	--border-color: #444;
+}
+
+
+.subview {
+	border: 1px solid var(--border-color);
+	padding: 10px;
+	transition: border-color 0.3s;
+}
+#map, #timeline, #network, #webpage {
+	height: 300px;
+	width: 100%;
+}
+
+.container {
+	border: 1px solid var(--border-color);
+	flex-grow: 1;
+	overflow-y: auto; /* Enable vertical scrolling for the content area */
+	overflow-x: hidden; /* Prevent horizontal scrolling */
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+	height: 100%; /* Ensure it fills the remaining height of the viewport */
+	box-sizing: border-box; /* Include padding in the height calculation */
+      /* display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;*/
+    }
+
+/* Toggle switch */
+.theme-toggle {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.theme-toggle input {
+	display: none;
+}
+
+.theme-toggle label {
+	cursor: pointer;
+	text-indent: -9999px;
+	width: 50px;
+	height: 25px;
+	background: #ddd;
+	display: block;
+	border-radius: 25px;
+	position: relative;
+}
+
+.theme-toggle label:after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 21px;
+      height: 21px;
+      background: white;
+      border-radius: 21px;
+      transition: 0.3s;
+}
+
+input:checked + label {
+      background: #444;
+}
+
+input:checked + label:after {
+      left: calc(100% - 2px);
+      transform: translateX(-100%);
+}
+
+label:active:after {
+      width: 28px;
+}
+#cy {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ccc;
+}
+
+#controls {
+	margin-bottom: 20px;
+}
+
+/* Tab styling */
+.tab {
+	background-color: var(--bg-color);
+	color: var(--text-color);
+	overflow: hidden;
+        border: 1px solid #ccc;
+}
+
+.tab button {
+	background-color: var(--bg-color);
+	color: var(--text-color);
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+}
+
+.tab button:hover {
+	background-color: var(--bg-color);
+	color: var(--text-color);
+}
+
+.tab button.active {
+        background-color: var(--bg-color);
+	color: var(--text-color);
+}
+
+	/* Tab content styling */
+	.tabcontent {
+		background-color: var(--bg-color);
+		color: var(--text-color);
+		display: none;
             padding: 20px;
             border: 1px solid #ccc;
             border-top: none;
@@ -40,25 +189,32 @@
 
         /* Form container styling */
         .form-container {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             display: flex;
             gap: 20px; /* Space between the forms */
             margin-bottom: 20px;
         }
 
         .form-section {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             flex: 1; /* Each form takes equal space */
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            background-color: #f9f9f9;
         }
 
         .form-section h2 {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             margin-top: 0;
         }
 
         .form-section input[type="text"],
         .form-section input[type="number"] {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             width: 100%;
             padding: 8px;
             margin-bottom: 12px;
@@ -67,8 +223,8 @@
         }
 
         .form-section input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
+		background-color: var(--bg-color);
+		color: var(--text-color);
             padding: 10px 20px;
             border: none;
             border-radius: 4px;
@@ -76,36 +232,43 @@
         }
 
         .form-section input[type="submit"]:hover {
-            background-color: #45a049;
+		background-color: var(--bg-color);
+		color: var(--text-color);
         }
 
         /* Container for submitted data */
         .data-container {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             margin-top: 20px;
         }
 
         /* Horizontal layout for user data */
         .horizontal-layout {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             display: flex;
             gap: 20px;
             overflow-x: auto; /* Enable horizontal scrolling if needed */
         }
 
         .horizontal-layout .data-item {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             flex: 0 0 auto; /* Prevent flex items from growing or shrinking */
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            background-color: #f1f1f1;
         }
 
         /* Vertical layout for product data */
         .vertical-layout .data-item {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             margin-bottom: 10px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            background-color: #f1f1f1;
         }
 
 
@@ -113,26 +276,37 @@
         .analysis-view,
         .company-specific-view,
         .global-view {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            background-color: #f9f9f9;
         }
 
         .analysis-view h2,
         .company-specific-view h2,
         .global-view h2 {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             margin-top: 0;
         }
 
         .analysis-view p,
         .company-specific-view p,
         .global-view p {
+		background-color: var(--bg-color);
+		color: var(--text-color);
             font-size: 18px;
         }
     </style>
 </head>
 <body>
+  <div class="theme-toggle">
+	  <input type="checkbox" id="theme-switch">
+	  <label for="theme-switch">
+		  Toggle Theme</label>
+  </div>
+
     <h1>VPN Transparency Report</h1>
 
     <!-- Tab links -->
@@ -265,6 +439,26 @@
 
         // Open the default tab (Form View) on page load
         document.getElementsByClassName("tablinks")[0].click();
+	const themeSwitch = document.getElementById('theme-switch');
+	themeSwitch.addEventListener('change', function() {
+		if (this.checked) {
+			document.documentElement.setAttribute('data-theme', 'dark');
+		} else {
+			document.documentElement.setAttribute('data-theme', 'light');
+		}
+	});
+	// Save the theme preference to localStorage (optional
+	const currentTheme = localStorage.getItem('theme');
+	if (currentTheme) {
+		document.documentElement.setAttribute('data-theme', currentTheme);
+		themeSwitch.checked = currentTheme === 'dark';
+	}
+	themeSwitch.addEventListener('change', function() {
+		const theme = this.checked ? 'dark' : 'light';
+		document.documentElement.setAttribute('data-theme', theme);
+		localStorage.setItem('theme', theme);  // Save the selected theme
+	});
+
     </script>
 </body>
 </html>
