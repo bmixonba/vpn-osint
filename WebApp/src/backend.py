@@ -56,8 +56,8 @@ def create_business():
             vals.append(longitude)
         if 'incorporation_date' in data and len(data['incorporation_date']) > 0:
             incorporation_date = data['incorporation_date']
-            keys.append(f"'{incorporation_date}'")
-            vals.append(incorporation_date)
+            keys.append('incorporation_date')
+            vals.append(f"'{incorporation_date}'")
         keys = ','.join(keys)
         vals = ','.join(vals)
         cmd = f"INSERT INTO vpnosint_business_db ({keys}) VALUES ({vals})"
@@ -213,6 +213,9 @@ def create_social_media():
 
         keys = ','.join(keys)
         vals = ','.join(vals)
+        if runCmd: 
+            keys.append("business_id")
+            vals.append(company_id)
         
         cmd = f"INSERT INTO vpnosint_business_to_twitter_db ({keys}) VALUES ({vals})"
         print(f"cmd={cmd}")
@@ -246,6 +249,9 @@ def create_social_media():
             runCmd = True
         keys = ','.join(keys)
         vals = ','.join(vals)
+        if runCmd: 
+            keys.append("business_id")
+            vals.append(company_id)
         print(f"keys={keys}, vals={vals}")
         cmd = f"INSERT INTO vpnosint_business_to_facebook_db ({keys}) VALUES ({vals})"
         if runCmd: 
@@ -267,9 +273,9 @@ def update_social_media(company_id):
     """
     data = request.json
     company_id = data['company_id']
-    print(f"api/create_social_media/, company_id={company_id}, type(company_id)={type(company_id)}")
+    print(f"api/update_social_media/, company_id={company_id}, type(company_id)={type(company_id)}")
     if company_id == -1 or company_id == '-1':
-        return jsonify({'ok' : False, 'statusText' : 'Cannot create social media provil for unknown VPN provider.'})
+        return jsonify({'ok' : False, 'statusText' : 'Cannot update social media provil for unknown VPN provider.'})
     else:
         try:
             conn = get_db_connection()
@@ -469,6 +475,266 @@ def update_social_media(company_id):
         return jsonify({'ok' : True, "statusText" : "Company Successfully Added."}) 
 
 # END - CRUD for social media transparency
+
+# BEGIN - CRUD for Network/Domain information
+
+@app.route('/api/create_domain_network', methods=['PUT','POST'])
+def create_domain_network():
+    """ """
+    return jsonify({"ok" : True, "statusText" : "Unimplemented API"})
+
+def _create_domain_network(data):
+    """Create a domain/network provifil
+    """
+    print(f"data={data}")
+    print(f"RAN - api/create_domain_network")
+    keys = []
+    vals = []
+    company_id = data['company_id']
+    print(f"api/create_domain_network/, company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        return jsonify({'ok' : False,
+                        'statusText' : 'Cannot create domain/network profile if VPN provider doesnt exist first.'})
+    else:
+        """
+        """
+        keys = []
+        vals = []
+        runCmd = False
+        if 'domain_name' in data and len(data['domain_name']) > 0:
+            domain_name = data['domain_name']
+            keys.append("domain_name")
+            vals.append(f"'{domain_name}'")
+            runCmd = True
+        if 'domain_address' in data and len(data['domain_address']) > 0:
+            domain_address = data['domain_address']
+            keys.append("address")
+            vals.append(f"'{domain_address}'")
+            runCmd = True
+        if 'domain_latitude' in data and len(data['domain_latitude']) > 0:
+            domain_latitude = data['domain_latitude']
+            keys.append("latitude")
+            vals.append(domain_latitude)
+            runCmd = True
+        if 'domain_longitude' in data and len(data['domain_longitude']) > 0:
+            domain_longitude = data['domain_longitude']
+            keys.append("longitude")
+            vals.append(f"{domain_longitude}")
+            runCmd = True
+        if 'domain_registration_date' in data and len(data['domain_registration_date']) > 0:
+            domain_registration_date = data['domain_registration_date']
+            keys.append("registration_date")
+            vals.append(f"'{domain_registration_date}'")
+            runCmd = True
+        if 'domain_registrar' in data and len(data['domain_registrar']) > 0:
+            domain_registrar = data['domain_registrar']
+            keys.append("registrar")
+            vals.append(f"'{domain_registrar}'")
+            runCmd = True
+        if 'domain_registrar_abuse_email' in data and len(data['domain_registrar_abuse_email']) > 0:
+            registrar_abuse_email = data['domain_registrar_abuse_email']
+            keys.append("registrar_abuse_email")
+            vals.append(f"'{registrar_abuse_email}'")
+            runCmd = True
+        if 'domain_registrar_phone' in data and len(data['domain_registrar_phone']) > 0:
+            registrar_phone = data['domain_registrar_phone']
+            keys.append("registrar_phone")
+            vals.append(f"'{registrar_phone}'")
+            runCmd = True
+        if 'domain_registrant_name' in data and len(data['domain_registrant_name']) > 0:
+            registrant_name = data['domain_registrant_name']
+            keys.append("registrant_name")
+            vals.append(f"'{registrant_name}'")
+            runCmd = True
+        if 'domain_registrant_organization' in data and len(data['domain_registrant_organization']) > 0:
+            registrant_organization = data['domain_registrant_organization']
+            keys.append("registrant_organization")
+            vals.append(f"'{registrant_organization}'")
+            runCmd = True
+
+        if runCmd: 
+            keys.append("business_id")
+            vals.append(company_id)
+        keys = ','.join(keys)
+        vals = ','.join(vals)
+        
+        cmd = f"INSERT INTO vpnosint_domain_db ({keys}) VALUES ({vals});"
+        print(f"cmd={cmd}")
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        if runCmd: 
+            cur.execute(cmd)
+        keys = []
+        vals = []
+        runCmd = False
+        if 'fb_profile_name' in data and len(data['fb_profile_name']) > 0:
+            fb_profile_name = data['fb_profile_name']
+            keys.append("profile_name")
+            vals.append(f"'{fb_profile_name}'")
+            runCmd = True
+        if 'fb_follower_count' in data and len(data['fb_follower_count']) > 0:
+            fb_follower_count = data['fb_follower_count']
+            keys.append("follower_count")
+            vals.append(f"{fb_follower_count}")
+            runCmd = True
+        if 'fb_location' in data and len(data['fb_location']) > 0:
+            fb_location = data['fb_location']
+            keys.append("location")
+            vals.append(f"'{fb_location}'")
+            runCmd = True
+        if 'fb_joined_date' in data and len(data['fb_joined_date']) > 0:
+            fb_joined_date = data['fb_joined_date']
+            keys.append('joined_date')
+            vals.append(f"'{fb_joined_date}'")
+            runCmd = True
+        keys = ','.join(keys)
+        vals = ','.join(vals)
+        print(f"keys={keys}, vals={vals}")
+        cmd = f"INSERT INTO vpnosint_business_to_facebook_db ({keys}) VALUES ({vals})"
+        if runCmd: 
+            cur.execute(cmd)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({'ok' : True, "statusText" : "Company Successfully Added."}) 
+
+@app.route('/api/update_domain_network/<int:company_id>', methods=['PUT','POST'])
+def update_domain_network(company_id):
+    """ Update domain/network information 
+
+    vpnosint_db=# d vpnosint_domain_db;
+                                                   Table "public.vpnosint_domain_db"
+             Column          |            Type             | Collation | Nullable |                    Default                     
+    -------------------------+-----------------------------+-----------+----------+------------------------------------------------
+     id                      | integer                     |           | not null | nextval('vpnosint_domain_db_id_seq'::regclass)
+     domain_name             | character varying(255)      |           | not null | 
+     address                 | text                        |           |          | 
+     latitude                | double precision            |           |          | 
+     longitude               | double precision            |           |          | 
+     business_id             | integer                     |           |          | 
+     registration_date       | timestamp without time zone |           |          | 
+     registrar               | character varying(256)      |           |          | 
+     registrar_abuse_email   | character varying(255)      |           |          | 
+     registrar_phone         | character varying(255)      |           |          | 
+     registrant_name         | character varying(255)      |           |          | 
+     registrant_organization | character varying(255)      |           |          | 
+    Indexes:
+        "vpnosint_domain_db_pkey" PRIMARY KEY, btree (id)
+    Foreign-key constraints:
+        "fk_business" FOREIGN KEY (business_id) REFERENCES vpnosint_business_db(id) ON DELETE CASCADE
+    """
+
+    data = request.json
+    company_id = data['company_id']
+    print(f"api/update_social_media/, company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        return jsonify({'ok' : False, 'statusText' : 'Cannot update social media provil for unknown VPN provider.'})
+    else:
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            domain_check_query = """
+                SELECT EXISTS (
+                    SELECT 1 FROM  vpnosint_domain_db WHERE business_id = %s
+                );
+            """
+            # Execute the query
+            cur.execute(domain_check_query, (company_id,))
+            domain_exists = cur.fetchone()[0]  # Fetch the result (True or False)
+
+            keys = []
+            vals = []
+            if not domain_exists:
+                print(f"Entry with ID {company_id} doesn't exists.")
+                return _create_domain_network(data)
+            else:
+                """ There is an existing entry, so we just need to update stuff."""
+                runCmd = False
+                update_cmd = []
+                if 'domain_name' in data and len(data['domain_name']) > 0:
+                    domain_name = data['domain_name']
+                    tmp = f"domain_name='{domain_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'domain_address' in data and len(data['domain_address']) > 0:
+                    domain_address = data['domain_address']
+                    tmp = f"address='{domain_address}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'domain_latitude' in data and len(data['domain_latitude']) > 0:
+                    domain_latitude = data['domain_latitude']
+                    tmp = f"latitude='{domain_latitude}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'domain_longitude' in data and len(data['domain_longitude']) > 0:
+                    domain_longitude = data['domain_longitude']
+                    tmp = f"longitude='{domain_longitude}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'domain_registration_date' in data and len(data['domain_registration_date']) > 0:
+                    registration_date = data['domain_registration_date']
+                    tmp = f"registration_date='{registration_date}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'domain_registrar' in data and len(data['domain_registrar']) > 0:
+                    domain_registrar = data['domain_registrar']
+                    tmp = f"registrar='{domain_registrar}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'domain_registrar_abuse_email' in data and len(data['domain_registrar_abuse_email']) > 0:
+                    domain_registrar_abuse_email = data['domain_registrar_abuse_email']
+                    tmp = f"registrar_abuse_email='{domain_registrar_abuse_email}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'domain_registrar_phone' in data and len(data['domain_registrar_phone']) > 0:
+                    domain_registrar_phone = data['domain_registrar_phone']
+                    tmp = f"registrar_phone='{domain_registrar_phone}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'domain_registrant_name' in data and len(data['domain_registrant_name']) > 0:
+                    domain_registrant_name = data['domain_registrant_name']
+                    tmp = f"registrant_name='{domain_registrant_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'domain_registrant_organization' in data and len(data['domain_registrant_organization']) > 0:
+                    domain_registrant_organization = data['domain_registrant_organization']
+                    tmp = f"registrant_organization='{domain_registrant_organization}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                
+                if runCmd: 
+                    tmp = f"business_id='{company_id}'"
+                    update_cmd.append(tmp)
+
+                update_cmd = ','.join(update_cmd)
+                cmd = f"UPDATE vpnosint_domain_db SET {update_cmd} WHERE business_id={company_id};"
+                print(f"cmd={cmd}")
+
+                if runCmd: 
+                    cur.execute(cmd)
+                    conn.commit()
+
+            # TODO: Implement saving IP addresses and stuff. That might be better done in the reverse engineering section though.    
+        except Exception as e:
+            print(f"Error checking entry: {e}")
+        finally:
+            # Close the cursor and connection
+            cur.close()
+            conn.close()
+
+        return jsonify({'ok' : True, "statusText" : "Company Successfully Added."}) 
+
+@app.route('/api/delete_domain_network/<int:company_id>', methods=['PUT','POST'])
+def delete_domain_network(company_id):
+    """ TODO: Implement"""
+    raise Exception("Unimplemented method.")
+
+
+# END - CRUD for Network/Domain Information
+
+
 # Aggregate View
 ## Company Profile API
 

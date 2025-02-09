@@ -240,7 +240,7 @@ label:active:after {
 		cursor: pointer;
         }
 
-        .form-section input[type="submit_business"]:hover {
+        .form-section input[type="create_business"]:hover {
 		background-color: var(--bg-color);
 		color: var(--text-color);
         }
@@ -362,7 +362,7 @@ label:active:after {
 					<input type="datetime-local" id="incorporation_date" name="incorporation_date"><br><br>
 				</form>
 
-				<button id="submit_business", onclick="submit_business_fn()">Submit Business</button>
+				<button id="create_business", onclick="create_business_fn()">Submit Business</button>
 			</div>
 		</div>
 		<!-- Product Form -->
@@ -413,21 +413,41 @@ label:active:after {
 	<div class="form-container">
 		<div class="form-section">
 			<!-- TODO: Fix the input methods -->
-			<h2>Network/Domain Transparency</h2>
-			<label for="companySubmit">Select a Company:</label>
-			<select id="companySubmit">
+			<h2>Domain/Network Transparency</h2>
+			<label for="companySubmitDN">Select a Company:</label>
+			<select id="companySubmitDN">
 				{% for company in companies %}
 				<option value="{{ company[0] }}">{{ company[1] }}</option>
 				{% endfor %}
 			</select>
 			<div class="form-content">
-			<form action="{{ url_for('create_social_media') }}" method="post">
-				<label for="product_name">Product Name:</label>
-				<input type="text" id="product_name" name="product_name" required><br><br>
-				<label for="price">Price:</label>
-				<input type="number" id="price" name="price" step="0.01" required><br><br>
-				<input type="submit" value="Submit Product">
-			</form>
+				<!-- Create a new company -->
+				<form id="entryForm">
+					<div id="domain">
+						<h3>Domain Info</h3>
+						<label for="domain_name">Domain Name</label>
+						<input type="text" id="domain_name" name="domain_name" required><br><br>
+						<label for="domain_address">Address</label>
+						<input type="text" id="domain_address" name="domain_address"><br><br>
+						<label for="domain_latitude">Latitude</label>
+						<input type="number" id="domain_latitude" name="domain_latitude"><br><br>
+						<label for="domain_longitude">Longitude</label>
+						<input type="number" id="domain_longitude" name="domain_longitude"><br><br>
+						<label for="domain_registration_date">Registration Date</label>
+						<input type="datetime-local" id="domain_registration_date" name="domain_registration_date"><br><br>
+						<label for="domain_registrar">Registrar</label>
+						<input type="text" id="domain_registrar" name="domain_registrar"><br><br>
+						<label for="domain_registrar_abuse_email">Registrar Abuse Email</label>
+						<input type="text" id="domain_registrar_abuse_email" name="domain_registrar_abuse_email"><br><br>
+						<label for="domain_registrar_phone">Registrar Phone Number</label>
+						<input type="text" id="domain_registrar_phone" name="domain_registrar_phone"><br><br>
+						<label for="domain_registrant">Registrant Name</label>
+						<input type="text" id="domain_registrant" name="domain_registrant"><br><br>
+						<label for="domain_registrant_organization">Registrant Organization</label>
+						<input type="text" id="domain_registrant_organization" name="domain_registrant_organization"><br><br>
+					</div>
+				</form>
+				<button id="create_domain_network", onclick="create_domain_network_fn()">Submit Domain/Network</button>
 			</div>
 		</div>
 		<div class="form-section">
@@ -631,7 +651,7 @@ label:active:after {
 
 	    // BEGIN: Create/Update Company Information
 	    // Create or Update an entry
-	    function submit_business_fn() {
+	    function create_business_fn() {
 		    event.preventDefault();
 		    const formData = {
 			    company_id: document.getElementById('companySubmit').value,
@@ -646,7 +666,7 @@ label:active:after {
 		    let url = '/api/create_business';
 		    if (methodBool) {
 			    method = 'POST';
-			    url = '/api/submit_business';
+			    url = '/api/create_business';
 		    } else {
 			    method = 'PUT';
 			    url  = `/api/update_business/${formData.company_id}`;
@@ -863,6 +883,48 @@ label:active:after {
 				    console.error('Error saving social media info.');
 			    }
 		    }).catch(error => console.error('Error saving social media:', error));
+	    };
+	    // BEGIN: Create/Update Domain/Network Information
+	    // Create or Update an entry
+	    function create_domain_network_fn() {
+		    event.preventDefault();
+		    const formData = {
+			    company_id: document.getElementById('companySubmitDN').value,
+			    domain_name: document.getElementById('domain_name').value,
+			    domain_address: document.getElementById('domain_address').value,
+			    domain_latitude: document.getElementById('domain_latitude').value,
+			    domain_longitude: document.getElementById('domain_longitude').value,
+			    domain_registration_date: document.getElementById('domain_registration_date').value,
+
+			    domain_registrar: document.getElementById('domain_registrar').value,
+			    domain_registrar_abuse_email: document.getElementById('domain_registrar_abuse_email').value,
+			    domain_registrar_phone: document.getElementById('domain_registrar_phone').value,
+			    domain_registrant: document.getElementById('domain_registrant').value,
+			    domain_registrant_organization: document.getElementById('domain_registrant_organization').value,
+		    };
+		    const methodBool = formData.company_id == -1;
+		    let method = 'POST';
+		    let url = '/api/create_domain_network';
+		    if (methodBool) {
+			    method = 'POST';
+			    url = '/api/create_domain_network';
+		    } else {
+			    method = 'PUT';
+			    url  = `/api/update_domain_network/${formData.company_id}`;
+		    }
+		    fetch(url, {
+			    method: method,
+			    headers: {
+				    'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(formData)
+		    }).then(response => {
+			    if (response.ok) {
+				    window.location.reload();
+			    } else {
+				    console.error('Error saving domain/network info.');
+			    }
+		    }).catch(error => console.error('Error saving domain/network info.:', error));
 	    };
 
     </script>
