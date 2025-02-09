@@ -172,32 +172,38 @@ def create_social_media():
     company_id = data['company_id']
     print(f"api/create_social_media/, company_id={company_id}, type(company_id)={type(company_id)}")
     if company_id == -1 or company_id == '-1':
+        return jsonify({'ok' : False, 'statusText' : 'Cannot create social media profile if VPN provider doesnt exist first.'})
+    else:
         """
-        
-
         """
         keys = []
         vals = []
+        runCmd = False
         if 'x_profile_name' in data and len(data['x_profile_name']) > 0:
             x_profile_name = data['x_profile_name']
-            keys.append("x_profile_name")
+            keys.append("profile_name")
             vals.append(f"'{x_profile_name}'")
+            runCmd = True
         if 'x_follower_count' in data and len(data['x_follower_count']) > 0:
             x_follower_count = data['x_follower_count']
-            keys.append("x_follower_count")
+            keys.append("follower_count")
             vals.append(f"{x_follower_count}")
+            runCmd = True
         if 'x_following_count' in data and len(data['x_following_count']) > 0:
             x_following_count = data['x_following_count']
-            keys.append("x_following_count")
+            keys.append("following_count")
             vals.append(x_following_count)
+            runCmd = True
         if 'x_location' in data and len(data['x_location']) > 0:
             x_location = data['x_location']
-            keys.append("x_location")
-            vals.append(x_location)
+            keys.append("location")
+            vals.append(f"'{x_location}'")
+            runCmd = True
         if 'x_joined_date' in data and len(data['x_joined_date']) > 0:
             x_joined_date = data['x_joined_date']
-            keys.append(f"'{x_joined_date}'")
-            vals.append(x_joined_date)
+            keys.append("joined_date")
+            vals.append(f"'{x_joined_date}'")
+            runCmd = True
             """
             fb_profile_name
             fb_follower_count
@@ -213,36 +219,42 @@ def create_social_media():
 
         conn = get_db_connection()
         cur = conn.cursor()
-        cur.execute(cmd)
+        if runCmd: 
+            cur.execute(cmd)
         keys = []
         vals = []
+        runCmd = False
         if 'fb_profile_name' in data and len(data['fb_profile_name']) > 0:
             fb_profile_name = data['fb_profile_name']
-            keys.append("fb_profile_name")
+            keys.append("profile_name")
             vals.append(f"'{fb_profile_name}'")
+            runCmd = True
         if 'fb_follower_count' in data and len(data['fb_follower_count']) > 0:
             fb_follower_count = data['fb_follower_count']
-            keys.append("fb_follower_count")
+            keys.append("follower_count")
             vals.append(f"{fb_follower_count}")
+            runCmd = True
         if 'fb_location' in data and len(data['fb_location']) > 0:
             fb_location = data['fb_location']
-            keys.append("fb_location")
-            vals.append(fb_location)
+            keys.append("location")
+            vals.append(f"'{fb_location}'")
+            runCmd = True
         if 'fb_joined_date' in data and len(data['fb_joined_date']) > 0:
             fb_joined_date = data['fb_joined_date']
-            keys.append(f"'{fb_joined_date}'")
-            vals.append(fb_joined_date)
+            keys.append('joined_date')
+            vals.append(f"'{fb_joined_date}'")
+            runCmd = True
         keys = ','.join(keys)
         vals = ','.join(vals)
+        print(f"keys={keys}, vals={vals}")
         cmd = f"INSERT INTO vpnosint_business_to_facebook_db ({keys}) VALUES ({vals})"
-        cur.execute(cmd)
+        if runCmd: 
+            cur.execute(cmd)
         conn.commit()
         cur.close()
         conn.close()
 
         return jsonify({'ok' : True, "statusText" : "Company Successfully Added."}) 
-    else:
-        return jsonify({"ok" : False, "statusText" : "Cannot create existing company" })
 
 @app.route('/api/update_social_media/<int:company_id>', methods=['PUT','POST'])
 def update_social_media(company_id):
@@ -254,9 +266,207 @@ def update_social_media(company_id):
     First, check if the data is there, if it's not, create it and then add it
     """
     data = request.json
-    print(f"/api/update_social_media - data={data}")
-    return jsonify({"ok": True})
+    company_id = data['company_id']
+    print(f"api/create_social_media/, company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        return jsonify({'ok' : False, 'statusText' : 'Cannot create social media provil for unknown VPN provider.'})
+    else:
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            twitter_check_query = """
+                SELECT EXISTS (
+                    SELECT 1 FROM  vpnosint_business_to_twitter_db WHERE business_id = %s
+                );
+            """
+            # Execute the query
+            cur.execute(twitter_check_query, (company_id,))
+            twitter_exists = cur.fetchone()[0]  # Fetch the result (True or False)
 
+            keys = []
+            vals = []
+            if not twitter_exists:
+                print(f"Entry with ID {company_id} doesn't exists.")
+
+                runCmd = False
+                if 'x_profile_name' in data and len(data['x_profile_name']) > 0:
+                    x_profile_name = data['x_profile_name']
+                    keys.append("profile_name")
+                    vals.append(f"'{x_profile_name}'")
+                    runCmd = True
+                if 'x_follower_count' in data and len(data['x_follower_count']) > 0:
+                    x_follower_count = data['x_follower_count']
+                    keys.append("follower_count")
+                    vals.append(f"{x_follower_count}")
+                    runCmd = True
+                if 'x_following_count' in data and len(data['x_following_count']) > 0:
+                    x_following_count = data['x_following_count']
+                    keys.append("following_count")
+                    vals.append(x_following_count)
+                    runCmd = True
+                if 'x_location' in data and len(data['x_location']) > 0:
+                    x_location = data['x_location']
+                    keys.append("location")
+                    vals.append(f"'{x_location}'")
+                    runCmd = True
+                if 'x_joined_date' in data and len(data['x_joined_date']) > 0:
+                    x_joined_date = data['x_joined_date']
+                    keys.append("joined_date")
+                    vals.append(f"'{x_joined_date}'")
+                    runCmd = True
+                    """
+                    fb_profile_name
+                    fb_follower_count
+                    fb_location
+                    fb_joined_date
+                    """
+                if runCmd: 
+                    keys.append("business_id")
+                    vals.append(company_id)
+
+                keys = ','.join(keys)
+                vals = ','.join(vals)
+                
+                cmd = f"INSERT INTO vpnosint_business_to_twitter_db ({keys}) VALUES ({vals});"
+                print(f"cmd={cmd}")
+
+                if runCmd: 
+                    cur.execute(cmd)
+                    conn.commit()
+            else:
+                """ There is an existing entry, so we just need to update stuff."""
+                runCmd = False
+                update_cmd = []
+                if 'x_profile_name' in data and len(data['x_profile_name']) > 0:
+                    x_profile_name = data['x_profile_name']
+                    tmp = f"profile_name='{x_profile_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'x_follower_count' in data and len(data['x_follower_count']) > 0:
+                    x_follower_count = data['x_follower_count']
+                    tmp = f"follower_count='{x_follower_count}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'x_following_count' in data and len(data['x_following_count']) > 0:
+                    x_following_count = data['x_following_count']
+                    tmp = f"following_count='{x_following_count}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'x_location' in data and len(data['x_location']) > 0:
+                    x_location = data['x_location']
+                    tmp = f"x_location='{x_location}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'x_joined_date' in data and len(data['x_joined_date']) > 0:
+                    x_joined_date = data['x_joined_date']
+                    tmp = f"joined_date='{x_joined_date}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                
+                if runCmd: 
+                    tmp = f"business_id='{company_id}'"
+                    update_cmd.append(tmp)
+
+                update_cmd = ','.join(update_cmd)
+                cmd = f"UPDATE vpnosint_business_to_twitter_db SET {update_cmd} WHERE business_id={company_id};"
+                print(f"cmd={cmd}")
+
+                if runCmd: 
+                    cur.execute(cmd)
+                    conn.commit()
+                
+            keys = []
+            vals = []
+            runCmd = False
+
+            facebook_check_query = """
+                SELECT EXISTS (
+                    SELECT 1 FROM  vpnosint_business_to_facebook_db WHERE business_id = %s
+                );
+            """
+            cur.execute(facebook_check_query, (company_id,))
+            facebook_exists = cur.fetchone()[0]  # Fetch the result (True or False)
+
+            if not facebook_exists:
+                if 'fb_profile_name' in data and len(data['fb_profile_name']) > 0:
+                    fb_profile_name = data['fb_profile_name']
+                    keys.append("profile_name")
+                    vals.append(f"'{fb_profile_name}'")
+                    runCmd = True
+                if 'fb_follower_count' in data and len(data['fb_follower_count']) > 0:
+                    fb_follower_count = data['fb_follower_count']
+                    keys.append("follower_count")
+                    vals.append(f"{fb_follower_count}")
+                    runCmd = True
+                if 'fb_location' in data and len(data['fb_location']) > 0:
+                    fb_location = data['fb_location']
+                    keys.append("location")
+                    vals.append(f"'{fb_location}'")
+                    runCmd = True
+                if 'fb_joined_date' in data and len(data['fb_joined_date']) > 0:
+                    fb_joined_date = data['fb_joined_date']
+                    keys.append('joined_date')
+                    vals.append(f"'{fb_joined_date}'")
+                    runCmd = True
+                if runCmd: 
+                    keys.append("business_id")
+                    vals.append(company_id)
+
+                keys = ','.join(keys)
+                vals = ','.join(vals)
+                print(f"keys={keys}, vals={vals}")
+                cmd = f"INSERT INTO vpnosint_business_to_facebook_db ({keys}) VALUES ({vals});"
+                if runCmd: 
+                    cur.execute(cmd)
+                    conn.commit()
+            else:
+                """ There is an existing entry, so we just need to update stuff."""
+                runCmd = False
+                update_cmd = []
+                if 'fb_profile_name' in data and len(data['fb_profile_name']) > 0:
+                    fb_profile_name = data['fb_profile_name']
+                    tmp = f"profile_name='{fb_profile_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'fb_follower_count' in data and len(data['fb_follower_count']) > 0:
+                    fb_follower_count = data['fb_follower_count']
+                    tmp = f"follower_count='{fb_follower_count}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'fb_following_count' in data and len(data['fb_following_count']) > 0:
+                    fb_following_count = data['fb_following_count']
+                    tmp = f"following_count='{fb_following_count}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'fb_location' in data and len(data['fb_location']) > 0:
+                    fb_location = data['fb_location']
+                    tmp = f"location='{fb_location}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'fb_joined_date' in data and len(data['fb_joined_date']) > 0:
+                    fb_joined_date = data['fb_joined_date']
+                    tmp = f"joined_date='{fb_joined_date}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                
+                if runCmd: 
+                    tmp = f"business_id='{company_id}'"
+                    update_cmd.append(tmp)
+                update_cmd = ','.join(update_cmd)
+                cmd = f"UPDATE vpnosint_business_to_facebook_db SET {update_cmd} WHERE business_id={company_id};"
+                print(f"cmd={cmd}")
+
+                if runCmd: 
+                    cur.execute(cmd)
+                    conn.commit()
+        except Exception as e:
+            print(f"Error checking entry: {e}")
+        finally:
+            # Close the cursor and connection
+            cur.close()
+            conn.close()
+
+        return jsonify({'ok' : True, "statusText" : "Company Successfully Added."}) 
 
 # END - CRUD for social media transparency
 # Aggregate View

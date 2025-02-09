@@ -230,13 +230,14 @@ label:active:after {
             border-radius: 4px;
         }
 
-        .form-section input[type="submit_business"] {
+        .form-section input[type="create_business"],
+	.form-section input[type="create_social_media"] {
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+		padding: 10px 20px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
         }
 
         .form-section input[type="submit_business"]:hover {
@@ -248,35 +249,35 @@ label:active:after {
         .data-container {
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            margin-top: 20px;
+		margin-top: 20px;
         }
 
         /* Horizontal layout for user data */
         .horizontal-layout {
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            display: flex;
-            gap: 20px;
-            overflow-x: auto; /* Enable horizontal scrolling if needed */
+		display: flex;
+		gap: 20px;
+		overflow-x: auto; /* Enable horizontal scrolling if needed */
         }
 
         .horizontal-layout .data-item {
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            flex: 0 0 auto; /* Prevent flex items from growing or shrinking */
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+		flex: 0 0 auto; /* Prevent flex items from growing or shrinking */
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
         }
 
         /* Vertical layout for product data */
         .vertical-layout .data-item {
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+		margin-bottom: 10px;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
         }
 
 
@@ -368,8 +369,8 @@ label:active:after {
 		<div class="form-section">
 			<!-- TODO: Fix the input methods -->
 			<h2>Social Media Transparency</h2>
-			<label for="companySubmit">Select a Company:</label>
-			<select id="companySubmit">
+			<label for="companySubmitSM">Select a Company:</label>
+			<select id="companySubmitSM">
 				{% for company in companies %}
 				<option value="{{ company[0] }}">{{ company[1] }}</option>
 				{% endfor %}
@@ -826,7 +827,7 @@ label:active:after {
 	    function create_social_media_fn() {
 		    event.preventDefault();
 		    const formData = {
-			    company_id: document.getElementById('companySubmit').value,
+			    company_id: document.getElementById('companySubmitSM').value,
 			    x_profile_name: document.getElementById('x_profile_name').value,
 			    x_follower_count: document.getElementById('x_follower_count').value,
 			    x_following_count: document.getElementById('x_following_count').value,
