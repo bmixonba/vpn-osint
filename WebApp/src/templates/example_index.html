@@ -338,7 +338,6 @@ label:active:after {
 	<div class="form-container">
 		<!-- User Form -->
 		<div class="form-section">
-			<!-- TODO: Fix the input methods -->
 			<h2>Business Transparency</h2>
 			<label for="companySubmit">Select a Company:</label>
 			<select id="companySubmit">
@@ -367,6 +366,7 @@ label:active:after {
 		</div>
 		<!-- Product Form -->
 		<div class="form-section">
+			<!-- TODO: Fix the input methods -->
 			<h2>Social Media Transparency</h2>
 			<label for="companySubmit">Select a Company:</label>
 			<select id="companySubmit">
@@ -375,18 +375,43 @@ label:active:after {
 				{% endfor %}
 			</select>
 			<div class="form-content">
-			<form action="{{ url_for('submit_social_media') }}" method="post">
-				<label for="product_name">Product Name:</label>
-				<input type="text" id="product_name" name="product_name" required><br><br>
-				<label for="price">Price:</label>
-				<input type="number" id="price" name="price" step="0.01" required><br><br>
-				<input type="submit" value="Submit Product">
-			</form>
+				<!-- Create a new company -->
+				<form id="entryForm">
+					<div id="twitter">
+						<h3>Twitter/X Info</h3>
+						<label for="x_profile_name">Profile Name</label>
+						<input type="text" id="x_profile_name" name="x_profile_name" required><br><br>
+						<label for="x_follower_count">Follower Count</label>
+						<input type="number" id="x_follower_count" name="x_follower_count"><br><br>
+						<label for="x_following_count">Following Count</label>
+						<input type="number" id="x_following_count" name="x_following_count"><br><br>
+						<label for="x_location">Location</label>
+						<input type="text" id="x_location" name="x_location"><br><br>
+						<label for="x_joined_date">Joined Date</label>
+						<input type="datetime-local" id="x_joined_date" name="x_joined_date"><br><br>
+					</div>
+				</form>
+				<form id="entryForm">
+					<div id="Facebook">
+						<h3>Fakebook Info</h3>
+						<label for="fb_profile_name">Profile Name</label>
+						<input type="text" id="fb_profile_name" name="fb_profile_name" required><br><br>
+						<label for="follower_count">Follower Count</label>
+						<input type="number" id="fb_follower_count" name="fb_follower_count"><br><br>
+						<label for="fb_location">Location</label>
+						<input type="text" id="fb_location" name="fb_location"><br><br>
+						<label for="fb_joined_date">Joined Date</label>
+						<input type="datetime-local" id="fb_joined_date" name="fb_joined_date"><br><br>
+					</div>
+				</form>
+
+				<button id="create_social_media", onclick="create_social_media_fn()">Submit Social Media</button>
 			</div>
 		</div>
 	</div>
 	<div class="form-container">
 		<div class="form-section">
+			<!-- TODO: Fix the input methods -->
 			<h2>Network/Domain Transparency</h2>
 			<label for="companySubmit">Select a Company:</label>
 			<select id="companySubmit">
@@ -395,7 +420,7 @@ label:active:after {
 				{% endfor %}
 			</select>
 			<div class="form-content">
-			<form action="{{ url_for('submit_social_media') }}" method="post">
+			<form action="{{ url_for('create_social_media') }}" method="post">
 				<label for="product_name">Product Name:</label>
 				<input type="text" id="product_name" name="product_name" required><br><br>
 				<label for="price">Price:</label>
@@ -405,6 +430,7 @@ label:active:after {
 			</div>
 		</div>
 		<div class="form-section">
+			<!-- TODO: Fix the input methods -->
 			<h2>Code Transparency</h2>
 			<label for="companySubmit">Select a Company:</label>
 			<select id="companySubmit">
@@ -413,7 +439,7 @@ label:active:after {
 				{% endfor %}
 			</select>
 			<div class="form-content">
-			<form action="{{ url_for('submit_social_media') }}" method="post">
+			<form action="{{ url_for('create_social_media') }}" method="post">
 				<label for="product_name">Product Name:</label>
 				<input type="text" id="product_name" name="product_name" required><br><br>
 				<label for="price">Price:</label>
@@ -425,6 +451,7 @@ label:active:after {
 	</div>
 	<div class="form-container">
 		<div class="form-section">
+			<!-- TODO: Fix the input methods -->
 			<h2>Miscellaneous Security</h2>
 			<label for="companySubmit">Select a Company:</label>
 			<select id="companySubmit">
@@ -433,7 +460,7 @@ label:active:after {
 				{% endfor %}
 			</select>
 			<div class="form-content">
-			<form action="{{ url_for('submit_social_media') }}" method="post">
+			<form action="{{ url_for('create_social_media') }}" method="post">
 				<label for="product_name">Product Name:</label>
 				<input type="text" id="product_name" name="product_name" required><br><br>
 				<label for="price">Price:</label>
@@ -443,6 +470,7 @@ label:active:after {
 			</div>
 		</div>
 		<div class="form-section">
+			<!-- TODO: Fix the input methods -->
 			<h2>Manual Analysis</h2>
 			<label for="companySubmit">Select a Company:</label>
 			<select id="companySubmit">
@@ -451,7 +479,7 @@ label:active:after {
 				{% endfor %}
 			</select>
 			<div class="form-content">
-			<form action="{{ url_for('submit_social_media') }}" method="post">
+			<form action="{{ url_for('create_social_media') }}" method="post">
 				<label for="product_name">Product Name:</label>
 				<input type="text" id="product_name" name="product_name" required><br><br>
 				<label for="price">Price:</label>
@@ -463,14 +491,15 @@ label:active:after {
 	</div>
 	<div class="form-container">
 		<div class="form-section">
+			<!-- DONE -->
 			<h2>Delete Company</h2>
-			<label for="companyDelete">Select a Company to Remove:</label>
+			<label for="companyDelete">Select a Business to Remove:</label>
 			<select id="companyDelete">
 				{% for company in companies %}
 				<option value="{{ company[0] }}">{{ company[1] }}</option>
 				{% endfor %}
 			</select>
-			<button onclick="delete_company()">Delete Company</button>
+			<button onclick="delete_business()">Delete Business</button>
 		</div>
 	</div>
 
@@ -558,250 +587,282 @@ label:active:after {
     </div>
 
     <script>
-        // JavaScript to handle tab switching
-        function openTab(evt, tabName) {
-            // Hide all tab content
-            var tabcontent = document.getElementsByClassName("tabcontent");
-            for (var i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
+	    // BEGIN: Them and tab switching
+	    function openTab(evt, tabName) {
+		    // Hide all tab content
+		    var tabcontent = document.getElementsByClassName("tabcontent");
+		    for (var i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		    }
 
-            // Remove the "active" class from all tab buttons
-            var tablinks = document.getElementsByClassName("tablinks");
-            for (var i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
+		    // Remove the "active" class from all tab buttons
+		    var tablinks = document.getElementsByClassName("tablinks");
+		    for (var i = 0; i < tablinks.length; i++) {
+			tablinks[i].className = tablinks[i].className.replace(" active", "");
+		    }
 
-            // Show the current tab and add the "active" class to the button
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
+		    // Show the current tab and add the "active" class to the button
+		    document.getElementById(tabName).style.display = "block";
+		    evt.currentTarget.className += " active";
+	    }
+	    // Open the default tab (Form View) on page load
+	    document.getElementsByClassName("tablinks")[0].click();
+	    const themeSwitch = document.getElementById('theme-switch');
+	    themeSwitch.addEventListener('change', function() {
+		    if (this.checked) {
+			    document.documentElement.setAttribute('data-theme', 'dark');
+		    } else {
+			    document.documentElement.setAttribute('data-theme', 'light');
+		    }
+	    });
+	    // Save the theme preference to localStorage (optional
+	    const currentTheme = localStorage.getItem('theme');
+	    if (currentTheme) {
+		    document.documentElement.setAttribute('data-theme', currentTheme);
+		    themeSwitch.checked = currentTheme === 'dark';
+	    }
+	    themeSwitch.addEventListener('change', function() {
+		    const theme = this.checked ? 'dark' : 'light';
+		    document.documentElement.setAttribute('data-theme', theme);
+		    localStorage.setItem('theme', theme);  // Save the selected theme
+	    });
+	    // END: Them and tab switching
 
-		// Open the default tab (Form View) on page load
-		document.getElementsByClassName("tablinks")[0].click();
-		const themeSwitch = document.getElementById('theme-switch');
-		themeSwitch.addEventListener('change', function() {
-			if (this.checked) {
-				document.documentElement.setAttribute('data-theme', 'dark');
-			} else {
-				document.documentElement.setAttribute('data-theme', 'light');
-			}
-		});
-		// Save the theme preference to localStorage (optional
-		const currentTheme = localStorage.getItem('theme');
-		if (currentTheme) {
-			document.documentElement.setAttribute('data-theme', currentTheme);
-			themeSwitch.checked = currentTheme === 'dark';
-		}
-		themeSwitch.addEventListener('change', function() {
-			const theme = this.checked ? 'dark' : 'light';
-			document.documentElement.setAttribute('data-theme', theme);
-			localStorage.setItem('theme', theme);  // Save the selected theme
-		});
-		// BEGIN: Create/Update Company Information
-		// Create or Update an entry
-		function submit_business_fn() {
-			event.preventDefault();
-			const formData = {
-				company_id: document.getElementById('companySubmit').value,
-				company_name: document.getElementById('company_name').value,
-				address: document.getElementById('address').value,
-				latitude: document.getElementById('latitude').value,
-				longitude: document.getElementById('longitude').value,
-				incorporation_date: document.getElementById('incorporation_date').value
-			};
+	    // BEGIN: Create/Update Company Information
+	    // Create or Update an entry
+	    function submit_business_fn() {
+		    event.preventDefault();
+		    const formData = {
+			    company_id: document.getElementById('companySubmit').value,
+			    company_name: document.getElementById('company_name').value,
+			    address: document.getElementById('address').value,
+			    latitude: document.getElementById('latitude').value,
+			    longitude: document.getElementById('longitude').value,
+			    incorporation_date: document.getElementById('incorporation_date').value
+		    };
+		    const methodBool = formData.company_id == -1;
+		    let method = 'POST';
+		    let url = '/api/create_business';
+		    if (methodBool) {
+			    method = 'POST';
+			    url = '/api/submit_business';
+		    } else {
+			    method = 'PUT';
+			    url  = `/api/update_business/${formData.company_id}`;
+		    }
+		    fetch(url, {
+			    method: method,
+			    headers: {
+				    'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(formData)
+		    }).then(response => {
+			    if (response.ok) {
+				    window.location.reload();
+			    } else {
+				    console.error('Error saving company info.');
+			    }
+		    }).catch(error => console.error('Error saving entry:', error));
+	    };
+	    function delete_business(){
+		    const company_id = document.getElementById('companyDelete').value;
+		    fetch(`/api/delete_business/${company_id}`, {
+			    method: 'DELETE'
+		    }).then(response => {
+			    if (response.ok) {
+				    window.location.reload();
+			    } else {
+				    console.error('Error deleting company info.');
+			    }
+		    }).catch(error => console.error('Error deleting entry:', error));
+	    };
 
-			const methodBool = formData.company_id == -1;
-			let method = 'POST';
-			let url = '/api/submit_business';
-			if (methodBool) {
-				method = 'POST';
-				url = '/api/submit_business';
-				console.log(`I-F  submit_business_fn - ${methodBool}, ${formData.company_id}, ${formData.company_id == -1}`)
-			} else {
-				console.log(`e-lse  submit_business_fn - ${methodBool}, ${formData.company_id}, ${formData.company_id == -1}`)
+	    // Analysis view scriptso
+	    const companyId = window.location.pathname.split('/').pop();
+	    function fetchCompanyData() {
+		    const company_id = document.getElementById('companySelect').value;
+		    if (company_id != -1) {
+			    fetch(`/api/vpn-company/${company_id}`)
+				    .then(response => response.json())
+				    .then(data => {
+					    updateProfile(data);
+				    })
+				    .catch(error => {
+					    console.error('Error fetching company data:', error);
+				    });
+		    }
+	    }
+	    let map; // Declare the map variable globally
+	    let isMapInitialized = false; // Flag to track initialization
+	    let timelineChart = null;
 
-				method = 'PUT';
-				url  = `/api/update_business/${formData.company_id}`;
-			}
-			console.log(`URL is ${url}`)
-			fetch(url, {
-				method: method,
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(formData)
-			}).then(response => {
-				if (response.ok) {
-					window.location.reload();
-				} else {
-					console.error('Error saving company info.');
-				}
-			}).catch(error => console.error('Error saving entry:', error));
-		};
+	    function updateProfile(data) {
+		    // Update the company name
+		    document.getElementById('company-name').textContent = data.name;
+		    // Populate the map
+		    if (!isMapInitialized){
+			    map = L.map('map').setView([data.locations[0].lat, data.locations[0].lon], 2);
+			    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				    attribution: '&copy; OpenStreetMap contributors'
+			    }).addTo(map);
+			    isMapInitialized = true;
+		    }
+		    data.locations.forEach(location => {
+			    L.marker([location.lat, location.lon]).addTo(map).bindPopup(location.address);
+		    });
+		    // Populate the timeline
+		    const timelineCtx = document.getElementById('timeline').getContext('2d');
+		    // Destroy the existing chart if it exists
+		    if (timelineChart) {
+			    timelineChart.destroy();
+		    }
 
+		    const labels = data.timelineEvents.map(event => event.date);
+		    const timelineData = data.timelineEvents.map(() => 1);
+		    timelineChart = new Chart(timelineCtx, {
+			    type: 'bar',
+			    data: {
+				    labels: labels,
+				    datasets: [{
+					    label: 'Company Events',
+					    data: timelineData,
+					    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+					    borderColor: 'rgba(75, 192, 192, 1)',
+					    borderWidth: 1
+				    }]
+			    },
+			    options: {
+				    scales: {
+					    x: { title: { display: true, text: 'Event Dates' }},
+					    y: { display: false }
+				    }
+			    }
+		    });
+		    // Define nodes and edges
+		    const elements = [
+			    // Nodes
+			    { data: { id: 'vpn1', label: 'VPN Provider 1' } },
+			    { data: { id: 'vpn2', label: 'VPN Provider 2' } },
+			    { data: { id: 'person1', label: 'Person A' } },
+			    { data: { id: 'place1', label: 'Place X' } },
+			    { data: { id: 'thing1', label: 'Thing Y' } },
+			    // Edges
+			    { data: { source: 'vpn1', target: 'person1', label: 'References' } },
+			    { data: { source: 'vpn1', target: 'place1', label: 'Located in' } },
+			    { data: { source: 'vpn1', target: 'thing1', label: 'Owns' } },
+			    { data: { source: 'vpn1', target: 'vpn2', label: 'Partnership' } },
+		    ];
+		    function updateWebpagePanel() {
+			    const webpageContainer = document.getElementById('webpage');
+			    webpageContainer.innerHTML = '';
+			    const iframe = document.createElement('iframe');
+			    iframe.src = "https://web.archive.org/web/20250106170609/https://opencorporates.com/companies/sg/201812738K";
+			    iframe.style.width='100%';
+			    iframe.style.height='100%';
+			    iframe.style.border='none';
+			    webpageContainer.appendChild(iframe);
+		    }
+		    // updateWebpagePanel();
+	    }
+	    // Call the fetch function to load data dynamically
+	    fetchCompanyData();
+	    // Toggle dark and light mode
+	    const cy = cytoscape({
+		    container: document.getElementById('cy'),
+		    elements: [],
+		    style: [{
+			    selector: 'node',
+			    style: {
+				    'background-color': '#0074D9',
+				    'label': 'data(label)',
+				    'color': '#fff',
+				    'text-halign': 'center',
+				    'text-valign': 'center',
+			    }
+		    },{
+			    selector: 'edge',
+			    style: {
+				    'width': 2,
+				    'line-color': '#FF4136',
+				    'target-arrow-color': '#FF4136',
+				    'target-arrow-shape': 'triangle',
+				    'curve-style': 'bezier',
+				    'label': 'data(label)',
+				    'text-background-color': '#fff',
+				    'text-background-opacity': 1,
+			    }
+		    },{
+			    selector: '[type="VPN"]',
+			    style: {
+				    'background-color': '#2ECC40',
+			    }
+		    },{
+			    selector: '[type="Person"]',
+			    style: {
+				    'background-color': '#FF851B',
+			    }
+		    },{
+			    selector: '[type="Place"]',
+			    style: {
+				    'background-color': '#7FDBFF',
+			    }
+		    },{
+			    selector: '[type="Thing"]',
+			    style: {
+				    'background-color': '#B10DC9',
+			    }
+		    }
+		    ],
+		    layout: {
+			    name: 'cose',
+			    animate: true,
+			    padding: 10
+		    }
+	    });
+	    // END: Create/Update Company Information
 
+	    // BEGIN: Create/Update Social Information
+	    // Create or Update an entry
+	    function create_social_media_fn() {
+		    event.preventDefault();
+		    const formData = {
+			    company_id: document.getElementById('companySubmit').value,
+			    x_profile_name: document.getElementById('x_profile_name').value,
+			    x_follower_count: document.getElementById('x_follower_count').value,
+			    x_following_count: document.getElementById('x_following_count').value,
+			    x_location: document.getElementById('x_location').value,
+			    x_joined_date: document.getElementById('x_joined_date').value,
 
+			    fb_profile_name: document.getElementById('fb_profile_name').value,
+			    fb_follower_count: document.getElementById('fb_follower_count').value,
+			    fb_location: document.getElementById('fb_location').value,
+			    fb_joined_date: document.getElementById('fb_joined_date').value,
 
-	// END: Create/Update Company Information
-
-	// Analysis view scriptso
-	const companyId = window.location.pathname.split('/').pop();
-	function fetchCompanyData() {
-		const company_id = document.getElementById('companySelect').value;
-		if (company_id != -1) {
-			fetch(`/api/vpn-company/${company_id}`)
-				.then(response => response.json())
-				.then(data => {
-					updateProfile(data);
-				})
-				.catch(error => {
-					console.error('Error fetching company data:', error);
-				});
-		}
-	}
-	let map; // Declare the map variable globally
-	let isMapInitialized = false; // Flag to track initialization
-	let timelineChart = null;
-
-	function updateProfile(data) {
-		// Update the company name
-		document.getElementById('company-name').textContent = data.name;
-		// Populate the map
-		if (!isMapInitialized){
-			map = L.map('map').setView([data.locations[0].lat, data.locations[0].lon], 2);
-			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				attribution: '&copy; OpenStreetMap contributors'
-			}).addTo(map);
-			isMapInitialized = true;
-		}
-		data.locations.forEach(location => {
-			L.marker([location.lat, location.lon]).addTo(map).bindPopup(location.address);
-		});
-		// Populate the timeline
-		const timelineCtx = document.getElementById('timeline').getContext('2d');
-		// Destroy the existing chart if it exists
-		if (timelineChart) {
-			timelineChart.destroy();
-		}
-
-		const labels = data.timelineEvents.map(event => event.date);
-		const timelineData = data.timelineEvents.map(() => 1);
-		timelineChart = new Chart(timelineCtx, {
-			type: 'bar',
-			data: {
-				labels: labels,
-				datasets: [{
-					label: 'Company Events',
-					data: timelineData,
-					backgroundColor: 'rgba(75, 192, 192, 0.2)',
-					borderColor: 'rgba(75, 192, 192, 1)',
-					borderWidth: 1
-				}]
-			},
-			options: {
-				scales: {
-					x: { title: { display: true, text: 'Event Dates' }},
-					y: { display: false }
-				}
-			}
-		});
-		// Define nodes and edges
-		const elements = [
-			// Nodes
-			{ data: { id: 'vpn1', label: 'VPN Provider 1' } },
-			{ data: { id: 'vpn2', label: 'VPN Provider 2' } },
-			{ data: { id: 'person1', label: 'Person A' } },
-			{ data: { id: 'place1', label: 'Place X' } },
-			{ data: { id: 'thing1', label: 'Thing Y' } },
-			// Edges
-			{ data: { source: 'vpn1', target: 'person1', label: 'References' } },
-			{ data: { source: 'vpn1', target: 'place1', label: 'Located in' } },
-			{ data: { source: 'vpn1', target: 'thing1', label: 'Owns' } },
-			{ data: { source: 'vpn1', target: 'vpn2', label: 'Partnership' } },
-		];
-		function updateWebpagePanel() {
-			const webpageContainer = document.getElementById('webpage');
-			webpageContainer.innerHTML = '';
-			const iframe = document.createElement('iframe');
-			iframe.src = "https://web.archive.org/web/20250106170609/https://opencorporates.com/companies/sg/201812738K";
-			iframe.style.width='100%';
-			iframe.style.height='100%';
-			iframe.style.border='none';
-			webpageContainer.appendChild(iframe);
-		}
-			  // updateWebpagePanel();
-	}
-	// Call the fetch function to load data dynamically
-	fetchCompanyData();
-	// Toggle dark and light mode
-	const cy = cytoscape({
-		container: document.getElementById('cy'),
-		elements: [],
-		style: [{
-			selector: 'node',
-			style: {
-				'background-color': '#0074D9',
-				'label': 'data(label)',
-				'color': '#fff',
-				'text-halign': 'center',
-				'text-valign': 'center',
-			}
-		},{
-			selector: 'edge',
-			style: {
-				'width': 2,
-				'line-color': '#FF4136',
-				'target-arrow-color': '#FF4136',
-				'target-arrow-shape': 'triangle',
-				'curve-style': 'bezier',
-				'label': 'data(label)',
-				'text-background-color': '#fff',
-				'text-background-opacity': 1,
-			}
-		},
-			{
-				selector: '[type="VPN"]',
-				style: {
-					'background-color': '#2ECC40',
-				}
-			},{
-				selector: '[type="Person"]',
-				style: {
-					'background-color': '#FF851B',
-				}
-			},{
-				selector: '[type="Place"]',
-				style: {
-					'background-color': '#7FDBFF',
-				}
-			},{
-				selector: '[type="Thing"]',
-				style: {
-					'background-color': '#B10DC9',
-				}
-			}
-		],
-		layout: {
-			name: 'cose',
-			animate: true,
-			padding: 10
-		}
-	});
-
-	function delete_company(){
-		const company_id = document.getElementById('companyDelete').value;
-		fetch(`/api/delete_company/${company_id}`, {
-			method: 'DELETE'
-		})
-			.then(response => {
-				if (response.ok) {
-					window.location.reload();
-				} else {
-					console.error('Error deleting company info.');
-				}
-		}).catch(error => console.error('Error deleting entry:', error));
-}
+		    };
+		    const methodBool = formData.company_id == -1;
+		    let method = 'POST';
+		    let url = '/api/create_social_media';
+		    if (methodBool) {
+			    method = 'POST';
+			    url = '/api/create_social_media';
+		    } else {
+			    method = 'PUT';
+			    url  = `/api/update_social_media/${formData.company_id}`;
+		    }
+		    fetch(url, {
+			    method: method,
+			    headers: {
+				    'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(formData)
+		    }).then(response => {
+			    if (response.ok) {
+				    window.location.reload();
+			    } else {
+				    console.error('Error saving social media info.');
+			    }
+		    }).catch(error => console.error('Error saving social media:', error));
+	    };
 
     </script>
 </body>

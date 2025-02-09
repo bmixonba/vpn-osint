@@ -23,30 +23,16 @@ def analyst():
     """ """
     return render_template("analyst.html")
 
-@app.route('/api/submit_business', methods=['POST'])
-def submit_business():
+# BEGIN: Business Transparency CRUD API endpoints
+
+@app.route('/api/create_business', methods=['POST'])
+def create_business():
     """
     Create a new business
-
-    database schema for table. 
-    vpnosint_db=# d vpnosint_business_db
-                                                Table "public.vpnosint_business_db"
-           Column       |            Type             | Collation | Nullable |                     Default                      
-    --------------------+-----------------------------+-----------+----------+--------------------------------------------------
-     id                 | integer                     |           | not null | nextval('vpnosint_business_db_id_seq'::regclass)
-     business_name      | character varying(255)      |           | not null | 
-     address            | text                        |           |          | 
-     latitude           | double precision            |           |          | 
-     longitude          | double precision            |           |          | 
-     incorporation_date | timestamp without time zone |           |          | 
-
-    Api submission from front end.
-    api/submit_business/
-        data={'company_id': '-1', 'company_name': 'Test VPN Company', 'address': 'Some funky address', 'latitude': '123123', 'longitude': '123123', 'incorporation_date': '2025-02-05T16:30'}
     """
     data = request.json
     print(f"data={data}")
-    print(f"RAN - api/submit_business/")
+    print(f"RAN - api/create_business/")
     keys = []
     vals = []
     company_id = data['company_id']
@@ -90,24 +76,189 @@ def submit_business():
     else:
         return jsonify({"ok" : False, "statusText" : "Cannot create existing company" })
 
-@app.route('/submit_social_media', methods=['POST'])
-def submit_social_media():
-    name = request.form['name']
-    email = request.form['email']
-    message = request.form['message']
 
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('INSERT INTO user_data (name, email, message) VALUES (%s, %s, %s)',
-                (name, email, message))
-    conn.commit()
-    cur.close()
-    conn.close()
+@app.route('/api/update_business/<int:company_id>', methods=['PUT'])
+def update_business(company_id):
+    """Update existing company information.
 
-    return redirect(url_for('analyst'))
+    notes:
 
-"""
-"""
+    RAN - api/update_company/11
+    RAN - data={'company_id': '11', 'company_name': 'Test business 1 update', 'address': '', 'latitude': '', 'longitude': '', 'incorporation_date': ''}
+
+    """
+    data = request.json
+    print(f"RAN - api/update_company/{company_id}")
+    print(f"RAN - data={data}")
+
+    update_cmd = []
+    company_id = data["company_id"]
+    print(f"company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        return jsonify({"ok" : False, "statusText" : "Cannot update unknown company" })
+    else:
+        if 'company_name' in data and len(data['company_name']) > 0:
+            business_name = data['company_name']
+            tmp = f"business_name='{business_name}'"
+            update_cmd.append(tmp)
+        if 'address' in data and len(data['address']) > 0:
+            address = data['address']
+            tmp = f"address='{address}'"
+            update_cmd.append(tmp)
+        if 'latitude' in data and len(data['latitude']) > 0:
+            latitude = data['latitude']
+            tmp = f"latitude={latitude}"
+            update_cmd.append(tmp)
+
+        if 'longitude' in data and len(data['longitude']) > 0:
+            longitude = data['longitude']
+            tmp = f"longitude={longitude}"
+            update_cmd.append(tmp)
+        if 'incorporation_date' in data and len(data['incorporation_date']) > 0:
+            incorporation_date = data['incorporation_date']
+            tmp = f"incorporation_date='{incorporation_date}'"
+            update_cmd.append(tmp)
+        update_cmd = ','.join(update_cmd)
+        cmd = f"UPDATE vpnosint_business_db SET {update_cmd} WHERE id={company_id};"
+        print(f"cmd={cmd}")
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(cmd)
+        conn.commit()
+        cur.close()
+        conn.close()
+        return jsonify({"ok" : True, "statusText" : "Company Successfully Updated."}) 
+
+@app.route('/api/delete_business/<int:company_id>', methods=['DELETE'])
+def delete_business(company_id):
+    if company_id == -1:
+        return jsonify({'status' : 200, "statusText" : "Nothing to delete."})
+    else:
+        print(f"/api/delete_business/{company_id}={type(company_id)}")
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('DELETE FROM vpnosint_business_db WHERE id = %s;',(company_id,));
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        print(f"api/delete_company/{company_id}")
+        return jsonify({'ok' : True, "statusText" : "Company Successfully Deleted."}) 
+
+
+# END: Business Transparency CRUD API endpoints
+
+# BEGIN - CRUD for social media transparency
+@app.route('/api/create_social_media', methods=['POST'])
+def create_social_media():
+    """
+    Create a new Social Media,
+
+    Model:
+
+    vpnosint_business_to_twitter_db
+
+    POST Request structure
+
+    company_id
+
+    """
+    data = request.json
+    print(f"data={data}")
+    print(f"RAN - api/create_social_media/")
+    keys = []
+    vals = []
+    company_id = data['company_id']
+    print(f"api/create_social_media/, company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        """
+        
+
+        """
+        keys = []
+        vals = []
+        if 'x_profile_name' in data and len(data['x_profile_name']) > 0:
+            x_profile_name = data['x_profile_name']
+            keys.append("x_profile_name")
+            vals.append(f"'{x_profile_name}'")
+        if 'x_follower_count' in data and len(data['x_follower_count']) > 0:
+            x_follower_count = data['x_follower_count']
+            keys.append("x_follower_count")
+            vals.append(f"{x_follower_count}")
+        if 'x_following_count' in data and len(data['x_following_count']) > 0:
+            x_following_count = data['x_following_count']
+            keys.append("x_following_count")
+            vals.append(x_following_count)
+        if 'x_location' in data and len(data['x_location']) > 0:
+            x_location = data['x_location']
+            keys.append("x_location")
+            vals.append(x_location)
+        if 'x_joined_date' in data and len(data['x_joined_date']) > 0:
+            x_joined_date = data['x_joined_date']
+            keys.append(f"'{x_joined_date}'")
+            vals.append(x_joined_date)
+            """
+            fb_profile_name
+            fb_follower_count
+            fb_location
+            fb_joined_date
+            """
+
+        keys = ','.join(keys)
+        vals = ','.join(vals)
+        
+        cmd = f"INSERT INTO vpnosint_business_to_twitter_db ({keys}) VALUES ({vals})"
+        print(f"cmd={cmd}")
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(cmd)
+        keys = []
+        vals = []
+        if 'fb_profile_name' in data and len(data['fb_profile_name']) > 0:
+            fb_profile_name = data['fb_profile_name']
+            keys.append("fb_profile_name")
+            vals.append(f"'{fb_profile_name}'")
+        if 'fb_follower_count' in data and len(data['fb_follower_count']) > 0:
+            fb_follower_count = data['fb_follower_count']
+            keys.append("fb_follower_count")
+            vals.append(f"{fb_follower_count}")
+        if 'fb_location' in data and len(data['fb_location']) > 0:
+            fb_location = data['fb_location']
+            keys.append("fb_location")
+            vals.append(fb_location)
+        if 'fb_joined_date' in data and len(data['fb_joined_date']) > 0:
+            fb_joined_date = data['fb_joined_date']
+            keys.append(f"'{fb_joined_date}'")
+            vals.append(fb_joined_date)
+        keys = ','.join(keys)
+        vals = ','.join(vals)
+        cmd = f"INSERT INTO vpnosint_business_to_facebook_db ({keys}) VALUES ({vals})"
+        cur.execute(cmd)
+        conn.commit()
+        cur.close()
+        conn.close()
+
+        return jsonify({'ok' : True, "statusText" : "Company Successfully Added."}) 
+    else:
+        return jsonify({"ok" : False, "statusText" : "Cannot create existing company" })
+
+@app.route('/api/update_social_media/<int:company_id>', methods=['PUT','POST'])
+def update_social_media(company_id):
+    """
+    Create a new Social Media,
+
+    Model:
+
+    First, check if the data is there, if it's not, create it and then add it
+    """
+    data = request.json
+    print(f"/api/update_social_media - data={data}")
+    return jsonify({"ok": True})
+
+
+# END - CRUD for social media transparency
 # Aggregate View
 ## Company Profile API
 
@@ -268,77 +419,6 @@ def example_index():
         total_companies=total_companies,
         avg_revenue=avg_revenue
     )
-
-@app.route('/api/update_business/<int:company_id>', methods=['PUT'])
-def update_business(company_id):
-    """Update existing company information.
-
-    notes:
-
-    RAN - api/update_company/11
-    RAN - data={'company_id': '11', 'company_name': 'Test business 1 update', 'address': '', 'latitude': '', 'longitude': '', 'incorporation_date': ''}
-
-    """
-    data = request.json
-    print(f"RAN - api/update_company/{company_id}")
-    print(f"RAN - data={data}")
-
-    update_cmd = []
-    company_id = data["company_id"]
-    print(f"company_id={company_id}, type(company_id)={type(company_id)}")
-    if company_id == -1 or company_id == '-1':
-        return jsonify({"ok" : False, "statusText" : "Cannot update unknown company" })
-    else:
-        if 'company_name' in data and len(data['company_name']) > 0:
-            business_name = data['company_name']
-            tmp = f"business_name='{business_name}'"
-            update_cmd.append(tmp)
-        if 'address' in data and len(data['address']) > 0:
-            address = data['address']
-            tmp = f"address='{address}'"
-            update_cmd.append(tmp)
-        if 'latitude' in data and len(data['latitude']) > 0:
-            latitude = data['latitude']
-            tmp = f"latitude={latitude}"
-            update_cmd.append(tmp)
-
-        if 'longitude' in data and len(data['longitude']) > 0:
-            longitude = data['longitude']
-            tmp = f"longitude={longitude}"
-            update_cmd.append(tmp)
-        if 'incorporation_date' in data and len(data['incorporation_date']) > 0:
-            incorporation_date = data['incorporation_date']
-            tmp = f"incorporation_date='{incorporation_date}'"
-            update_cmd.append(tmp)
-        update_cmd = ','.join(update_cmd)
-        cmd = f"UPDATE vpnosint_business_db SET {update_cmd} WHERE id={company_id};"
-        print(f"cmd={cmd}")
-
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute(cmd)
-        conn.commit()
-        cur.close()
-        conn.close()
-        return jsonify({"ok" : True, "statusText" : "Company Successfully Updated."}) 
-
-@app.route('/api/delete_company/<int:company_id>', methods=['DELETE'])
-def delete_company(company_id):
-    if company_id == -1:
-        return jsonify({'status' : 200, "statusText" : "Nothing to delete."})
-    else:
-        print(f"/api/delete_company/{company_id}={type(company_id)}")
-        conn = get_db_connection()
-        cur = conn.cursor()
-        cur.execute('DELETE FROM vpnosint_business_db WHERE id = %s;',(company_id,));
-        conn.commit()
-        cur.close()
-        conn.close()
-
-        print(f"api/delete_company/{company_id}")
-        return jsonify({'ok' : True, "statusText" : "Company Successfully Deleted."}) 
-
-
 
 def main():
     app.run(debug=True)
