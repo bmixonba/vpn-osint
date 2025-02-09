@@ -26,8 +26,6 @@ body {
         font-family: Arial, sans-serif;
         margin: 0;
         height: 100vh;
-	overflow: hidden;
-
     }
 
 #content {
@@ -38,7 +36,7 @@ body {
         flex-direction: column;
     }
 pre {
-        background: #f4f4f4;
+	background-color: var(--bg-color);
         padding: 10px;
         border: 1px solid #ddd;
         border-radius: 5px;
@@ -173,9 +171,10 @@ label:active:after {
 }
 
 .tab button.active {
-        background-color: var(--bg-color);
+	background-color: var(--bg-color);
 	color: var(--text-color);
 }
+
 
 	/* Tab content styling */
 	.tabcontent {
@@ -188,22 +187,31 @@ label:active:after {
         }
 
         /* Form container styling */
-        .form-container {
+	.form-container {
+		display: flex;
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            display: flex;
-            gap: 20px; /* Space between the forms */
-            margin-bottom: 20px;
+		gap: 20px; /* Space between the forms */
+		margin-bottom: 20px;
+		height: 350px;
         }
 
         .form-section {
+		flex: 1; /* Each form takes equal space */
+		display: flex;
+		flex-direction: column;
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            flex: 1; /* Each form takes equal space */
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+		padding: 20px;
+		border: 1px solid #ccc;
+		border-radius: 8px;
+		overflow: hidden;
         }
+	.form-content {
+		flex: 1;
+		padding: 20px;
+		overflow-y: auto;
+	}
 
         .form-section h2 {
 		background-color: var(--bg-color);
@@ -222,7 +230,7 @@ label:active:after {
             border-radius: 4px;
         }
 
-        .form-section input[type="submit"] {
+        .form-section input[type="submit_business"] {
 		background-color: var(--bg-color);
 		color: var(--text-color);
             padding: 10px 20px;
@@ -231,7 +239,7 @@ label:active:after {
             cursor: pointer;
         }
 
-        .form-section input[type="submit"]:hover {
+        .form-section input[type="submit_business"]:hover {
 		background-color: var(--bg-color);
 		color: var(--text-color);
         }
@@ -278,9 +286,9 @@ label:active:after {
         .global-view {
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+		padding: 20px;
+		border: 1px solid #ccc;
+		border-radius: 8px;
         }
 
         .analysis-view h2,
@@ -288,7 +296,14 @@ label:active:after {
         .global-view h2 {
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            margin-top: 0;
+		margin-top: 0;
+        }
+        .analysis-view h3,
+        .company-specific-view h3,
+        .global-view h3 {
+		background-color: var(--bg-color);
+		color: var(--text-color);
+		margin-top: 0;
         }
 
         .analysis-view p,
@@ -296,10 +311,11 @@ label:active:after {
         .global-view p {
 		background-color: var(--bg-color);
 		color: var(--text-color);
-            font-size: 18px;
+		font-size: 18px;
         }
     </style>
 </head>
+
 <body>
   <div class="theme-toggle">
 	  <input type="checkbox" id="theme-switch">
@@ -311,9 +327,9 @@ label:active:after {
 
     <!-- Tab links -->
     <div class="tab">
-        <button class="tablinks" onclick="openTab(event, 'FormView')">Form View</button>
-        <button class="tablinks" onclick="openTab(event, 'AnalystView')">Analyst View</button>
-        <button class="tablinks" onclick="openTab(event, 'CompanySpecificView')">Company-Specific View</button>
+        <button class="tablinks" onclick="openTab(event, 'FormView')">Add/Update Company Information</button>
+        <button class="tablinks" onclick="openTab(event, 'AnalystView')">Company-Specific Analysis</button>
+        <button class="tablinks" onclick="openTab(event, 'CompanySpecificView')">Source Code Viewer</button>
         <button class="tablinks" onclick="openTab(event, 'GlobalView')">Global View</button>
     </div>
 
@@ -322,18 +338,43 @@ label:active:after {
 	<div class="form-container">
 		<!-- User Form -->
 		<div class="form-section">
+			<!-- TODO: Fix the input methods -->
 			<h2>Business Transparency</h2>
-			<form action="{{ url_for('submit_business') }}" method="post">
-				<label for="name">Name:</label>
-				<input type="text" id="name" name="name" required><br><br>
-				<label for="email">Email:</label>
-				<input type="email" id="email" name="email" required><br><br>
-				<input type="submit" value="Submit User">
-			</form>
+			<label for="companySubmit">Select a Company:</label>
+			<select id="companySubmit">
+				{% for company in companies %}
+				<option value="{{ company[0] }}">{{ company[1] }}</option>
+				{% endfor %}
+			</select>
+
+			<div class="form-content">
+				<!-- Create a new company -->
+				<form id="entryForm">
+					<label for="company_name">VPN Provider Name</label>
+					<input type="text" id="company_name" name="company_name" required><br><br>
+					<label for="address">Address</label>
+					<input type="text" id="address" name="address"><br><br>
+					<label for="latitude">Latitude</label>
+					<input type="number" id="latitude" name="latitude"><br><br>
+					<label for="longitude">Longitude</label>
+					<input type="number" id="longitude" name="longitude"><br><br>
+					<label for="incorporation_date">Incorporation Date</label>
+					<input type="datetime-local" id="incorporation_date" name="incorporation_date"><br><br>
+				</form>
+
+				<button id="submit_business", onclick="submit_business_fn()">Submit Business</button>
+			</div>
 		</div>
 		<!-- Product Form -->
 		<div class="form-section">
 			<h2>Social Media Transparency</h2>
+			<label for="companySubmit">Select a Company:</label>
+			<select id="companySubmit">
+				{% for company in companies %}
+				<option value="{{ company[0] }}">{{ company[1] }}</option>
+				{% endfor %}
+			</select>
+			<div class="form-content">
 			<form action="{{ url_for('submit_social_media') }}" method="post">
 				<label for="product_name">Product Name:</label>
 				<input type="text" id="product_name" name="product_name" required><br><br>
@@ -341,11 +382,19 @@ label:active:after {
 				<input type="number" id="price" name="price" step="0.01" required><br><br>
 				<input type="submit" value="Submit Product">
 			</form>
+			</div>
 		</div>
 	</div>
 	<div class="form-container">
 		<div class="form-section">
 			<h2>Network/Domain Transparency</h2>
+			<label for="companySubmit">Select a Company:</label>
+			<select id="companySubmit">
+				{% for company in companies %}
+				<option value="{{ company[0] }}">{{ company[1] }}</option>
+				{% endfor %}
+			</select>
+			<div class="form-content">
 			<form action="{{ url_for('submit_social_media') }}" method="post">
 				<label for="product_name">Product Name:</label>
 				<input type="text" id="product_name" name="product_name" required><br><br>
@@ -353,9 +402,17 @@ label:active:after {
 				<input type="number" id="price" name="price" step="0.01" required><br><br>
 				<input type="submit" value="Submit Product">
 			</form>
+			</div>
 		</div>
 		<div class="form-section">
 			<h2>Code Transparency</h2>
+			<label for="companySubmit">Select a Company:</label>
+			<select id="companySubmit">
+				{% for company in companies %}
+				<option value="{{ company[0] }}">{{ company[1] }}</option>
+				{% endfor %}
+			</select>
+			<div class="form-content">
 			<form action="{{ url_for('submit_social_media') }}" method="post">
 				<label for="product_name">Product Name:</label>
 				<input type="text" id="product_name" name="product_name" required><br><br>
@@ -363,11 +420,19 @@ label:active:after {
 				<input type="number" id="price" name="price" step="0.01" required><br><br>
 				<input type="submit" value="Submit Product">
 			</form>
+			</div>
 		</div>
 	</div>
 	<div class="form-container">
 		<div class="form-section">
 			<h2>Miscellaneous Security</h2>
+			<label for="companySubmit">Select a Company:</label>
+			<select id="companySubmit">
+				{% for company in companies %}
+				<option value="{{ company[0] }}">{{ company[1] }}</option>
+				{% endfor %}
+			</select>
+			<div class="form-content">
 			<form action="{{ url_for('submit_social_media') }}" method="post">
 				<label for="product_name">Product Name:</label>
 				<input type="text" id="product_name" name="product_name" required><br><br>
@@ -375,9 +440,17 @@ label:active:after {
 				<input type="number" id="price" name="price" step="0.01" required><br><br>
 				<input type="submit" value="Submit Product">
 			</form>
+			</div>
 		</div>
 		<div class="form-section">
 			<h2>Manual Analysis</h2>
+			<label for="companySubmit">Select a Company:</label>
+			<select id="companySubmit">
+				{% for company in companies %}
+				<option value="{{ company[0] }}">{{ company[1] }}</option>
+				{% endfor %}
+			</select>
+			<div class="form-content">
 			<form action="{{ url_for('submit_social_media') }}" method="post">
 				<label for="product_name">Product Name:</label>
 				<input type="text" id="product_name" name="product_name" required><br><br>
@@ -385,17 +458,84 @@ label:active:after {
 				<input type="number" id="price" name="price" step="0.01" required><br><br>
 				<input type="submit" value="Submit Product">
 			</form>
+			</div>
 		</div>
 	</div>
+	<div class="form-container">
+		<div class="form-section">
+			<h2>Delete Company</h2>
+			<label for="companyDelete">Select a Company to Remove:</label>
+			<select id="companyDelete">
+				{% for company in companies %}
+				<option value="{{ company[0] }}">{{ company[1] }}</option>
+				{% endfor %}
+			</select>
+			<button onclick="delete_company()">Delete Company</button>
+		</div>
+	</div>
+
     </div>
 
     <!-- Analyst View -->
     <div id="AnalystView" class="tabcontent">
         <div class="analysis-view">
             <h2>Analyst View</h2>
-            <p><strong>Company Name:</strong> {{ company_details[1] }}</p>
-            <p><strong>Revenue:</strong> ${{ "%.2f"|format(company_details[2]) }}</p>
-        </div>
+	    <h3 id="company-name">
+		    Loading Company Name...
+	    </h3>
+	    <label for="companySelect">Select a Company:</label>
+            <select id="companySelect">
+                {% for company in companies %}
+                    <option value="{{ company[0] }}">{{ company[1] }}</option>
+                {% endfor %}
+            </select>
+            <button onclick="fetchCompanyData()">Load Data</button>
+	    <!-- Geospatial View -->
+	    <div class="subview">
+		    <h2>Geospatial Information</h2>
+		    <div id="map"></div>
+	    </div>
+	    <!-- Timeline View -->
+	    <div class="subview">
+		    <h2>Event Timeline</h2>
+		    <canvas id="timeline"></canvas>
+	    </div>
+	    <!-- Relationship Network Graph View -->
+	    <div class="subview">
+		    <h2>Relationship Network Graph</h2>
+		    <button id="filterVPNs">
+			    Show Only VPNs</button>
+		    <button id="resetFilter">
+			    Reset Filter</button>
+		    <button id="cluster">
+			    Cluster Layout</button>
+		    <div id="cy"></div>
+	    </div>
+	    <!-- Embedded Webpage View -->
+	    <div class="subview">
+		    <h2>Webpage View</h2>
+		    <div id="webpage" 
+			 class="carousel slide"
+			 data-bs-ride="carousel">
+			 <div class="carousel-inner">
+				 <div class="carousel-item active">
+					 <iframe src="https://web.archive.org/web/20180412092237/https://play.google.com/store/apps/details?id=free.vpn.unblock.proxy.turbovpn&hl=en_US" title="Page 2"></iframe>
+				 </div>
+				 <div class="carousel-item">
+					 <iframe src="https://web.archive.org/web/20250106170609/https://opencorporates.com/companies/sg/201812738K" title="Page 3"></iframe>
+				 </div>
+			 </div>
+			 <button class="carousel-control-prev" type="button" data-bs-target="#iframeCarousel" data-bs-slide="prev">
+				 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				 <span class="visually-hidden">Previous</span>
+			 </button>
+			 <button class="carousel-control-next" type="button" data-bs-target="#iframeCarousel" data-bs-slide="next">
+				 <span class="carousel-control-next-icon" aria-hidden="true"></span>
+				 <span class="visually-hidden">Next</span>
+			 </button>
+		    </div>
+	    </div>
+	</div>
     </div>
 
     <!-- Company-Specific View -->
@@ -437,27 +577,229 @@ label:active:after {
             evt.currentTarget.className += " active";
         }
 
-        // Open the default tab (Form View) on page load
-        document.getElementsByClassName("tablinks")[0].click();
-	const themeSwitch = document.getElementById('theme-switch');
-	themeSwitch.addEventListener('change', function() {
-		if (this.checked) {
-			document.documentElement.setAttribute('data-theme', 'dark');
-		} else {
-			document.documentElement.setAttribute('data-theme', 'light');
+		// Open the default tab (Form View) on page load
+		document.getElementsByClassName("tablinks")[0].click();
+		const themeSwitch = document.getElementById('theme-switch');
+		themeSwitch.addEventListener('change', function() {
+			if (this.checked) {
+				document.documentElement.setAttribute('data-theme', 'dark');
+			} else {
+				document.documentElement.setAttribute('data-theme', 'light');
+			}
+		});
+		// Save the theme preference to localStorage (optional
+		const currentTheme = localStorage.getItem('theme');
+		if (currentTheme) {
+			document.documentElement.setAttribute('data-theme', currentTheme);
+			themeSwitch.checked = currentTheme === 'dark';
+		}
+		themeSwitch.addEventListener('change', function() {
+			const theme = this.checked ? 'dark' : 'light';
+			document.documentElement.setAttribute('data-theme', theme);
+			localStorage.setItem('theme', theme);  // Save the selected theme
+		});
+		// BEGIN: Create/Update Company Information
+		// Create or Update an entry
+		function submit_business_fn() {
+			event.preventDefault();
+			const formData = {
+				company_id: document.getElementById('companySubmit').value,
+				company_name: document.getElementById('company_name').value,
+				address: document.getElementById('address').value,
+				latitude: document.getElementById('latitude').value,
+				longitude: document.getElementById('longitude').value,
+				incorporation_date: document.getElementById('incorporation_date').value
+			};
+
+			const methodBool = formData.company_id || formData.company_id == -1;
+			let method = 'POST';
+			let url = '/api/submit_business';
+			if (methodBool) {
+				method = 'POST';
+				url = '/api/submit_business';
+			} else {
+				method = 'PUT';
+				url  = `/api/update_business/${formData.company_id}`;
+			}
+			fetch(url, {
+				method: method,
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(formData)
+			})
+				.then(response => {
+					if (response.ok) {
+						window.location.reload();
+					} else {
+						console.error('Error saving company info.');
+
+					}
+				})
+				.catch(error => console.error('Error saving entry:', error));
+
+		};
+
+
+	// END: Create/Update Company Information
+
+	// Analysis view scriptso
+	const companyId = window.location.pathname.split('/').pop();
+	function fetchCompanyData() {
+		const company_id = document.getElementById('companySelect').value;
+		if (company_id != -1) {
+			fetch(`/api/vpn-company/${company_id}`)
+				.then(response => response.json())
+				.then(data => {
+					updateProfile(data);
+				})
+				.catch(error => {
+					console.error('Error fetching company data:', error);
+				});
+		}
+	}
+	let map; // Declare the map variable globally
+	let isMapInitialized = false; // Flag to track initialization
+	let timelineChart = null;
+
+	function updateProfile(data) {
+		// Update the company name
+		document.getElementById('company-name').textContent = data.name;
+		// Populate the map
+		if (!isMapInitialized){
+			map = L.map('map').setView([data.locations[0].lat, data.locations[0].lon], 2);
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; OpenStreetMap contributors'
+			}).addTo(map);
+			isMapInitialized = true;
+		}
+		data.locations.forEach(location => {
+			L.marker([location.lat, location.lon]).addTo(map).bindPopup(location.address);
+		});
+		// Populate the timeline
+		const timelineCtx = document.getElementById('timeline').getContext('2d');
+		// Destroy the existing chart if it exists
+		if (timelineChart) {
+			timelineChart.destroy();
+		}
+
+		const labels = data.timelineEvents.map(event => event.date);
+		const timelineData = data.timelineEvents.map(() => 1);
+		timelineChart = new Chart(timelineCtx, {
+			type: 'bar',
+			data: {
+				labels: labels,
+				datasets: [{
+					label: 'Company Events',
+					data: timelineData,
+					backgroundColor: 'rgba(75, 192, 192, 0.2)',
+					borderColor: 'rgba(75, 192, 192, 1)',
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					x: { title: { display: true, text: 'Event Dates' }},
+					y: { display: false }
+				}
+			}
+		});
+		// Define nodes and edges
+		const elements = [
+			// Nodes
+			{ data: { id: 'vpn1', label: 'VPN Provider 1' } },
+			{ data: { id: 'vpn2', label: 'VPN Provider 2' } },
+			{ data: { id: 'person1', label: 'Person A' } },
+			{ data: { id: 'place1', label: 'Place X' } },
+			{ data: { id: 'thing1', label: 'Thing Y' } },
+			// Edges
+			{ data: { source: 'vpn1', target: 'person1', label: 'References' } },
+			{ data: { source: 'vpn1', target: 'place1', label: 'Located in' } },
+			{ data: { source: 'vpn1', target: 'thing1', label: 'Owns' } },
+			{ data: { source: 'vpn1', target: 'vpn2', label: 'Partnership' } },
+		];
+		function updateWebpagePanel() {
+			const webpageContainer = document.getElementById('webpage');
+			webpageContainer.innerHTML = '';
+			const iframe = document.createElement('iframe');
+			iframe.src = "https://web.archive.org/web/20250106170609/https://opencorporates.com/companies/sg/201812738K";
+			iframe.style.width='100%';
+			iframe.style.height='100%';
+			iframe.style.border='none';
+			webpageContainer.appendChild(iframe);
+		}
+			  // updateWebpagePanel();
+	}
+	// Call the fetch function to load data dynamically
+	fetchCompanyData();
+	// Toggle dark and light mode
+	const cy = cytoscape({
+		container: document.getElementById('cy'),
+		elements: [],
+		style: [{
+			selector: 'node',
+			style: {
+				'background-color': '#0074D9',
+				'label': 'data(label)',
+				'color': '#fff',
+				'text-halign': 'center',
+				'text-valign': 'center',
+			}
+		},{
+			selector: 'edge',
+			style: {
+				'width': 2,
+				'line-color': '#FF4136',
+				'target-arrow-color': '#FF4136',
+				'target-arrow-shape': 'triangle',
+				'curve-style': 'bezier',
+				'label': 'data(label)',
+				'text-background-color': '#fff',
+				'text-background-opacity': 1,
+			}
+		},
+			{
+				selector: '[type="VPN"]',
+				style: {
+					'background-color': '#2ECC40',
+				}
+			},{
+				selector: '[type="Person"]',
+				style: {
+					'background-color': '#FF851B',
+				}
+			},{
+				selector: '[type="Place"]',
+				style: {
+					'background-color': '#7FDBFF',
+				}
+			},{
+				selector: '[type="Thing"]',
+				style: {
+					'background-color': '#B10DC9',
+				}
+			}
+		],
+		layout: {
+			name: 'cose',
+			animate: true,
+			padding: 10
 		}
 	});
-	// Save the theme preference to localStorage (optional
-	const currentTheme = localStorage.getItem('theme');
-	if (currentTheme) {
-		document.documentElement.setAttribute('data-theme', currentTheme);
-		themeSwitch.checked = currentTheme === 'dark';
-	}
-	themeSwitch.addEventListener('change', function() {
-		const theme = this.checked ? 'dark' : 'light';
-		document.documentElement.setAttribute('data-theme', theme);
-		localStorage.setItem('theme', theme);  // Save the selected theme
-	});
+
+	function delete_company(){
+		const company_id = document.getElementById('companyDelete').value;
+		fetch(`/api/delete_company/${company_id}`, {
+			method: 'DELETE'
+		})
+			.then(response => {
+				if (response.ok) {
+					window.location.reload();
+				} else {
+					console.error('Error deleting company info.');
+				}
+		}).catch(error => console.error('Error deleting entry:', error));
+}
 
     </script>
 </body>
