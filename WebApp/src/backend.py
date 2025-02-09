@@ -11,7 +11,7 @@ def get_db_connection():
     conn = psycopg2.connect(
         dbname="vpnosint_db",
         user="vpnosint_user",
-        password="labtrash337",
+        password="<password>",
         host="localhost"
     )
     return conn
@@ -45,25 +45,50 @@ def submit_business():
         data={'company_id': '-1', 'company_name': 'Test VPN Company', 'address': 'Some funky address', 'latitude': '123123', 'longitude': '123123', 'incorporation_date': '2025-02-05T16:30'}
     """
     data = request.json
+    print(f"data={data}")
     print(f"RAN - api/submit_business/")
-    business_name = data['company_name']
-    address = data['address']
-    latitude = data['latitude']
-    longitude = data['longitude']
-    incorporation_date = data['incorporation_date']
-    print(f"\business_name={business_name}, address={address}, latitude={latitude}, longitude={longitude}, incorporation_date={incorporation_date}")
+    keys = []
+    vals = []
+    company_id = data['company_id']
+    print(f"company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        if 'company_name' in data and len(data['company_name']) > 0:
+            business_name = data['company_name']
+            keys.append("business_name")
+            vals.append(f"'{business_name}'")
+        if 'address' in data and len(data['address']) > 0:
+            address = data['address']
+            keys.append("address")
+            vals.append(f"'{address}'")
+        if 'latitude' in data and len(data['latitude']) > 0:
+            latitude = data['latitude']
+            keys.append("latitude")
+            vals.append(latitude)
+        if 'longitude' in data and len(data['longitude']) > 0:
+            longitude = data['longitude']
+            keys.append("longitude")
+            vals.append(longitude)
+        if 'incorporation_date' in data and len(data['incorporation_date']) > 0:
+            incorporation_date = data['incorporation_date']
+            keys.append(f"'{incorporation_date}'")
+            vals.append(incorporation_date)
+        keys = ','.join(keys)
+        vals = ','.join(vals)
+        cmd = f"INSERT INTO vpnosint_business_db ({keys}) VALUES ({vals})"
+        print(f"cmd={cmd}")
 
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('INSERT INTO vpnosint_business_db (business_name, address, latitude, longitude, incorporation_date) VALUES (%s, %s, %s, %s, %s)',
-                (business_name, address, latitude, longitude, incorporation_date))
-    conn.commit()
-    cur.close()
-    conn.close()
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(cmd)
+        conn.commit()
+        cur.close()
+        conn.close()
 
-    """
-    """
-    return jsonify({'ok' : True, "statusText" : "Company Successfully Added."}) 
+        """
+        """
+        return jsonify({'ok' : True, "statusText" : "Company Successfully Added."}) 
+    else:
+        return jsonify({"ok" : False, "statusText" : "Cannot create existing company" })
 
 @app.route('/submit_social_media', methods=['POST'])
 def submit_social_media():
@@ -248,11 +273,54 @@ def example_index():
 def update_business(company_id):
     """Update existing company information.
 
+    notes:
+
+    RAN - api/update_company/11
+    RAN - data={'company_id': '11', 'company_name': 'Test business 1 update', 'address': '', 'latitude': '', 'longitude': '', 'incorporation_date': ''}
+
     """
-    #  conn = get_db_connection()
-    # cur = conn.cursor()
+    data = request.json
     print(f"RAN - api/update_company/{company_id}")
-    return redirect(url_for('example_index'))
+    print(f"RAN - data={data}")
+
+    update_cmd = []
+    company_id = data["company_id"]
+    print(f"company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        return jsonify({"ok" : False, "statusText" : "Cannot update unknown company" })
+    else:
+        if 'company_name' in data and len(data['company_name']) > 0:
+            business_name = data['company_name']
+            tmp = f"business_name='{business_name}'"
+            update_cmd.append(tmp)
+        if 'address' in data and len(data['address']) > 0:
+            address = data['address']
+            tmp = f"address='{address}'"
+            update_cmd.append(tmp)
+        if 'latitude' in data and len(data['latitude']) > 0:
+            latitude = data['latitude']
+            tmp = f"latitude={latitude}"
+            update_cmd.append(tmp)
+
+        if 'longitude' in data and len(data['longitude']) > 0:
+            longitude = data['longitude']
+            tmp = f"longitude={longitude}"
+            update_cmd.append(tmp)
+        if 'incorporation_date' in data and len(data['incorporation_date']) > 0:
+            incorporation_date = data['incorporation_date']
+            tmp = f"incorporation_date='{incorporation_date}'"
+            update_cmd.append(tmp)
+        update_cmd = ','.join(update_cmd)
+        cmd = f"UPDATE vpnosint_business_db SET {update_cmd} WHERE id={company_id};"
+        print(f"cmd={cmd}")
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(cmd)
+        conn.commit()
+        cur.close()
+        conn.close()
+        return jsonify({"ok" : True, "statusText" : "Company Successfully Updated."}) 
 
 @app.route('/api/delete_company/<int:company_id>', methods=['DELETE'])
 def delete_company(company_id):

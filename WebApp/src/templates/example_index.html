@@ -611,34 +611,36 @@ label:active:after {
 				incorporation_date: document.getElementById('incorporation_date').value
 			};
 
-			const methodBool = formData.company_id || formData.company_id == -1;
+			const methodBool = formData.company_id == -1;
 			let method = 'POST';
 			let url = '/api/submit_business';
 			if (methodBool) {
 				method = 'POST';
 				url = '/api/submit_business';
+				console.log(`I-F  submit_business_fn - ${methodBool}, ${formData.company_id}, ${formData.company_id == -1}`)
 			} else {
+				console.log(`e-lse  submit_business_fn - ${methodBool}, ${formData.company_id}, ${formData.company_id == -1}`)
+
 				method = 'PUT';
 				url  = `/api/update_business/${formData.company_id}`;
 			}
+			console.log(`URL is ${url}`)
 			fetch(url, {
 				method: method,
 				headers: {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(formData)
-			})
-				.then(response => {
-					if (response.ok) {
-						window.location.reload();
-					} else {
-						console.error('Error saving company info.');
-
-					}
-				})
-				.catch(error => console.error('Error saving entry:', error));
-
+			}).then(response => {
+				if (response.ok) {
+					window.location.reload();
+				} else {
+					console.error('Error saving company info.');
+				}
+			}).catch(error => console.error('Error saving entry:', error));
 		};
+
+
 
 
 	// END: Create/Update Company Information
