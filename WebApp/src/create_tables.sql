@@ -41,3 +41,23 @@ CREATE TABLE IF NOT EXISTS vpnosint_vpn_company_to_vpn_apk_db (
         REFERENCES vpnosint_vpn_apk_db (id)
         ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS vpnosint_business_to_facebook_db (
+	id SERIAL PRIMARY KEY,
+	business_id INT REFERENCES vpnosint_business_db(id) ON DELETE CASCADE,
+	profile_name VARCHAR(255),
+	follower_count INT,
+	location VARCHAR(255),
+	joined_date TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS vpnosint_business_to_twitter_db (
+	id SERIAL PRIMARY KEY,
+	business_id INT REFERENCES vpnosint_business_db(id) ON DELETE CASCADE,
+	profile_name VARCHAR(255),
+	follower_count INT,
+	following_count INT,
+	location VARCHAR(255),
+	joined_date TIMESTAMP
+);
+
