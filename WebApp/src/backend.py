@@ -12,7 +12,7 @@ def get_db_connection():
     conn = psycopg2.connect(
         dbname="vpnosint_db",
         user="vpnosint_user",
-        password="labtrash337",
+        password="<password>",
         host="localhost"
     )
     return conn
