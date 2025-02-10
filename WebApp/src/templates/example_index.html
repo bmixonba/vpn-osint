@@ -453,21 +453,34 @@ label:active:after {
 		<div class="form-section">
 			<!-- TODO: Fix the input methods -->
 			<h2>Code Transparency</h2>
-			<label for="companySubmit">Select a Company:</label>
-			<select id="companySubmit">
+			<label for="companySubmitCode">Select a Company:</label>
+			<select id="companySubmitCode">
 				{% for company in companies %}
 				<option value="{{ company[0] }}">{{ company[1] }}</option>
 				{% endfor %}
 			</select>
 			<div class="form-content">
-			<form action="{{ url_for('create_social_media') }}" method="post">
-				<label for="product_name">Product Name:</label>
-				<input type="text" id="product_name" name="product_name" required><br><br>
-				<label for="price">Price:</label>
-				<input type="number" id="price" name="price" step="0.01" required><br><br>
-				<input type="submit" value="Submit Product">
-			</form>
+				<!-- Create a new company -->
+				<form id="entryForm">
+					<label for="github_exists">Github Account Exists?</label>
+					<input type="checkbox" id="github_exists" name="github_exists" required><br><br>
+					<label for="gitlab_exists">Gitlab Account Exists?</label>
+					<input type="checkbox" id="gitlab_exists" name="gitlab_exists" required><br><br>
+					<label for="gitee_exists">Gitee Account Exists?</label>
+					<input type="checkbox" id="gitee_exists" name="gitee_exists" required><br><br>
+					<label for="is_open_source">Is Open Source?</label>
+					<input type="checkbox" id="is_open_source" name="is_open_source" required><br><br>
+				</form>
+				<!-- Create a new company -->
+				<form id="entryForm">
+					<label for="github_comment_url">Github Comment URL </label>
+					<input type="text" id="github_comment_url" name="github_comment_url" required><br><br>
+					<label for="github_comment">Github Comment</label>
+					<input type="text" id="github_comment" name="github_comment" required><br><br>
+				</form>
+
 			</div>
+			<button id="create_business", onclick="create_business_fn()">Submit Business</button>
 		</div>
 	</div>
 	<div class="form-container">

@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
+
 app = Flask(__name__)
     
 import sys
@@ -11,7 +12,7 @@ def get_db_connection():
     conn = psycopg2.connect(
         dbname="vpnosint_db",
         user="vpnosint_user",
-        password="<password>",
+        password="labtrash337",
         host="localhost"
     )
     return conn
