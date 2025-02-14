@@ -350,21 +350,119 @@ label:active:after {
 			<div class="form-content">
 				<!-- Create a new company -->
 				<form id="entryForm">
-					<label for="company_name">VPN Provider Name</label>
-					<input type="text" id="company_name" name="company_name" required><br><br>
-					<label for="address">Address</label>
-					<input type="text" id="address" name="address"><br><br>
-					<label for="latitude">Latitude</label>
-					<input type="number" id="latitude" name="latitude"><br><br>
-					<label for="longitude">Longitude</label>
-					<input type="number" id="longitude" name="longitude"><br><br>
-					<label for="incorporation_date">Incorporation Date</label>
-					<input type="datetime-local" id="incorporation_date" name="incorporation_date"><br><br>
+					<div id="business">
+						<h3>VPN Provider Information</h3>
+						<label for="company_name">VPN Provider Name</label>
+						<input type="text" id="company_name" name="company_name" required><br><br>
+						<label for="address">Address</label>
+						<input type="text" id="address" name="address"><br><br>
+						<label for="latitude">Latitude</label>
+						<input type="number" id="latitude" name="latitude"><br><br>
+						<label for="longitude">Longitude</label>
+						<input type="number" id="longitude" name="longitude"><br><br>
+						<label for="incorporation_date">Incorporation Date</label>
+						<input type="datetime-local" id="incorporation_date" name="incorporation_date"><br><br>
+					</div>
 				</form>
+				<button id="create_business", onclick="create_business()">Submit Business</button>
+				<form id="entryForm">
+					<div id="opencorporates">
+						<h3>Open Corporates</h3>
+							<label for="oc_query_string">Query String</label>
+							<input type="text" id="oc_query_string" name="oc_query_string" required><br><br>
+							<label for="oc_url">URL</label>
+							<input type="text" id="oc_url" name="oc_url"><br><br>
+							<label for="oc_company_number">Company Number</label>
+							<input type="number" id="oc_company_number" name="oc_company_number"><br><br>
+							<label for="oc_status">Status</label>
+							<input type="text" id="oc_status" name="oc_status"><br><br>
+							<label for="oc_incorporation_date">Incorporation Date</label>
+							<input type="datetime-local" id="oc_incorporation_date" name="oc_incorporation_date"><br><br>
+							<label for="oc_company_type">Company Type</label>
+							<input type="text" id="oc_company_type" name="oc_company_type"><br><br>
+							<label for="oc_jurisdiction">Jurisdiction</label>
+							<input type="text" id="oc_jurisdiction" name="oc_jurisdiction"><br><br>
+							<label for="oc_registered_address_name">Registered Address Name</label>
+							<input type="text" id="oc_registered_address_name" name="oc_registered_address_name"><br><br>
+							<label for="oc_registered_address_street">Registered Address Street</label>
+							<input type="text" id="oc_registered_address_street" name="oc_registered_address_street"><br><br>
+							<label for="oc_registered_address_city">Registered Address City</label>
+							<input type="text" id="oc_registered_address_city" name="oc_registered_address_city"><br><br>
+							<label for="oc_registered_address_state">Registered Address State</label>
+							<input type="text" id="oc_registered_address_state" name="oc_registered_address_state"><br><br>
+							<label for="oc_registered_address_country">Registered Address Country</label>
+							<input type="text" id="oc_registered_address_country" name="oc_registered_address_country"><br><br>
+							<label for="oc_registered_address_zip">Registered Address Zip</label>
+							<input type="number" id="oc_registered_address_zip" name="oc_registered_address_zip"><br><br>
+							<label for="oc_director_officer">Director/Officer</label>
+							<input type="text" id="oc_director_officer" name="oc_director_officer"><br><br>
+							<label for="oc_data_source_last_updated">Data Source Last Updated</label>
+							<input type="datetime-local" id="oc_data_source_last_updated" name="oc_data_source_last_updated"><br><br>
+							<label for="oc_data_source_last_changed">Data Source Last Changed</label>
+							<input type="datetime-local" id="oc_data_source_last_changed" name="oc_data_source_last_changed"><br><br>
+							<label for="oc_data_source_url">Data Source Url</label>
+							<input type="text" id="oc_data_source_url" name="oc_data_source_url"><br><br>
+					</div>
+				</form>
+				<button id="create_business", onclick="create_business_open_corporates_fn()">Submit O.C.</button>
+				<form id="entryForm">
+					<div id="opencorporates_tm">
+						<h3>Open Corporates - Trademark</h3>
+							<label for="oc_mark_text">Mark Text</label>
+							<input type="text" id="oc_mark_text" name="oc_mark_text" required><br><br>
+							<label for="oc_image_url">Image URL</label>
+							<input type="text" id="oc_image_url" name="oc_image_url"><br><br>
+							<label for="oc_register">Register</label>
+							<input type="text" id="oc_register" name="oc_register"><br><br>
+							<label for="oc_nice_classification">Nice Classification</label>
+							<input type="text" id="oc_nice_classification" name="oc_nice_classification"><br><br>
+							<label for="oc_registration_date">Registration Date</label>
+							<input type="datetime-local" id="oc_registration_date" name="oc_registration_date"><br><br>
+							<label for="oc_expiry">Expiry</label>
+							<input type="datetime-local" id="oc_expiry" name="oc_expiry"><br><br>
+							<label for="oc_trademark_url">Trademark URL</label>
+							<input type="text" id="oc_trademark_url" name="oc_trademark_url"><br><br>
+							<label for="oc_source_url">Source URL</label>
+							<input type="text" id="oc_source_url" name="oc_source_url"><br><br>
+							<label for="oc_holder_name">Holder Name</label>
+							<input type="text" id="oc_holder_name" name="oc_holder_name"><br><br>
+							<label for="oc_holder_address_street">Holder Address Street</label>
+							<input type="text" id="oc_holder_address_street" name="oc_holder_address_street"><br><br>
+							<label for="oc_holder_address_city">Holder Address City</label>
+							<input type="text" id="oc_holder_address_city" name="oc_holder_address_city"><br><br>
+							<label for="oc_holder_address_state">Holder Address State</label>
+							<input type="text" id="oc_holder_address_state" name="oc_holder_address_state"><br><br>
+							<label for="oc_holder_address_country">Holder Address Country</label>
+							<input type="text" id="oc_holder_address_country" name="oc_holder_address_country"><br><br>
+							<label for="oc_holder_address_zip">Holder Address_zip</label>
+							<input type="number" id="oc_holder_address_zip" name="oc_holder_address_zip"><br><br>
+							<label for="oc_holder_latitude">Holder Latitude</label>
+							<input type="number" id="oc_holder_latitude" name="oc_holder_latitude"><br><br>
+							<label for="oc_holder_longitude">Holder Longitude</label>
+							<input type="number" id="oc_holder_longitude" name="oc_holder_longitude"><br><br>
+							<label for="oc_correspondent_name">Correspondent Name</label>
+							<input type="text" id="oc_correspondent_name" name="oc_correspondent_name"><br><br>
+							<label for="oc_correspondent_address_street">Correspondent Address Street</label>
+							<input type="text" id="oc_correspondent_address_street" name="oc_correspondent_address_street"><br><br>
+							<label for="oc_correspondent_address_city">Correspondent Address City</label>
+							<input type="text" id="oc_correspondent_address_city" name="oc_correspondent_address_city"><br><br>
+							<label for="oc_correspondent_address_state">Correspondent Address State</label>
+							<input type="text" id="oc_correspondent_address_state" name="oc_correspondent_address_state"><br><br>
+							<label for="oc_correspondent_address_country">Correspondent Address Country</label>
+							<input type="text" id="oc_correspondent_address_country" name="oc_correspondent_address_country"><br><br>
+							<label for="oc_correspondent_address_latitude">Correspondent Address Latitude</label>
+							<input type="number" id="oc_correspondent_address_latitude" name="oc_correspondent_address_latitude"><br><br>
+							<label for="oc_correspondent_address_longitude">Correspondent Address Longitude</label>
+							<input type="number" id="oc_correspondent_address_longitude" name="oc_correspondent_address_longitude"><br><br>
+							<label for="oc_trademark_notes">Trademark Notes</label>
+							<input type="text" id="oc_trademark_notes" name="oc_trademark_notes"><br><br>
+					</div>
+				</form>
+				<button id="create_oc_trademarks", onclick="create_oc_trademarks_fn()">Submit Trademark</button>
 
-				<button id="create_business", onclick="create_business_fn()">Submit Business</button>
 			</div>
 		</div>
+
 		<!-- Product Form -->
 		<div class="form-section">
 			<!-- TODO: Fix the input methods -->
@@ -698,6 +796,115 @@ label:active:after {
 			    }
 		    }).catch(error => console.error('Error saving entry:', error));
 	    };
+
+	    function create_business_open_corporates_fn() {
+		    event.preventDefault();
+		    const formData = {
+			    company_id: document.getElementById('companySubmit').value,
+			    oc_query_string: document.getElementById('oc_query_string').value,
+			    oc_url: document.getElementById('oc_url').value,
+			    oc_company_number: document.getElementById('oc_company_number').value,
+			    oc_status: document.getElementById('oc_status').value,
+			    oc_incorporation_date: document.getElementById('oc_incorporation_date').value,
+			    oc_company_type: document.getElementById('oc_company_type').value,
+			    oc_jurisdiction: document.getElementById('oc_jurisdiction').value,
+			    oc_registered_address_name: document.getElementById('oc_registered_address_name').value,
+			    oc_registered_address_street: document.getElementById('oc_registered_address_street').value,
+			    oc_registered_address_city: document.getElementById('oc_registered_address_city').value,
+			    oc_registered_address_state: document.getElementById('oc_registered_address_state').value,
+			    oc_registered_address_country: document.getElementById('oc_registered_address_country').value,
+			    oc_registered_address_zip: document.getElementById('oc_registered_address_zip').value,
+			    oc_director_officer: document.getElementById('oc_director_officer').value,
+			    oc_data_source_last_updated: document.getElementById('oc_data_source_last_updated').value,
+			    oc_data_source_last_changed: document.getElementById('oc_data_source_last_changed').value,
+			    oc_data_source_url: document.getElementById('oc_data_source_url').value
+		    };
+		    const methodBool = formData.company_id == -1;
+		    let method = 'POST';
+		    let url = '/api/create_open_corporates';
+
+		    if (methodBool) {
+			    method = 'POST';
+			    url = '/api/create_open_corporates';
+			    console.log(`I-F - /api/create_open_corporates/${formData.company_id}`)
+		    } else {
+			    method = 'PUT';
+			    url  = `/api/update_open_corporates/${formData.company_id}`;
+			    console.log(`E-lse - /api/update_open_corporates/${formData.company_id}`)
+		    }
+		    fetch(url, {
+			    method: method,
+			    headers: {
+				    'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(formData)
+		    }).then(response => {
+			    if (response.ok) {
+				    // console.log(`${response.ok}`)
+				    window.location.reload();
+			    } else {
+				    console.error('Error saving company info.');
+			    }
+		    }).catch(error => console.error('Error saving entry:', error));
+	    };
+	    function create_oc_trademarks_fn() {
+			// create_oc_trademarks
+		    event.preventDefault();
+		    const formData = {
+			    company_id: document.getElementById('companySubmit').value,
+			    oc_mark_text: document.getElementById('oc_mark_text').value,
+			    oc_image_url: document.getElementById('oc_image_url').value,
+			    oc_register: document.getElementById('oc_register').value,
+			    oc_nice_classification: document.getElementById('oc_nice_classification').value,
+			    oc_registration_date: document.getElementById('oc_registration_date').value,
+			    oc_expiry: document.getElementById('oc_expiry').value,
+			    oc_trademark_url: document.getElementById('oc_trademark_url').value,
+			    oc_source_url: document.getElementById('oc_source_url').value,
+			    oc_holder_name: document.getElementById('oc_holder_name').value,
+			    oc_holder_address_street: document.getElementById('oc_holder_address_street').value,
+			    oc_holder_address_city: document.getElementById('oc_holder_address_city').value,
+			    oc_holder_address_state: document.getElementById('oc_holder_address_state').value,
+			    oc_holder_address_country: document.getElementById('oc_holder_address_country').value,
+			    oc_holder_address_zip: document.getElementById('oc_holder_address_zip').value,
+			    oc_holder_latitude: document.getElementById('oc_holder_latitude').value,
+			    oc_holder_longitude: document.getElementById('oc_holder_longitude').value,
+			    oc_correspondent_name: document.getElementById('oc_correspondent_name').value,
+			    oc_correspondent_address_street: document.getElementById('oc_correspondent_address_street').value,
+			    oc_correspondent_address_city: document.getElementById('oc_correspondent_address_city').value,
+			    oc_correspondent_address_state: document.getElementById('oc_correspondent_address_state').value,
+			    oc_correspondent_address_country: document.getElementById('oc_correspondent_address_country').value,
+			    oc_correspondent_address_latitude: document.getElementById('oc_correspondent_address_latitude').value,
+			    oc_correspondent_address_longitude: document.getElementById('oc_correspondent_address_longitude').value,
+			    oc_trademark_notes: document.getElementById('oc_trademark_notes').value
+		    };
+		    const methodBool = formData.company_id == -1;
+		    let method = 'POST';
+		    let url = '/api/create_oc_trademarks';
+
+		    if (methodBool) {
+			    method = 'POST';
+			    url = '/api/create_oc_trademarks';
+			    console.log(`I-F - /api/create_oc_trademarks/${formData.company_id}`)
+		    } else {
+			    method = 'PUT';
+			    url  = `/api/update_oc_trademarks/${formData.company_id}`;
+			    console.log(`E-lse - /api/update_oc_trademarks/${formData.company_id}`)
+		    }
+		    fetch(url, {
+			    method: method,
+			    headers: {
+				    'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(formData)
+		    }).then(response => {
+			    if (response.ok) {
+				    // console.log(`${response.ok}`)
+				    window.location.reload();
+			    } else {
+				    console.error('Error saving company info.');
+			    }
+		    }).catch(error => console.error('Error saving entry:', error));
+	    };
 	    function delete_business(){
 		    const company_id = document.getElementById('companyDelete').value;
 		    fetch(`/api/delete_business/${company_id}`, {
@@ -710,6 +917,8 @@ label:active:after {
 			    }
 		    }).catch(error => console.error('Error deleting entry:', error));
 	    };
+
+
 
 	    // Analysis view scriptso
 	    const companyId = window.location.pathname.split('/').pop();
@@ -921,9 +1130,11 @@ label:active:after {
 		    if (methodBool) {
 			    method = 'POST';
 			    url = '/api/create_domain_network';
+			    console.log(`I-f : /api/create_domain_network/${formData.company_id}`)
 		    } else {
 			    method = 'PUT';
 			    url  = `/api/update_domain_network/${formData.company_id}`;
+			    console.log(`E-lse : /api/update_domain_network/${formData.company_id}`)
 		    }
 		    fetch(url, {
 			    method: method,
