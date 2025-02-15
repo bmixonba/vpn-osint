@@ -551,8 +551,8 @@ label:active:after {
 		<div class="form-section">
 			<!-- TODO: Fix the input methods -->
 			<h2>Code Transparency</h2>
-			<label for="companySubmitCode">Select a Company:</label>
-			<select id="companySubmitCode">
+			<label for="companySubmitCT">Select a Company:</label>
+			<select id="companySubmitCT">
 				{% for company in companies %}
 				<option value="{{ company[0] }}">{{ company[1] }}</option>
 				{% endfor %}
@@ -560,14 +560,23 @@ label:active:after {
 			<div class="form-content">
 				<!-- Create a new company -->
 				<form id="entryForm">
-					<label for="github_exists">Github Account Exists?</label>
-					<input type="checkbox" id="github_exists" name="github_exists" required><br><br>
-					<label for="gitlab_exists">Gitlab Account Exists?</label>
-					<input type="checkbox" id="gitlab_exists" name="gitlab_exists" required><br><br>
-					<label for="gitee_exists">Gitee Account Exists?</label>
-					<input type="checkbox" id="gitee_exists" name="gitee_exists" required><br><br>
+					<label for="github_account_name">Github Account Name</label>
+					<input type="text" id="github_account_name" name="github_account_name"><br><br>
+					<label for="github_account_exists">Github Account Exists?</label>
+					<input type="checkbox" id="github_account_exists" name="github_account_exists" value="false"><br><br>
+
+					<label for="gitlab_account_name">Gitlab Account Name</label>
+					<input type="text" id="gitlab_account_name" name="gitlab_account_name"><br><br>
+					<label for="gitlab_account_exists">Gitlab Account Exists?</label>
+					<input type="checkbox" id="gitlab_account_exists" name="gitlab_account_exists" value="false"><br><br>
+
+					<label for="gitee_account_name">Gitee Account Name</label>
+					<input type="text" id="gitee_account_name" name="gitee_account_name"><br><br>
+					<label for="gitee_account_exists">Gitee Account Exists?</label>
+					<input type="checkbox" id="gitee_account_exists" name="gitee_account_exists" value="false"><br><br>
 					<label for="is_open_source">Is Open Source?</label>
-					<input type="checkbox" id="is_open_source" name="is_open_source" required><br><br>
+					<input type="checkbox" id="is_open_source" name="is_open_source" value="false"><br><br>
+
 				</form>
 				<!-- Create a new company -->
 				<form id="entryForm">
@@ -577,28 +586,69 @@ label:active:after {
 					<input type="text" id="github_comment" name="github_comment" required><br><br>
 				</form>
 
+				<button id="create_code_transparency", onclick="create_code_transparency_fn()">Submit Code Transparency</button>
 			</div>
-			<button id="create_business", onclick="create_business_fn()">Submit Business</button>
 		</div>
 	</div>
 	<div class="form-container">
 		<div class="form-section">
 			<!-- TODO: Fix the input methods -->
 			<h2>Miscellaneous Security</h2>
-			<label for="companySubmit">Select a Company:</label>
-			<select id="companySubmit">
+			<label for="companySubmitMiscGP">Select a Company:</label>
+			<select id="companySubmitMiscGP">
 				{% for company in companies %}
 				<option value="{{ company[0] }}">{{ company[1] }}</option>
 				{% endfor %}
 			</select>
 			<div class="form-content">
-			<form action="{{ url_for('create_social_media') }}" method="post">
-				<label for="product_name">Product Name:</label>
-				<input type="text" id="product_name" name="product_name" required><br><br>
-				<label for="price">Price:</label>
-				<input type="number" id="price" name="price" step="0.01" required><br><br>
-				<input type="submit" value="Submit Product">
-			</form>
+				<form id="entryForm">
+					<div id="distribution">
+						<h3>Distribution - Google Play </h3>
+						<label for="gp_url">Google Play URL</label>
+						<input type="text" id="gp_url" name="gp_url" ><br><br>
+						<label for="gp_app_name">App Name</label>
+						<input type="text" id="gp_app_name" name="gp_app_name" ><br><br>
+						<label for="gp_developer">Developer</label>
+						<input type="text" id="gp_developer" name="gp_developer" ><br><br>
+						<label for="gp_contains_ads">Contains Ads</label>
+						<input type="text" id="gp_contains_ads" name="gp_contains_ads" ><br><br>
+						<label for="gp_stars">Stars</label>
+						<input type="number" id="gp_stars" name="gp_stars" ><br><br>
+						<label for="gp_reviews">Reviews</label>
+						<input type="number" id="gp_reviews" name="gp_reviews" ><br><br>
+						<label for="gp_downloads">Downloads</label>
+						<input type="number" id="gp_downloads" name="gp_downloads" ><br><br>
+						<label for="gp_rating">Rating</label>
+						<input type="number" id="gp_rating" name="gp_rating" ><br><br>
+						<label for="gp_website">Website</label>
+						<input type="text" id="gp_website" name="gp_website" ><br><br>
+						<label for="gp_support_email">Support Email</label>
+						<input type="text" id="gp_support_email" name="gp_support_email" ><br><br>
+						<label for="gp_privacy_policy">Privacy Policy</label>
+						<input type="text" id="gp_privacy_policy" name="gp_privacy_policy" ><br><br>
+						<label for="gp_address_street">Address Street</label>
+						<input type="text" id="gp_address_street" name="gp_address_street" ><br><br>
+						<label for="gp_address_city">Address City</label>
+						<input type="text" id="gp_address_city" name="gp_address_city" ><br><br>
+
+						<label for="gp_address_state">Address State</label>
+						<input type="text" id="gp_address_state" name="gp_address_state"><br><br>
+
+						<label for="gp_address_country">Address Country</label>
+						<input type="text" id="gp_address_country" name="gp_address_country" ><br><br>
+						<label for="gp_address_zipcode">Address Zipcode</label>
+						<input type="text" id="gp_address_zipcode" name="gp_address_zipcode" ><br><br>
+						<label for="gp_contact_email">Contact Email</label>
+						<input type="text" id="gp_contact_email" name="gp_contact_email"><br><br>
+
+						<label for="gp_contact_developer_name">Contact Developer Name</label>
+						<input type="text" id="gp_contact_developer_name" name="gp_contact_developer_name" ><br><br>
+						<label for="gp_phone_number">Phone Number</label>
+						<input type="text" id="gp_phone_number" name="gp_phone_number" ><br><br>
+					</div>
+				</form>
+				<button id="create_distribution_google_play", onclick="create_distribution_google_play_fn()">Submit Google Play</button>
+
 			</div>
 		</div>
 		<div class="form-section">
@@ -1149,6 +1199,96 @@ label:active:after {
 				    console.error('Error saving domain/network info.');
 			    }
 		    }).catch(error => console.error('Error saving domain/network info.:', error));
+	    };
+	    // Begin Miscellaneous - Distribution Google play
+	    function create_distribution_google_play_fn() {
+		    event.preventDefault();
+		    const formData = {
+			    company_id: document.getElementById('companySubmitMiscGP').value,
+			    gp_url: document.getElementById('gp_url').value,
+			    gp_app_name: document.getElementById('gp_app_name').value,
+			    gp_developer: document.getElementById('gp_developer').value,
+			    gp_contains_ads: document.getElementById('gp_contains_ads').value,
+			    gp_stars: document.getElementById('gp_stars').value,
+
+			    gp_reviews: document.getElementById('gp_reviews').value,
+			    gp_downloads: document.getElementById('gp_downloads').value,
+			    gp_rating: document.getElementById('gp_rating').value,
+			    gp_website: document.getElementById('gp_website').value,
+			    gp_support_email: document.getElementById('gp_support_email').value,
+			    gp_privacy_policy: document.getElementById('gp_privacy_policy').value,
+			    gp_address_street: document.getElementById('gp_address_street').value,
+			    gp_address_city: document.getElementById('gp_support_email').value,
+			    gp_address_state: document.getElementById('gp_address_state').value,
+			    gp_address_country: document.getElementById('gp_address_country').value,
+			    gp_address_zipcode: document.getElementById('gp_address_zipcode').value,
+			    gp_contact_email: document.getElementById('gp_contact_email').value,
+			    gp_contact_developer_name: document.getElementById('gp_contact_developer_name').value,
+			    gp_phone_number: document.getElementById('gp_phone_number').value,
+		    };
+		    const methodBool = formData.company_id == -1;
+		    let method = 'POST';
+		    let url = '/api/create_distribution_google_play'; 
+		    if (methodBool) {
+			    method = 'POST';
+			    url = '/api/create_distribution_google_play';
+			    console.log(`I-f : /api/create_distribution_google_play/${formData.company_id}`)
+		    } else {
+			    method = 'PUT';
+			    url  = `/api/update_distribution_google_play/${formData.company_id}`;
+			    console.log(`E-lse : /api/update_distribution_google_play/${formData.company_id}`)
+		    }
+		    fetch(url, {
+			    method: method,
+			    headers: {
+				    'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(formData)
+		    }).then(response => {
+			    if (response.ok) {
+				    window.location.reload();
+			    } else {
+				    console.error('Error saving Google play distribution info.');
+			    }
+		    }).catch(error => console.error('Error Google play distribution:', error));
+	    };
+	    function create_code_transparency_fn() {
+		    event.preventDefault();
+		    const formData = {
+			    company_id: document.getElementById('companySubmitCT').value,
+			    github_account_name: document.getElementById('github_account_name').value,
+			    github_account_exists: document.getElementById('github_account_exists').value,
+			    gitlab_account_name: document.getElementById('gitlab_account_name').value,
+			    gitlab_account_exists: document.getElementById('gitlab_account_exists').value,
+			    gitee_account_name: document.getElementById('gitee_account_name').value,
+			    gitee_account_exists: document.getElementById('gitee_account_exists').value,
+			    is_open_source: document.getElementById('is_open_source').value,
+		    };
+		    const methodBool = formData.company_id == -1;
+		    let method = 'POST';
+		    let url = '/api/create_code_transparency'; 
+		    if (methodBool) {
+			    method = 'POST';
+			    url = '/api/create_code_transparency';
+			    console.log(`I-f : /api/create_code_transparency/${formData.company_id}`)
+		    } else {
+			    method = 'PUT';
+			    url  = `/api/update_code_transparency/${formData.company_id}`;
+			    console.log(`E-lse : /api/update_code_transparency/${formData.company_id}`)
+		    }
+		    fetch(url, {
+			    method: method,
+			    headers: {
+				    'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(formData)
+		    }).then(response => {
+			    if (response.ok) {
+				    window.location.reload();
+			    } else {
+				    console.error('Error saving code transparency info.');
+			    }
+		    }).catch(error => console.error('Error saving code transparency:', error));
 	    };
 
     </script>

@@ -903,6 +903,708 @@ def update_oc_trademarks(company_id):
 
 # END: Business Transparency CRUD API endpoints
 
+# BEGIN : vpnosint_business_distribution_google_play 
+# DONE TODO - Implement view/control and CRUD for distribution / google
+# TODO - Implement view/control and CRUD for distribution / apple 
+# TODO - Implement view/control and CRUD for distribution / telegram 
+
+@app.route('/api/create_distribution_google_play/', methods=['POST'])
+def create_distribution_google_play():
+    """
+    """
+    data = request.json
+    return _create_distribution_google_play(data)
+
+def _create_distribution_google_play(data):
+    """
+    business_id               | integer                     |           |          | 
+    gp_url                    | character varying(255)      |           |          | 
+    gp_app_name               | character varying(255)      |           |          | 
+    gp_developer              | character varying(255)      |           |          | 
+    gp_contains_ads           | boolean                     |           |          | 
+    gp_stars                  | integer                     |           |          | 
+    gp_reviews                | integer                     |           |          | 
+    gp_downloads              | integer                     |           |          | 
+    gp_rating                 | integer                     |           |          | 
+    gp_website                | character varying(255)      |           |          | 
+    gp_support_email          | character varying(255)      |           |          | 
+    gp_privacy_policy         | character varying(255)      |           |          | 
+    gp_address_street         | character varying(255)      |           |          | 
+    gp_address_city           | character varying(255)      |           |          | 
+    gp_address_state          | character varying(255)      |           |          | 
+    gp_address_country        | character varying(255)      |           |          | 
+    gp_address_zipcode        | character varying(255)      |           |          | 
+    gp_contact_email          | character varying(255)      |           |          | 
+    gp_contact_developer_name | character varying(255)      |           |          | 
+    gp_phone_number           | character varying(255)      |           |          | 
+    gp_timestamp              | timestamp without time zone |           |          | 
+    """
+    
+    print(f"data={data}")
+    print(f"RAN - api/create_distribution_google_play")
+    keys = []
+    vals = []
+    company_id = data['company_id']
+    print(f"api/create_distribution_google_play/, company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        return jsonify({'ok' : False,
+                        'statusText' : 'Cannot create distribution information for VPN provider doesnt exist first.'})
+    else:
+        """
+        """
+        keys = []
+        vals = []
+        runCmd = False
+        if 'gp_url' in data and len(data['gp_url']) > 0:
+            gp_url = data['gp_url']
+            keys.append("gp_url")
+            vals.append(f"'{gp_url}'")
+            runCmd = True
+        if 'gp_app_name' in data and len(data['gp_app_name']) > 0:
+            gp_app_name = data['gp_app_name']
+            keys.append("gp_app_name")
+            vals.append(f"'{gp_app_name}'")
+            runCmd = True
+
+        if 'gp_developer' in data and len(data['gp_developer']) > 0:
+            gp_developer = data['gp_developer']
+            keys.append("gp_developer")
+            vals.append(f"'{gp_developer}'")
+            runCmd = True
+        if 'gp_contains_ads' in data and len(data['gp_contains_ads']) > 0:
+            gp_contains_ads = data['gp_contains_ads']
+            keys.append("gp_contains_ads")
+            vals.append(f"'{gp_contains_ads}'")
+            runCmd = True
+        if 'gp_stars' in data and len(data['gp_stars']) > 0:
+            gp_stars = data['gp_stars']
+            keys.append("gp_stars")
+            vals.append(f"'{gp_stars}'")
+            runCmd = True
+        if 'gp_reviews' in data and len(data['gp_reviews']) > 0:
+            gp_reviews = data['gp_reviews']
+            keys.append("gp_reviews")
+            vals.append(f"'{gp_reviews}'")
+            runCmd = True
+        if 'gp_downloads' in data and len(data['gp_downloads']) > 0:
+            gp_downloads = data['gp_downloads']
+            keys.append("gp_downloads")
+            vals.append(f"'{gp_downloads}'")
+            runCmd = True
+        if 'gp_rating' in data and len(data['gp_rating']) > 0:
+            gp_rating = data['gp_rating']
+            keys.append("gp_rating")
+            vals.append(f"'{gp_rating}'")
+            runCmd = True
+        if 'gp_website' in data and len(data['gp_website']) > 0:
+            gp_website = data['gp_website']
+            keys.append("gp_website")
+            vals.append(f"'{gp_website}'")
+            runCmd = True
+        if 'gp_support_email' in data and len(data['gp_support_email']) > 0:
+            gp_support_email = data['gp_support_email']
+            keys.append("gp_support_email")
+            vals.append(f"'{gp_support_email}'")
+            runCmd = True
+        if 'gp_privacy_policy' in data and len(data['gp_privacy_policy']) > 0:
+            gp_privacy_policy = data['gp_privacy_policy']
+            keys.append("gp_privacy_policy")
+            vals.append(f"'{gp_privacy_policy}'")
+            runCmd = True
+        if 'gp_address_street' in data and len(data['gp_address_street']) > 0:
+            gp_address_street = data['gp_address_street']
+            keys.append("gp_address_street")
+            vals.append(f"'{gp_address_street}'")
+            runCmd = True
+        if 'gp_address_city' in data and len(data['gp_address_city']) > 0:
+            gp_address_city = data['gp_address_city']
+            keys.append("gp_address_city")
+            vals.append(f"'{gp_address_city}'")
+            runCmd = True
+        if 'gp_address_state' in data and len(data['gp_address_state']) > 0:
+            gp_address_state = data['gp_address_state']
+            keys.append("gp_address_state")
+            vals.append(f"'{gp_address_state}'")
+            runCmd = True
+        if 'gp_address_country' in data and len(data['gp_address_country']) > 0:
+            gp_address_country = data['gp_address_country']
+            keys.append("gp_address_country")
+            vals.append(f"'{gp_address_country}'")
+            runCmd = True
+        if 'gp_address_zipcode' in data and len(data['gp_address_zipcode']) > 0:
+            gp_address_zipcode = data['gp_address_zipcode']
+            keys.append("gp_address_zipcode")
+            vals.append(f"{gp_address_zipcode}")
+            runCmd = True
+        if 'gp_contact_email' in data and len(data['gp_contact_email']) > 0:
+            gp_contact_email = data['gp_contact_email']
+            keys.append("gp_contact_email")
+            vals.append(f"'{gp_contact_email}'")
+            runCmd = True
+        if 'gp_contact_developer_name' in data and len(data['gp_contact_developer_name']) > 0:
+            gp_contact_developer_name = data['gp_contact_developer_name']
+            keys.append("gp_contact_developer_name")
+            vals.append(f"'{gp_contact_developer_name}'")
+            runCmd = True
+        if 'gp_phone_number' in data and len(data['gp_phone_number']) > 0:
+            gp_phone_number = data['gp_phone_number']
+            keys.append("gp_phone_number")
+            vals.append(f"'{gp_phone_number}'")
+            runCmd = True
+
+        if runCmd: 
+            keys.append("business_id")
+            vals.append(company_id)
+            gp_timestamp = datetime.datetime.now().isoformat()
+            keys.append("gp_timestamp")
+            vals.append(f"'{gp_timestamp}'")
+        keys = ','.join(keys)
+        vals = ','.join(vals)
+        
+        cmd = f"INSERT INTO vpnosint_business_distribution_google_play ({keys}) VALUES ({vals});"
+        print(f"cmd={cmd}")
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        if runCmd: 
+            cur.execute(cmd)
+        conn.commit()
+        cur.close()
+        conn.close()
+        return jsonify({'ok' : True, "statusText" : "Successfully Added distribution info for Google play."}) 
+
+
+@app.route('/api/update_distribution_google_play/<int:company_id>', methods=['PUT','POST'])
+def update_distribution_google_play(company_id):
+    """
+    """
+    data = request.json
+    print(f"RAN 1. api/update_distribution_google_play/{company_id}")
+    print(f"RAN 2. api/update_distribution_google_play/, data={data}")
+
+    update_cmd = []
+    company_id = data["company_id"]
+    print(f"RAN 3. api/update_distribution_google_play/, company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        print(f"RAN if 4. api/update_distribution_google_play/{company_id}")
+        return jsonify({"ok" : False, "statusText" : "Cannot update unknown company" })
+    else:
+        try:
+            print(f"RAN else 4. api/update_distribution_google_play/{company_id}")
+            conn = get_db_connection()
+            cur = conn.cursor()
+            gp_check_query = """
+            
+                SELECT EXISTS (
+                    SELECT 1 FROM  vpnosint_business_distribution_google_play WHERE business_id = %s
+                );
+            """
+
+            print(f"RAN else 4. api/update_distribution_google_play/{company_id}")
+            cur.execute(gp_check_query, (company_id,))
+            gp_exists = cur.fetchone()[0]  # Fetch the result (True or False)
+
+            print(f"RAN else 5. api/update_distribution_google_play/{company_id}, gp_exists={gp_exists} ")
+            keys = []
+            vals = []
+            if not gp_exists:
+                print(f"RAN 6. api/update_distribution_google_play/{company_id}, if not gp_exists={not gp_exists}")
+                data["update_called"] = True
+                return _create_distribution_google_play(data)
+            else:
+                print(f"RAN 7. api/update_distribution_google_play/{company_id}, else not gp_exists={not gp_exists}")
+                runCmd = False
+                update_cmd = []
+                if 'gp_url' in data and len(data['gp_url']) > 0:
+                    gp_url = data['gp_url']
+                    tmp = f"gp_url='{gp_url}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_app_name' in data and len(data['gp_app_name']) > 0:
+                    gp_app_name = data['gp_app_name']
+                    tmp = f"gp_app_name='{gp_app_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_developer' in data and len(data['gp_developer']) > 0:
+                    gp_developer = data['gp_developer']
+                    tmp = f"gp_developer='{gp_developer}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_contains_ads' in data and len(data['gp_contains_ads']) > 0:
+                    gp_contains_ads = data['gp_contains_ads']
+                    tmp = f"gp_contains_ads='{gp_contains_ads}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_stars' in data and len(data['gp_stars']) > 0:
+                    gp_stars = data['gp_stars']
+                    tmp = f"gp_stars='{gp_stars}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_reviews' in data and len(data['gp_reviews']) > 0:
+                    gp_reviews = data['gp_reviews']
+                    tmp = f"gp_reviews='{gp_reviews}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_downloads' in data and len(data['gp_downloads']) > 0:
+                    gp_downloads = data['gp_downloads']
+                    tmp = f"gp_downloads='{gp_downloads}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_rating' in data and len(data['gp_rating']) > 0:
+                    gp_rating = data['gp_rating']
+                    tmp = f"gp_rating='{gp_rating}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_website' in data and len(data['gp_website']) > 0:
+                    gp_website = data['gp_website']
+                    tmp = f"gp_website='{gp_website}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_support_email' in data and len(data['gp_support_email']) > 0:
+                    gp_support_email = data['gp_support_email']
+                    tmp = f"gp_support_email='{gp_support_email}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_privacy_policy' in data and len(data['gp_privacy_policy']) > 0:
+                    gp_privacy_policy = data['gp_privacy_policy']
+                    tmp = f"gp_privacy_policy='{gp_privacy_policy}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_address_street' in data and len(data['gp_address_street']) > 0:
+                    gp_address_street = data['gp_address_street']
+                    tmp = f"gp_address_street='{gp_address_street}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_address_city' in data and len(data['gp_address_city']) > 0:
+                    gp_address_city = data['gp_address_city']
+                    tmp = f"gp_address_city='{gp_address_city}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_address_state' in data and len(data['gp_address_state']) > 0:
+                    gp_address_state = data['gp_address_state']
+                    tmp = f"gp_address_state='{gp_address_state}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_address_country' in data and len(data['gp_address_country']) > 0:
+                    gp_address_country = data['gp_address_country']
+                    tmp = f"gp_address_country='{gp_address_country}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_address_zipcode' in data and len(data['gp_address_zipcode']) > 0:
+                    gp_address_zipcode = data['gp_address_zipcode']
+                    tmp = f"gp_address_zipcode='{gp_address_zipcode}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if 'gp_contact_email' in data and len(data['gp_contact_email']) > 0:
+                    gp_contact_email = data['gp_contact_email']
+                    tmp = f"gp_contact_email='{gp_contact_email}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'gp_contact_developer_name' in data and len(data['gp_contact_developer_name']) > 0:
+                    gp_contact_developer_name = data['gp_contact_developer_name']
+                    tmp = f"gp_contact_developer_name='{gp_contact_developer_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'gp_phone_number' in data and len(data['gp_phone_number']) > 0:
+                    gp_phone_number = data['gp_phone_number']
+                    tmp = f"gp_phone_number='{gp_phone_number}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if runCmd:
+                    gp_timestamp = datetime.datetime.now().isoformat()
+                    tmp = f"gp_timestamp='{gp_timestamp}'"
+                    update_cmd.append(tmp)
+
+                update_cmd = ','.join(update_cmd)
+                cmd = f"UPDATE vpnosint_business_distribution_google_play SET {update_cmd} WHERE business_id={company_id};"
+                print(f"cmd={cmd}")
+                print(f"RAN - api/update_distribution_google_play/{company_id}, else not oc_exists={not oc_exists}, runCmd={runCmd}")
+
+                if runCmd: 
+                    cur.execute(cmd)
+                    conn.commit()
+
+            cur.close()
+            conn.close()
+            return jsonify({"ok" : True, "statusText" : "Open Corporates Info Successfully Updated."}) 
+        except Exception as e:
+           print(f"RAN - Exception - {e} - api/update_distribution_google_play/{company_id}")
+        finally:
+           print(f"RAN - Finally - api/update_distribution_google_play/{company_id}, if not oc_exists")
+           return jsonify({"ok" : False, "statusText" : "Failed to updated Google play distribution info."}) 
+# END : vpnosint_business_distribution_google_play 
+
+# BEGIN : vpnosint_business_code_transparency_db
+# TODO - Implement view/control and CRUD for code transparency info
+
+@app.route('/api/create_code_transparency/', methods=['POST'])
+def create_code_transparency():
+    """
+    business_id           | integer                |           |          | 
+    github_account_name   | character varying(255) |           |          | 
+    github_account_exists | boolean                |           |          | 
+    gitlab_account_name   | character varying(255) |           |          | 
+    gitlab_account_exists | boolean                |           |          | 
+    gitee_account_name    | character varying(255) |           |          | 
+    gitee_account_exists  | boolean                |           |          | 
+    is_open_source        | boolean                |           |          | 
+
+    """
+    data = request.json
+    return _create_code_transparency(data)
+
+def _create_code_transparency(data):
+    """
+    """
+    
+    print(f"data={data}")
+    print(f"RAN - api/create_code_transparency")
+    keys = []
+    vals = []
+    company_id = data['company_id']
+    print(f"api/create_code_transparency/, company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        return jsonify({'ok' : False,
+                        'statusText' : 'Cannot create github code transparency information for VPN provider doesnt exist first.'})
+    else:
+        """
+        """
+        keys = []
+        vals = []
+        runCmd = False
+        if 'github_account_name' in data and len(data['github_account_name']) > 0:
+            github_account_name = data['github_account_name']
+            keys.append("github_account_name")
+            vals.append(f"'{github_account_name}'")
+            runCmd = True
+        if 'github_account_exists' in data and len(data['github_account_exists']) > 0:
+            github_account_exists = data['github_account_exists']
+            keys.append("github_account_exists")
+            vals.append(f"'{github_account_exists}'")
+            runCmd = True
+        if 'gitlab_account_name' in data and len(data['gitlab_account_name']) > 0:
+            gitlab_account_name = data['gitlab_account_name']
+            keys.append("gitlab_account_name")
+            vals.append(f"'{gitlab_account_name}'")
+            runCmd = True
+        if 'gitlab_account_exists' in data and len(data['gitlab_account_exists']) > 0:
+            gitlab_account_exists = data['gitlab_account_exists']
+            keys.append("gitlab_account_exists")
+            vals.append(f"'{gitlab_account_exists}'")
+            runCmd = True
+        if 'gitee_account_name' in data and len(data['gitee_account_name']) > 0:
+            gitee_account_name = data['gitee_account_name']
+            keys.append("gitee_account_name")
+            vals.append(f"'{gitee_account_name}'")
+            runCmd = True
+        if 'gitee_account_exists' in data and len(data['gitee_account_exists']) > 0:
+            gitee_account_exists = data['gitee_account_exists']
+            keys.append("gitee_account_exists")
+            vals.append(f"'{gitee_account_exists}'")
+            runCmd = True
+        if 'is_open_source' in data and len(data['is_open_source']) > 0:
+            is_open_source = data['is_open_source']
+            tmp = f"is_open_source='{is_open_source}'"
+            keys.append("is_open_source")
+            vals.append(f"'{is_open_source}'")
+            runCmd = True
+
+        if runCmd: 
+            keys.append("business_id")
+            vals.append(company_id)
+            ct_timestamp = datetime.datetime.now().isoformat()
+            keys.append("ct_timestamp")
+            vals.append(f"'{ct_timestamp}'")
+        keys = ','.join(keys)
+        vals = ','.join(vals)
+        
+        cmd = f"INSERT INTO vpnosint_business_code_transparency_db ({keys}) VALUES ({vals});"
+        print(f"cmd={cmd}")
+
+        conn = get_db_connection()
+        cur = conn.cursor()
+        if runCmd: 
+            cur.execute(cmd)
+        conn.commit()
+        cur.close()
+        conn.close()
+        return jsonify({'ok' : True, "statusText" : "Successfully added code transparnecy."}) 
+
+
+@app.route('/api/update_code_transparency/<int:company_id>', methods=['PUT','POST'])
+def update_code_transparency(company_id):
+    """
+    business_id           | integer                |           |          | 
+    github_account_name   | character varying(255) |           |          | 
+    github_account_exists | boolean                |           |          | 
+    gitlab_account_name   | character varying(255) |           |          | 
+    gitlab_account_exists | boolean                |           |          | 
+    gitee_account_name    | character varying(255) |           |          | 
+    gitee_account_exists  | boolean                |           |          | 
+    is_open_source        | boolean                |           |          | 
+
+    """
+    data = request.json
+    print(f"RAN 1. api/update_code_transparency/{company_id}")
+    print(f"RAN 2. api/update_code_transparency/, data={data}")
+
+    update_cmd = []
+    company_id = data["company_id"]
+    print(f"RAN 3. api/update_code_transparency/, company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        print(f"RAN if 4. api/update_code_transparency/{company_id}")
+        return jsonify({"ok" : False, "statusText" : "Cannot update unknown company" })
+    else:
+        try:
+            print(f"RAN else 4. api/update_code_transparency/{company_id}")
+            conn = get_db_connection()
+            cur = conn.cursor()
+            ct_check_query = """
+                SELECT EXISTS (
+                    SELECT 1 FROM vpnosint_business_code_transparency_db WHERE business_id = %s
+                );
+            """
+
+            print(f"RAN else 4. api/update_code_transparency/{company_id}")
+            cur.execute(ct_check_query, (company_id,))
+            ct_exists = cur.fetchone()[0]  # Fetch the result (True or False)
+
+            print(f"RAN else 5. api/update_code_transparency/{company_id}, ct_exists={ct_exists} ")
+            keys = []
+            vals = []
+            if not ct_exists:
+                print(f"RAN 6. api/update_code_transparency/{company_id}, if not ct_exists={not ct_exists}")
+                data["update_called"] = True
+                return _create_code_transparency(data)
+            else:
+                print(f"RAN 7. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+                runCmd = False
+                update_cmd = []
+                print(f"RAN 8. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+                if 'github_account_name' in data and len(data['github_account_name']) > 0:
+                    github_account_name = data['github_account_name']
+                    tmp = f"github_account_name='{github_account_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                print(f"RAN 9. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+                if 'github_account_exists' in data and len(data['github_account_exists']) > 0:
+                    github_account_exists = data['github_account_exists']
+                    tmp = f"github_account_exists='{github_account_exists}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                print(f"RAN 10. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+                if 'gitlab_account_name' in data and len(data['gitlab_account_name']) > 0:
+                    gitlab_account_name = data['gitlab_account_name']
+                    tmp = f"gitlab_account_name='{gitlab_account_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                print(f"RAN 11. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+                if 'gitlab_account_exists' in data and len(data['gitlab_account_exists']) > 0:
+                    gitlab_account_exists = data['gitlab_account_exists']
+                    tmp = f"gitlab_account_exists='{gitlab_account_exists}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                print(f"RAN 12. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+                if 'gitee_account_name' in data and len(data['gitee_account_name']) > 0:
+                    gitee_account_name = data['gitee_account_name']
+                    tmp = f"gitee_account_name='{gitee_account_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                print(f"RAN 13. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+                if 'gitee_account_exists' in data and len(data['gitee_account_exists']) > 0:
+                    gitee_account_exists = data['gitee_account_exists']
+                    tmp = f"gitee_account_exists='{gitee_account_exists}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                print(f"RAN 14. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+                if 'is_open_source' in data and len(data['is_open_source']) > 0:
+                    is_open_source = data['is_open_source']
+                    tmp = f"is_open_source='{is_open_source}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                print(f"RAN 15. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+
+                if runCmd:
+                    ct_timestamp = datetime.datetime.now().isoformat()
+                    tmp = f"ct_timestamp='{ct_timestamp}'"
+                    update_cmd.append(tmp)
+                print(f"RAN 16. api/update_code_transparency/{company_id}, else not ct_exists={not ct_exists}")
+
+                update_cmd = ','.join(update_cmd)
+                cmd = f"UPDATE vpnosint_business_code_transparency_db SET {update_cmd} WHERE business_id={company_id};"
+                print(f"RAN 17. api/update_code_transparency/{company_id}, cmd={cmd}")
+                if runCmd: 
+                    cur.execute(cmd)
+                    conn.commit()
+            cur.close()
+            conn.close()
+            print(f"RAN 18. Committed")
+        except Exception as e:
+           print(f"RAN - Exception - {e} - api/update_code_transparency/{company_id}")
+        finally:
+           print(f"RAN -FOO- Finally - api/update_code_transparency/{company_id}, if not ct_exists")
+           return jsonify({"ok" : False, "statusText" : "Failed to updated code transparency info."}) 
+
+# END : vpnosint_business_code_transparency_db
+
+# BEGIN : vpnosint_business_github_query_db
+# TODO - Implement view/control and CRUD for github search
+# TODO - Implement view/control and CRUD for github search
+# TODO - Implement view/control and CRUD for github search
+# END : vpnosint_business_github_query_db
+
+# BEGIN : vpnosint_business_github_query_db
+# TODO - Implement view/control and CRUD for github search
+# TODO - Implement view/control and CRUD for github search
+# TODO - Implement view/control and CRUD for github search
+# END : vpnosint_business_github_query_db
+
+# BEGIN : vpnosint_vpn_apk_db
+# TODO - Implement view/control and CRUD for apk info 
+# TODO - Implement view/control and CRUD for apk info 
+# TODO - Implement view/control and CRUD VPN apk info 
+# END : vpnosint_vpn_apk_db
+
+# BEGIN : vpnosint_business_person_db 
+# TODO - Implement view/control and CRUD for person map 
+# TODO - Implement view/control and CRUD for person map
+# TODO - Implement view/control and CRUD for person map 
+
+@app.route('/api/create_business_person/', methods=['PUT'])
+def create_business_person():
+    data = request.json
+    return _create_business_person(data)
+
+def _create_business_person(data):
+    raise Exception("_create_business_person - UNIMPLEMENTED API.")
+    return jsonify({'ok' : False, 'statusText' : 'Not implemented'})
+
+@app.route('/api/update_business_person/<int:company_id>', methods=['PUT','POST'])
+def update_business_person(company_id):
+    """
+    person_first_name  | character varying(255)      |           |          | 
+    person_last_name   | character varying(255)      |           |          | 
+    person_source      | text                        |           |          | 
+    person_affiliation | text                        |           |          | 
+    person_notes       | text                        |           |          | 
+    person_source_type | character varying(255)      |           |          | 
+    person_timestamp   | timestamp without time zone |           |          | 
+    """
+    raise Exception("_create_business_person - UNIMPLEMENTED API.")
+    data = request.json
+    print(f"RAN 1. api/update_business_person/{company_id}")
+    print(f"RAN 2. api/update_business_person/, data={data}")
+
+    update_cmd = []
+    company_id = data["company_id"]
+    print(f"RAN 3. api/update_business_person/, company_id={company_id}, type(company_id)={type(company_id)}")
+    if company_id == -1 or company_id == '-1':
+        print(f"RAN if 4. api/update_business_person/{company_id}")
+        return jsonify({"ok" : False, "statusText" : "Cannot update unknown company" })
+    else:
+        try:
+            print(f"RAN else 4. api/update_business_person/{company_id}")
+            conn = get_db_connection()
+            cur = conn.cursor()
+            gp_check_query = """
+            
+                SELECT EXISTS (
+                    SELECT 1 FROM vpnosint_business_person_db WHERE business_id = %s
+                );
+            """
+
+            print(f"RAN else 4. api/update_business_person/{company_id}")
+            cur.execute(gp_check_query, (company_id,))
+            gp_exists = cur.fetchone()[0]  # Fetch the result (True or False)
+
+            print(f"RAN else 5. api/update_business_person/{company_id}, gp_exists={gp_exists} ")
+            update_cmd = []
+            if not gp_exists:
+                print(f"RAN 6. api/update_business_person/{company_id}, if not gp_exists={not gp_exists}")
+                data["update_called"] = True
+                return _create_distribution_google_play(data)
+            else:
+                print(f"RAN 7. api/update_business_person/{company_id}, else not gp_exists={not gp_exists}")
+                runCmd = False
+                update_cmd = []
+                if 'person_first_name' in data and len(data['person_first_name']) > 0:
+                    person_first_name = data['person_first_name']
+                    tmp = f"person_first_name='{person_first_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'person_last_name' in data and len(data['person_last_name']) > 0:
+                    person_last_name = data['person_last_name']
+                    tmp = f"person_last_name='{person_last_name}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'person_source' in data and len(data['person_source']) > 0:
+                    person_source = data['person_source']
+                    tmp = f"person_source='{person_source}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'person_affiliation' in data and len(data['person_affiliation']) > 0:
+                    person_affiliation = data['person_affiliation']
+                    tmp = f"person_affiliation='{person_affiliation}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'person_notes' in data and len(data['person_notes']) > 0:
+                    person_notes = data['person_notes']
+                    tmp = f"person_notes='{person_notes}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+                if 'person_source_type' in data and len(data['person_source_type']) > 0:
+                    person_source_type = data['person_source_type']
+                    tmp = f"person_source_type='{person_source_type}'"
+                    update_cmd.append(tmp)
+                    runCmd = True
+
+                if runCmd:
+                    person_timestamp = datetime.datetime.now().isoformat()
+                    tmp = f"person_timestamp='{person_timestamp}'"
+                    update_cmd.append(tmp)
+
+                update_cmd = ','.join(update_cmd)
+                cmd = f"UPDATE vpnosint_business_person_db SET {update_cmd} WHERE business_id={company_id};"
+                print(f"cmd={cmd}")
+                print(f"RAN - api/update_business_person/{company_id}, else not oc_exists={not oc_exists}, runCmd={runCmd}")
+
+                if runCmd: 
+                    cur.execute(cmd)
+                    conn.commit()
+            cur.close()
+            conn.close()
+            return jsonify({"ok" : True, "statusText" : "Successfully updated person affilate information."}) 
+        except Exception as e:
+           print(f"RAN - Exception - {e} - api/update_code_transparency/{company_id}")
+        finally:
+           print(f"RAN - Finally - api/update_code_transparency/{company_id}, if not oc_exists")
+           return jsonify({"ok" : False, "statusText" : "Failed to updated person affilate info."}) 
+
+# END : vpnosint_business_person_db 
+
+# TODO: Implement models for
+# TODO: Telegram social media profile
+# TODO: LinkedIn profile
+# TODO: General website (rating website, security information website)
+# TODO: Add security audit and security audit is public to code transparency.
+# TODO: 
+
 # BEGIN - CRUD for social media transparency
 @app.route('/api/create_social_media', methods=['POST'])
 def create_social_media():
