@@ -402,9 +402,9 @@ label:active:after {
 							<input type="datetime-local" id="oc_data_source_last_changed" name="oc_data_source_last_changed"><br><br>
 							<label for="oc_data_source_url">Data Source Url</label>
 							<input type="text" id="oc_data_source_url" name="oc_data_source_url"><br><br>
+							<button id="create_business", onclick="create_business_open_corporates_fn()">Submit O.C.</button>
 					</div>
 				</form>
-				<button id="create_business", onclick="create_business_open_corporates_fn()">Submit O.C.</button>
 				<form id="entryForm">
 					<div id="opencorporates_tm">
 						<h3>Open Corporates - Trademark</h3>
@@ -456,16 +456,15 @@ label:active:after {
 							<input type="number" id="oc_correspondent_address_longitude" name="oc_correspondent_address_longitude"><br><br>
 							<label for="oc_trademark_notes">Trademark Notes</label>
 							<input type="text" id="oc_trademark_notes" name="oc_trademark_notes"><br><br>
+							<button id="create_oc_trademarks", onclick="create_oc_trademarks_fn()">Submit Trademark</button>
 					</div>
 				</form>
-				<button id="create_oc_trademarks", onclick="create_oc_trademarks_fn()">Submit Trademark</button>
 
 			</div>
 		</div>
 
 		<!-- Product Form -->
 		<div class="form-section">
-			<!-- TODO: Fix the input methods -->
 			<h2>Social Media Transparency</h2>
 			<label for="companySubmitSM">Select a Company:</label>
 			<select id="companySubmitSM">
@@ -503,7 +502,6 @@ label:active:after {
 						<input type="datetime-local" id="fb_joined_date" name="fb_joined_date"><br><br>
 					</div>
 				</form>
-
 				<button id="create_social_media", onclick="create_social_media_fn()">Submit Social Media</button>
 			</div>
 		</div>
@@ -544,8 +542,40 @@ label:active:after {
 						<label for="domain_registrant_organization">Registrant Organization</label>
 						<input type="text" id="domain_registrant_organization" name="domain_registrant_organization"><br><br>
 					</div>
+					<button id="create_domain", onclick="create_domain_fn()">Submit Domain</button><br><br>
 				</form>
-				<button id="create_domain_network", onclick="create_domain_network_fn()">Submit Domain/Network</button>
+				<form id="entryForm">
+					<div id="network">
+						<h3>Network Info</h3>
+						<label for="network_ip_address">IP address</label>
+						<input type="text" id="network_ip_address" name="network_ip_address"><br><br>
+
+						<label for="network_reverse_ip_address">Reverse IP address</label>
+						<input type="text" id="network_reverse_ip_address" name="network_reverse_ip_address"><br><br>
+
+						<label for="network_ip_latitude">IP Latitude</label>
+						<input type="text" id="network_ip_latitude" name="network_ip_latitude"><br><br>
+
+						<label for="network_ip_longitude">IP Longitude</label>
+						<input type="text" id="network_ip_longitude" name="network_ip_longitude"><br><br>
+
+						<label for="network_as_name">Autonomous System Comapny Name</label>
+						<input type="text" id="network_as_name" name="network_as_name"><br><br>
+
+						<label for="as_company_url">Autonomous System Company URL</label>
+						<input type="text" id="network_as_company_url" name="network_as_company_url"><br><br>
+
+						<label for="network_as_number">Autonomous System Number</label>
+						<input type="number" id="network_as_number" name="network_as_number"><br><br>
+
+						<label for="network_as_city">Autonomous System City</label>
+						<input type="text" id="network_as_city" name="network_as_city"><br><br>
+
+						<label for="network_as_country">Autonomous System Country</label>
+						<input type="text" id="network_as_country" name="network_as_country"><br><br>
+					</div>
+					<button id="create_network", onclick="create_network_fn()">Submit Network</button>
+				</form>
 			</div>
 		</div>
 		<div class="form-section">
@@ -562,18 +592,12 @@ label:active:after {
 				<form id="entryForm">
 					<label for="github_account_name">Github Account Name</label>
 					<input type="text" id="github_account_name" name="github_account_name"><br><br>
-					<label for="github_account_exists">Github Account Exists?</label>
-					<input type="checkbox" id="github_account_exists" name="github_account_exists" value="false"><br><br>
 
 					<label for="gitlab_account_name">Gitlab Account Name</label>
 					<input type="text" id="gitlab_account_name" name="gitlab_account_name"><br><br>
-					<label for="gitlab_account_exists">Gitlab Account Exists?</label>
-					<input type="checkbox" id="gitlab_account_exists" name="gitlab_account_exists" value="false"><br><br>
 
 					<label for="gitee_account_name">Gitee Account Name</label>
 					<input type="text" id="gitee_account_name" name="gitee_account_name"><br><br>
-					<label for="gitee_account_exists">Gitee Account Exists?</label>
-					<input type="checkbox" id="gitee_account_exists" name="gitee_account_exists" value="false"><br><br>
 					<label for="is_open_source">Is Open Source?</label>
 					<input type="checkbox" id="is_open_source" name="is_open_source" value="false"><br><br>
 
@@ -1158,7 +1182,7 @@ label:active:after {
 	    };
 	    // BEGIN: Create/Update Domain/Network Information
 	    // Create or Update an entry
-	    function create_domain_network_fn() {
+	    function create_domain_fn() {
 		    event.preventDefault();
 		    const formData = {
 			    company_id: document.getElementById('companySubmitDN').value,
@@ -1176,15 +1200,15 @@ label:active:after {
 		    };
 		    const methodBool = formData.company_id == -1;
 		    let method = 'POST';
-		    let url = '/api/create_domain_network';
+		    let url = '/api/create_domain';
 		    if (methodBool) {
 			    method = 'POST';
-			    url = '/api/create_domain_network';
-			    console.log(`I-f : /api/create_domain_network/${formData.company_id}`)
+			    url = '/api/create_domain';
+			    console.log(`I-f : /api/create_domain/${formData.company_id}`)
 		    } else {
 			    method = 'PUT';
-			    url  = `/api/update_domain_network/${formData.company_id}`;
-			    console.log(`E-lse : /api/update_domain_network/${formData.company_id}`)
+			    url  = `/api/update_domain/${formData.company_id}`;
+			    console.log(`E-lse : /api/update_domain/${formData.company_id}`)
 		    }
 		    fetch(url, {
 			    method: method,
@@ -1196,10 +1220,53 @@ label:active:after {
 			    if (response.ok) {
 				    window.location.reload();
 			    } else {
-				    console.error('Error saving domain/network info.');
+				    console.error('Error saving domain info.');
 			    }
-		    }).catch(error => console.error('Error saving domain/network info.:', error));
+		    }).catch(error => console.error('Error saving domain info.:', error));
 	    };
+	    function create_network_fn() {
+		    event.preventDefault();
+		    const formData = {
+			    company_id: document.getElementById('companySubmitDN').value,
+			    network_ip_address: document.getElementById('network_ip_address').value,
+			    network_reverse_ip_address: document.getElementById('network_reverse_ip_address').value,
+			    network_ip_latitude: document.getElementById('network_ip_latitude').value,
+			    network_ip_longitude: document.getElementById('network_ip_longitude').value,
+			    network_as_name: document.getElementById('network_as_name').value,
+
+			    network_as_company_url: document.getElementById('network_as_company_url').value,
+			    network_as_number: document.getElementById('network_as_number').value,
+			    network_as_city: document.getElementById('network_as_city').value,
+			    network_as_country: document.getElementById('network_as_country').value,
+		    };
+		    const methodBool = formData.company_id == -1;
+		    let method = 'POST';
+		    let url = '/api/create_network';
+		    if (methodBool) {
+			    method = 'POST';
+			    url = '/api/create_network';
+			    console.log(`I-f : /api/create_network/${formData.company_id}`)
+		    } else {
+			    method = 'PUT';
+			    url  = `/api/update_network/${formData.company_id}`;
+			    console.log(`E-lse : /api/update_network/${formData.company_id}`)
+		    }
+		    fetch(url, {
+			    method: method,
+			    headers: {
+				    'Content-Type': 'application/json'
+			    },
+			    body: JSON.stringify(formData)
+		    }).then(response => {
+			    if (response.ok) {
+				    window.location.reload();
+				    console.log(`E-lse : /api/update_network/${formData.company_id}`)
+			    } else {
+				    console.error('Error saving domain info.');
+			    }
+		    }).catch(error => console.error('Error saving domain info.:', error));
+	    };
+
 	    // Begin Miscellaneous - Distribution Google play
 	    function create_distribution_google_play_fn() {
 		    event.preventDefault();
@@ -1267,6 +1334,7 @@ label:active:after {
 		    const methodBool = formData.company_id == -1;
 		    let method = 'POST';
 		    let url = '/api/create_code_transparency'; 
+		    console.error(`create_code_transparency - formData.is_open_source=${formData.is_open_source}, formData.gitee_account_exists=${formData.gitee_account_exists}, formData.gitlab_account_exists=${formData.gitlab_account_exists}, formData.github_account_exists=${formData.github_account_exists}`);
 		    if (methodBool) {
 			    method = 'POST';
 			    url = '/api/create_code_transparency';
@@ -1284,7 +1352,8 @@ label:active:after {
 			    body: JSON.stringify(formData)
 		    }).then(response => {
 			    if (response.ok) {
-				    window.location.reload();
+				    // window.location.reload();
+				    console.error(`create_code_transparency - formData.is_open_source=${formData.is_open_source}, formData.gitee_account_exists=${formData.gitee_account_exists}, formData.gitlab_account_exists=${formData.gitlab_account_exists}, formData.github_account_exists=${formData.github_account_exists}`);
 			    } else {
 				    console.error('Error saving code transparency info.');
 			    }

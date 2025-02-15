@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS vpnosint_business_db (
 );
 
 -- Create vpnosint_domain_db table with business_id as foreign key
+
 CREATE TABLE IF NOT EXISTS vpnosint_domain_db (
     id SERIAL PRIMARY KEY,
     domain_name VARCHAR(255) NOT NULL,
@@ -59,6 +60,21 @@ CREATE TABLE IF NOT EXISTS vpnosint_business_to_twitter_db (
 	following_count INT,
 	location VARCHAR(255),
 	joined_date TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS vpnosint_network_db ( 
+	id SERIAL PRIMARY KEY,
+       	business_id INT REFERENCES vpnosint_business_db(id) ON DELETE CASCADE,
+	network_ip_address VARCHAR(255),
+	network_reverse_ip_address VARCHAR(255),
+	network_ip_latitude INT,
+	network_ip_longitude INT,
+	network_as_name VARCHAR(255),
+	network_as_company_url VARCHAR(255),
+	network_as_number INT,
+	network_as_city VARCHAR(255),
+	network_as_state VARCHAR(255),
+	network_timestamp TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS vpnosint_business_github_query_db (
