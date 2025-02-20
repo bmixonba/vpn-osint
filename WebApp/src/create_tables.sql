@@ -199,3 +199,26 @@ CREATE TABLE IF NOT EXISTS vpnosint_business_person_db (
 	person_timestamp TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS vpnosint_apk_to_file_db (
+	id SERIAL PRIMARY KEY,
+       	apk_id INT REFERENCES vpnosint_vpn_apk_db(id) ON DELETE CASCADE,
+	file_name VARCHAR(255),
+	file_sha256 VARCHAR(255),
+	file_type VARCHAR(255),
+	file_extension VARCHAR(255),
+	file_timestamp TIMESTAMP,
+	file_last_modified TIMESTAMP
+);
+
+
+CREATE TABLE IF NOT EXISTS vpnosint_apk_to_function_db (
+	id SERIAL PRIMARY KEY,
+       	apk_id INT REFERENCES vpnosint_vpn_apk_db(id) ON DELETE CASCADE,
+	fn_package_name VARCHAR(255),
+	fn_function_name VARCHAR(255),
+	fn_path VARCHAR(255),
+	fn_code_sha256 VARCHAR(255),
+	fn_timestamp TIMESTAMP,
+	fn_last_modified TIMESTAMP
+);
+

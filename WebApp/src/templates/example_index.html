@@ -364,7 +364,7 @@ label:active:after {
 						<input type="datetime-local" id="incorporation_date" name="incorporation_date"><br><br>
 					</div>
 				</form>
-				<button id="create_business", onclick="create_business()">Submit Business</button>
+				<button id="create_business", onclick="create_business_fn()">Submit Business</button>
 				<form id="entryForm">
 					<div id="opencorporates">
 						<h3>Open Corporates</h3>
@@ -402,7 +402,7 @@ label:active:after {
 							<input type="datetime-local" id="oc_data_source_last_changed" name="oc_data_source_last_changed"><br><br>
 							<label for="oc_data_source_url">Data Source Url</label>
 							<input type="text" id="oc_data_source_url" name="oc_data_source_url"><br><br>
-							<button id="create_business", onclick="create_business_open_corporates_fn()">Submit O.C.</button>
+							<button id="create_business_open_corporates_fn", onclick="create_business_open_corporates_fn()">Submit O.C.</button>
 					</div>
 				</form>
 				<form id="entryForm">
@@ -610,8 +610,15 @@ label:active:after {
 					<input type="text" id="github_comment" name="github_comment" required><br><br>
 				</form>
 
-				<button id="create_code_transparency", onclick="create_code_transparency_fn()">Submit Code Transparency</button>
-			</div>
+				<button id="create_code_transparency", onclick="create_code_transparency_fn()">Submit Code Transparency</button><br></br>
+				<form id="entryForm">
+					<h3>Upload a File</h3>
+					<input type="file" id="fileInput"><br></br>
+					<button onclick="uploadFile()">Upload</button>
+					<h3>Task Status</h3>
+					<p id="status">No task running.</p>
+					</div>
+				</form>
 		</div>
 	</div>
 	<div class="form-container">
@@ -636,8 +643,6 @@ label:active:after {
 						<input type="text" id="gp_developer" name="gp_developer" ><br><br>
 						<label for="gp_contains_ads">Contains Ads</label>
 						<input type="text" id="gp_contains_ads" name="gp_contains_ads" ><br><br>
-						<label for="gp_stars">Stars</label>
-						<input type="number" id="gp_stars" name="gp_stars" ><br><br>
 						<label for="gp_reviews">Reviews</label>
 						<input type="number" id="gp_reviews" name="gp_reviews" ><br><br>
 						<label for="gp_downloads">Downloads</label>
@@ -669,6 +674,8 @@ label:active:after {
 						<input type="text" id="gp_contact_developer_name" name="gp_contact_developer_name" ><br><br>
 						<label for="gp_phone_number">Phone Number</label>
 						<input type="text" id="gp_phone_number" name="gp_phone_number" ><br><br>
+						<label for="gp_registration_date">Registration Date</label>
+						<input type="datetime-local" id="gp_registration_date" name="gp_registration_date" ><br><br>
 					</div>
 				</form>
 				<button id="create_distribution_google_play", onclick="create_distribution_google_play_fn()">Submit Google Play</button>
@@ -684,15 +691,6 @@ label:active:after {
 				<option value="{{ company[0] }}">{{ company[1] }}</option>
 				{% endfor %}
 			</select>
-			<div class="form-content">
-			<form action="{{ url_for('create_social_media') }}" method="post">
-				<label for="product_name">Product Name:</label>
-				<input type="text" id="product_name" name="product_name" required><br><br>
-				<label for="price">Price:</label>
-				<input type="number" id="price" name="price" step="0.01" required><br><br>
-				<input type="submit" value="Submit Product">
-			</form>
-			</div>
 		</div>
 	</div>
 	<div class="form-container">
@@ -1276,7 +1274,6 @@ label:active:after {
 			    gp_app_name: document.getElementById('gp_app_name').value,
 			    gp_developer: document.getElementById('gp_developer').value,
 			    gp_contains_ads: document.getElementById('gp_contains_ads').value,
-			    gp_stars: document.getElementById('gp_stars').value,
 
 			    gp_reviews: document.getElementById('gp_reviews').value,
 			    gp_downloads: document.getElementById('gp_downloads').value,
@@ -1292,6 +1289,7 @@ label:active:after {
 			    gp_contact_email: document.getElementById('gp_contact_email').value,
 			    gp_contact_developer_name: document.getElementById('gp_contact_developer_name').value,
 			    gp_phone_number: document.getElementById('gp_phone_number').value,
+			    gp_registration_date: document.getElementById('gp_registration_date').value,
 		    };
 		    const methodBool = formData.company_id == -1;
 		    let method = 'POST';
@@ -1359,6 +1357,54 @@ label:active:after {
 			    }
 		    }).catch(error => console.error('Error saving code transparency:', error));
 	    };
+	    async function uploadFile() {
+		    const fileInput = document.getElementById('fileInput');
+		    const file = fileInput.files[0];
+
+		    if (!file) {
+			alert('Please select a file.');
+			return;
+		    }
+
+		    const company_id = document.getElementById('companySubmitCT').value;
+		    const formData = new FormData();
+		    formData.append('company_id', company_id);
+		    formData.append('file', file);
+
+
+		    const response = await fetch('/upload', {
+			    method: 'POST',
+			    body: formData
+		    });
+
+		    if (response.ok) {
+			const data = await response.json();
+			const taskId = data.task_id;
+			checkStatus(taskId);
+		    } else {
+			alert('File upload failed.');
+		    }
+	    }
+
+	    async function checkStatus(taskId) {
+		    const statusElement = document.getElementById('status');
+		    statusElement.textContent = 'Processing...';
+
+		    const interval = setInterval(async () => {
+			const response = await fetch(`/status/${taskId}`);
+			const data = await response.json();
+
+			if (data.status === 'SUCCESS') {
+			    clearInterval(interval);
+			    statusElement.textContent = `Processing complete. Result: ${data.result}`;
+			} else if (data.status === 'FAILURE') {
+			    clearInterval(interval);
+			    statusElement.textContent = 'Processing failed.';
+			} else {
+			    statusElement.textContent = 'Processing...';
+			}
+		    }, 1000); // Poll every second
+	    }
 
     </script>
 </body>

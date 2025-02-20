@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
 import datetime
+import hashlib
+from celery_app import celery_app, process_file
+
 
 app = Flask(__name__)
     
@@ -7,6 +10,11 @@ import sys
 import json
 import psycopg2
 import os
+import uuid
+
+# Directory to store uploaded files
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Connect to PostgreSQL
 def get_db_connection():
@@ -18,6 +26,84 @@ def get_db_connection():
     )
     return conn
 
+
+todo_list = """ 
+TODO:
+1. Can't update the fields individually
+2. Most models only allow each company to have at most one entry per company
+3. Input is not validated so SQL injection is possible.
+4. Automatic code analysis stuff -
+4.0. Models for the various meta-data
+4.1. Create a model to store the uploaded file names to the database, and check
+     whether the file has been saved already,
+4.2. process the file per my different models.
+"""
+
+# BEGIN: Manual Analysis
+
+
+def compute_sha256(file):
+    sha256_hash = hashlib.sha256()
+    for chunk in iter(lambda: file.read(4096), b''):
+        sha256_hash.update(chunk)
+    file.seek(0)  # Reset the file pointer to the beginning
+    return sha256_hash.hexdigest()
+
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    """
+    """
+    print(f"upload_file: 1. request={request}, type(request)={type(request)}")
+    company_info = request.form
+    print(f"upload_file: 2. company_id={company_info}")
+    apk_data = request.files
+    print(f"upload_file. 3. apk_data={apk_data}")
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+
+    file = request.files['file']
+    print(f"upload_file. 4. type(file)={type(file)}, file={file}")
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+    if 'company_id' not in company_info:
+        print(f"upload_file. 4.1 company_id not in company_info={company_info}")
+        return jsonify({'error': 'No file uploaded'}), 400
+    business_id = company_info['company_id']
+    print(f"upload_file. 5. file uploaded. business_id={business_id}")
+    # Save the file to the upload directory
+    file_hash = compute_sha256(file)
+    file_extension = os.path.splitext(file.filename)[1]  # Preserve the file extension
+
+    print(f"upload_file. 6. file uploaded. file_hash={file_hash}")
+
+    file_path = os.path.join(UPLOAD_FOLDER, file_hash + file_extension)
+    print(f"upload_file. 7. file uploaded. file_path={file_path}")
+    try:
+        with open(file_path, "wb") as f:
+            file.save(f)
+        print(f"upload_file. 8. file saved. file={file}")
+    except Exception as e:
+        print(f"/upload_file. Exception - {e}")
+    # Start the asynchronous processing task
+    try:
+        task_id = _process_file(file_path)  # Pass the client's session ID
+        print(f"upload_file. 9. file uploaded. task.id={task_id}")
+    except Exception as e:
+        print(f"/upload_file. Exception - {e}")
+
+    return jsonify({'task_id': task_id}), 202
+
+@app.route('/status/<task_id>', methods=['GET'])
+def get_status(task_id):
+    task = celery_app.AsyncResult(task_id)
+    return jsonify({'status': task.status, 'result': task.result}), 200
+
+def _process_file(file_path):
+    return process_file(file_path)
+
+# END: Manual Analysis
 
 # Analyst view
 @app.route('/analyst')
